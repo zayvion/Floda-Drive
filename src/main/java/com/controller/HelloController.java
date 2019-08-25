@@ -16,7 +16,7 @@ public class HelloController {
 
     @Autowired
     private TestService testService;
-    @RequestMapping("/")
+    @RequestMapping(value = "/")
     public String hello (Model model){
         System.out.println("w3");
         //testService.addData();
