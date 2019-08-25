@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapper.TbUserFileMapper" >
+  <resultMap id="BaseResultMap" type="com.pojo.TbUserFile" >
+    <id column="userfile_id" property="userfileId" jdbcType="BIGINT" />
+    <result column="user_file_name" property="userFileName" jdbcType="VARCHAR" />
+    <result column="belong_user" property="belongUser" jdbcType="BIGINT" />
+    <result column="file_type" property="fileType" jdbcType="CHAR" />
+    <result column="file_size" property="fileSize" jdbcType="DECIMAL" />
+    <result column="file_location" property="fileLocation" jdbcType="BIGINT" />
+    <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    userfile_id, user_file_name, belong_user, file_type, file_size, file_location, upload_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pojo.TbUserFileExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_user_file
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_user_file
+    where userfile_id = #{userfileId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_user_file
+    where userfile_id = #{userfileId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pojo.TbUserFileExample" >
+    delete from tb_user_file
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pojo.TbUserFile" >
+    insert into tb_user_file (userfile_id, user_file_name, belong_user, 
+      file_type, file_size, file_location, 
+      upload_time)
+    values (#{userfileId,jdbcType=BIGINT}, #{userFileName,jdbcType=VARCHAR}, #{belongUser,jdbcType=BIGINT}, 
+      #{fileType,jdbcType=CHAR}, #{fileSize,jdbcType=DECIMAL}, #{fileLocation,jdbcType=BIGINT}, 
+      #{uploadTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pojo.TbUserFile" >
+    insert into tb_user_file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userfileId != null" >
+        userfile_id,
+      </if>
+      <if test="userFileName != null" >
+        user_file_name,
+      </if>
+      <if test="belongUser != null" >
+        belong_user,
+      </if>
+      <if test="fileType != null" >
+        file_type,
+      </if>
+      <if test="fileSize != null" >
+        file_size,
+      </if>
+      <if test="fileLocation != null" >
+        file_location,
+      </if>
+      <if test="uploadTime != null" >
+        upload_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userfileId != null" >
+        #{userfileId,jdbcType=BIGINT},
+      </if>
+      <if test="userFileName != null" >
+        #{userFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="belongUser != null" >
+        #{belongUser,jdbcType=BIGINT},
+      </if>
+      <if test="fileType != null" >
+        #{fileType,jdbcType=CHAR},
+      </if>
+      <if test="fileSize != null" >
+        #{fileSize,jdbcType=DECIMAL},
+      </if>
+      <if test="fileLocation != null" >
+        #{fileLocation,jdbcType=BIGINT},
+      </if>
+      <if test="uploadTime != null" >
+        #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pojo.TbUserFileExample" resultType="java.lang.Integer" >
+    select count(*) from tb_user_file
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_user_file
+    <set >
+      <if test="record.userfileId != null" >
+        userfile_id = #{record.userfileId,jdbcType=BIGINT},
+      </if>
+      <if test="record.userFileName != null" >
+        user_file_name = #{record.userFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.belongUser != null" >
+        belong_user = #{record.belongUser,jdbcType=BIGINT},
+      </if>
+      <if test="record.fileType != null" >
+        file_type = #{record.fileType,jdbcType=CHAR},
+      </if>
+      <if test="record.fileSize != null" >
+        file_size = #{record.fileSize,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fileLocation != null" >
+        file_location = #{record.fileLocation,jdbcType=BIGINT},
+      </if>
+      <if test="record.uploadTime != null" >
+        upload_time = #{record.uploadTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_user_file
+    set userfile_id = #{record.userfileId,jdbcType=BIGINT},
+      user_file_name = #{record.userFileName,jdbcType=VARCHAR},
+      belong_user = #{record.belongUser,jdbcType=BIGINT},
+      file_type = #{record.fileType,jdbcType=CHAR},
+      file_size = #{record.fileSize,jdbcType=DECIMAL},
+      file_location = #{record.fileLocation,jdbcType=BIGINT},
+      upload_time = #{record.uploadTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.TbUserFile" >
+    update tb_user_file
+    <set >
+      <if test="userFileName != null" >
+        user_file_name = #{userFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="belongUser != null" >
+        belong_user = #{belongUser,jdbcType=BIGINT},
+      </if>
+      <if test="fileType != null" >
+        file_type = #{fileType,jdbcType=CHAR},
+      </if>
+      <if test="fileSize != null" >
+        file_size = #{fileSize,jdbcType=DECIMAL},
+      </if>
+      <if test="fileLocation != null" >
+        file_location = #{fileLocation,jdbcType=BIGINT},
+      </if>
+      <if test="uploadTime != null" >
+        upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where userfile_id = #{userfileId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pojo.TbUserFile" >
+    update tb_user_file
+    set user_file_name = #{userFileName,jdbcType=VARCHAR},
+      belong_user = #{belongUser,jdbcType=BIGINT},
+      file_type = #{fileType,jdbcType=CHAR},
+      file_size = #{fileSize,jdbcType=DECIMAL},
+      file_location = #{fileLocation,jdbcType=BIGINT},
+      upload_time = #{uploadTime,jdbcType=TIMESTAMP}
+    where userfile_id = #{userfileId,jdbcType=BIGINT}
+  </update>
+</mapper>

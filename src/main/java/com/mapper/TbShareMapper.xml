@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapper.TbShareMapper" >
+  <resultMap id="BaseResultMap" type="com.pojo.TbShare" >
+    <id column="share_id" property="shareId" jdbcType="BIGINT" />
+    <result column="share_file" property="shareFile" jdbcType="BIGINT" />
+    <result column="share_user" property="shareUser" jdbcType="BIGINT" />
+    <result column="share_comment" property="shareComment" jdbcType="VARCHAR" />
+    <result column="share_title" property="shareTitle" jdbcType="VARCHAR" />
+    <result column="share_url" property="shareUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    share_id, share_file, share_user, share_comment, share_title, share_url
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pojo.TbShareExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_share
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_share
+    where share_id = #{shareId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_share
+    where share_id = #{shareId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pojo.TbShareExample" >
+    delete from tb_share
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pojo.TbShare" >
+    insert into tb_share (share_id, share_file, share_user, 
+      share_comment, share_title, share_url
+      )
+    values (#{shareId,jdbcType=BIGINT}, #{shareFile,jdbcType=BIGINT}, #{shareUser,jdbcType=BIGINT}, 
+      #{shareComment,jdbcType=VARCHAR}, #{shareTitle,jdbcType=VARCHAR}, #{shareUrl,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pojo.TbShare" >
+    insert into tb_share
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shareId != null" >
+        share_id,
+      </if>
+      <if test="shareFile != null" >
+        share_file,
+      </if>
+      <if test="shareUser != null" >
+        share_user,
+      </if>
+      <if test="shareComment != null" >
+        share_comment,
+      </if>
+      <if test="shareTitle != null" >
+        share_title,
+      </if>
+      <if test="shareUrl != null" >
+        share_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shareId != null" >
+        #{shareId,jdbcType=BIGINT},
+      </if>
+      <if test="shareFile != null" >
+        #{shareFile,jdbcType=BIGINT},
+      </if>
+      <if test="shareUser != null" >
+        #{shareUser,jdbcType=BIGINT},
+      </if>
+      <if test="shareComment != null" >
+        #{shareComment,jdbcType=VARCHAR},
+      </if>
+      <if test="shareTitle != null" >
+        #{shareTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="shareUrl != null" >
+        #{shareUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pojo.TbShareExample" resultType="java.lang.Integer" >
+    select count(*) from tb_share
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_share
+    <set >
+      <if test="record.shareId != null" >
+        share_id = #{record.shareId,jdbcType=BIGINT},
+      </if>
+      <if test="record.shareFile != null" >
+        share_file = #{record.shareFile,jdbcType=BIGINT},
+      </if>
+      <if test="record.shareUser != null" >
+        share_user = #{record.shareUser,jdbcType=BIGINT},
+      </if>
+      <if test="record.shareComment != null" >
+        share_comment = #{record.shareComment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shareTitle != null" >
+        share_title = #{record.shareTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shareUrl != null" >
+        share_url = #{record.shareUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_share
+    set share_id = #{record.shareId,jdbcType=BIGINT},
+      share_file = #{record.shareFile,jdbcType=BIGINT},
+      share_user = #{record.shareUser,jdbcType=BIGINT},
+      share_comment = #{record.shareComment,jdbcType=VARCHAR},
+      share_title = #{record.shareTitle,jdbcType=VARCHAR},
+      share_url = #{record.shareUrl,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.TbShare" >
+    update tb_share
+    <set >
+      <if test="shareFile != null" >
+        share_file = #{shareFile,jdbcType=BIGINT},
+      </if>
+      <if test="shareUser != null" >
+        share_user = #{shareUser,jdbcType=BIGINT},
+      </if>
+      <if test="shareComment != null" >
+        share_comment = #{shareComment,jdbcType=VARCHAR},
+      </if>
+      <if test="shareTitle != null" >
+        share_title = #{shareTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="shareUrl != null" >
+        share_url = #{shareUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where share_id = #{shareId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pojo.TbShare" >
+    update tb_share
+    set share_file = #{shareFile,jdbcType=BIGINT},
+      share_user = #{shareUser,jdbcType=BIGINT},
+      share_comment = #{shareComment,jdbcType=VARCHAR},
+      share_title = #{shareTitle,jdbcType=VARCHAR},
+      share_url = #{shareUrl,jdbcType=VARCHAR}
+    where share_id = #{shareId,jdbcType=BIGINT}
+  </update>
+</mapper>
