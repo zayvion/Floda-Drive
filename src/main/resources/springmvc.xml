@@ -24,4 +24,10 @@
             <value>52428800</value>
         </property>
     </bean>
+
+    <!-- 静态资源放行 -->
+    <mvc:resources location="/layuiadmin/" mapping="/layuiadmin/**" />
+    <mvc:resources location="/views/" mapping="/views/**" />
+<!--    <mvc:resources location="/js/" mapping="/js/**" />-->
+<!--    <mvc:resources location="/file/" mapping="/file/**" />-->
 </beans>
