@@ -40,7 +40,7 @@ public class UserController {
         if (((String) session.getAttribute("regCode")).equals(mailCode)) {
             userService.addUser(user);
             session.setAttribute("onlineuser",user);
-            return "index";
+            return "user/login";
         }
         // 验证码不正确向前台传值
         model.addAttribute("msg", "验证码输入错误！");
@@ -64,7 +64,7 @@ public class UserController {
             return "redirect:index";
         }
         model.addAttribute("msg", "用户名或密码错误！");
-        return "login";
+        return "user/login";
     }
 
     /**

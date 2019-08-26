@@ -13,6 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PageController {
     @RequestMapping(value = "/")
     public String hello (Model model){
-        return "index";
+        return "user/login";
     }
 }
