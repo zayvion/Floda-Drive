@@ -513,6 +513,66 @@ public class TbUserExample {
             addCriterion("user_level not between", value1, value2, "userLevel");
             return (Criteria) this;
         }
+
+        public Criteria andDriveSizeIsNull() {
+            addCriterion("drive_size is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDriveSizeIsNotNull() {
+            addCriterion("drive_size is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDriveSizeEqualTo(Long value) {
+            addCriterion("drive_size =", value, "driveSize");
+            return (Criteria) this;
+        }
+
+        public Criteria andDriveSizeNotEqualTo(Long value) {
+            addCriterion("drive_size <>", value, "driveSize");
+            return (Criteria) this;
+        }
+
+        public Criteria andDriveSizeGreaterThan(Long value) {
+            addCriterion("drive_size >", value, "driveSize");
+            return (Criteria) this;
+        }
+
+        public Criteria andDriveSizeGreaterThanOrEqualTo(Long value) {
+            addCriterion("drive_size >=", value, "driveSize");
+            return (Criteria) this;
+        }
+
+        public Criteria andDriveSizeLessThan(Long value) {
+            addCriterion("drive_size <", value, "driveSize");
+            return (Criteria) this;
+        }
+
+        public Criteria andDriveSizeLessThanOrEqualTo(Long value) {
+            addCriterion("drive_size <=", value, "driveSize");
+            return (Criteria) this;
+        }
+
+        public Criteria andDriveSizeIn(List<Long> values) {
+            addCriterion("drive_size in", values, "driveSize");
+            return (Criteria) this;
+        }
+
+        public Criteria andDriveSizeNotIn(List<Long> values) {
+            addCriterion("drive_size not in", values, "driveSize");
+            return (Criteria) this;
+        }
+
+        public Criteria andDriveSizeBetween(Long value1, Long value2) {
+            addCriterion("drive_size between", value1, value2, "driveSize");
+            return (Criteria) this;
+        }
+
+        public Criteria andDriveSizeNotBetween(Long value1, Long value2) {
+            addCriterion("drive_size not between", value1, value2, "driveSize");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

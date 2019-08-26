@@ -13,6 +13,8 @@ public class TbUser {
 
     private String userLevel;
 
+    private Long driveSize;
+
     public Long getUserId() {
         return userId;
     }
@@ -59,5 +61,13 @@ public class TbUser {
 
     public void setUserLevel(String userLevel) {
         this.userLevel = userLevel == null ? null : userLevel.trim();
+    }
+
+    public Long getDriveSize() {
+        return driveSize;
+    }
+
+    public void setDriveSize(Long driveSize) {
+        this.driveSize = driveSize;
     }
 }

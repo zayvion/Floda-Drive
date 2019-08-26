@@ -8,6 +8,7 @@
     <result column="user_phone" property="userPhone" jdbcType="VARCHAR" />
     <result column="user_email" property="userEmail" jdbcType="VARCHAR" />
     <result column="user_level" property="userLevel" jdbcType="CHAR" />
+    <result column="drive_size" property="driveSize" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    user_id, user_name, user_password, user_phone, user_email, user_level
+    user_id, user_name, user_password, user_phone, user_email, user_level, drive_size
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pojo.TbUserExample" >
     select
@@ -85,7 +86,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from tb_user
     where user_id = #{userId,jdbcType=BIGINT}
@@ -101,12 +102,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.pojo.TbUser" >
-    insert into tb_user (user_id, user_name, user_password, 
-      user_phone, user_email, user_level
-      )
-    values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, 
-      #{userPhone,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR}, #{userLevel,jdbcType=CHAR}
-      )
+    insert into tb_user (user_id, user_name, user_password,
+      user_phone, user_email, user_level,
+      drive_size)
+    values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR},
+      #{userPhone,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR}, #{userLevel,jdbcType=CHAR},
+      #{driveSize,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.pojo.TbUser" >
     insert into tb_user
@@ -129,6 +130,9 @@
       <if test="userLevel != null" >
         user_level,
       </if>
+      <if test="driveSize != null" >
+        drive_size,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
@@ -148,6 +152,9 @@
       </if>
       <if test="userLevel != null" >
         #{userLevel,jdbcType=CHAR},
+      </if>
+      <if test="driveSize != null" >
+        #{driveSize,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -178,6 +185,9 @@
       <if test="record.userLevel != null" >
         user_level = #{record.userLevel,jdbcType=CHAR},
       </if>
+      <if test="record.driveSize != null" >
+        drive_size = #{record.driveSize,jdbcType=BIGINT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -186,11 +196,12 @@
   <update id="updateByExample" parameterType="map" >
     update tb_user
     set user_id = #{record.userId,jdbcType=BIGINT},
-      user_name = #{record.userName,jdbcType=VARCHAR},
-      user_password = #{record.userPassword,jdbcType=VARCHAR},
-      user_phone = #{record.userPhone,jdbcType=VARCHAR},
-      user_email = #{record.userEmail,jdbcType=VARCHAR},
-      user_level = #{record.userLevel,jdbcType=CHAR}
+    user_name = #{record.userName,jdbcType=VARCHAR},
+    user_password = #{record.userPassword,jdbcType=VARCHAR},
+    user_phone = #{record.userPhone,jdbcType=VARCHAR},
+    user_email = #{record.userEmail,jdbcType=VARCHAR},
+    user_level = #{record.userLevel,jdbcType=CHAR},
+    drive_size = #{record.driveSize,jdbcType=BIGINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -213,6 +224,9 @@
       <if test="userLevel != null" >
         user_level = #{userLevel,jdbcType=CHAR},
       </if>
+      <if test="driveSize != null" >
+        drive_size = #{driveSize,jdbcType=BIGINT},
+      </if>
     </set>
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
@@ -222,7 +236,8 @@
       user_password = #{userPassword,jdbcType=VARCHAR},
       user_phone = #{userPhone,jdbcType=VARCHAR},
       user_email = #{userEmail,jdbcType=VARCHAR},
-      user_level = #{userLevel,jdbcType=CHAR}
+      user_level = #{userLevel,jdbcType=CHAR},
+      drive_size = #{driveSize,jdbcType=BIGINT}
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
 </mapper>
