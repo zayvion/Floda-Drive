@@ -1,6 +1,9 @@
 package com.service;
 
+import com.pojo.ShowFolders;
 import com.pojo.TbFolder;
+
+import java.util.List;
 
 /**
  * @Auther: zayvion
@@ -13,4 +16,11 @@ public interface FolderService {
      * @param folder
      */
     void addFolder(TbFolder folder);
+
+    /**
+     * 根据用户id查询文件夹
+     * @param UserId
+     * @return
+     */
+    ShowFolders findFolders(int UserId);
 }

@@ -88,8 +88,8 @@
                         </cite>
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a lay-href="set/user/info.html">基本资料</a></dd>
-                        <dd><a lay-href="set/user/password.html">修改密码</a></dd>
+                        <dd><a lay-href="views/set/user/info.jsp">基本资料</a></dd>
+                        <dd><a lay-href="views/set/user/password.jsp">修改密码</a></dd>
                         <hr>
                         <dd style="text-align: center;"><a href="user/logout">退出</a></dd>
                     </dl>

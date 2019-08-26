@@ -52,4 +52,15 @@ public class TbFolder {
     public void setFolderCreatetime(Date folderCreatetime) {
         this.folderCreatetime = folderCreatetime;
     }
+
+    @Override
+    public String toString() {
+        return "TbFolder{" +
+                "folderId=" + folderId +
+                ", folderName='" + folderName + '\'' +
+                ", folderFather=" + folderFather +
+                ", folderUser=" + folderUser +
+                ", folderCreatetime=" + folderCreatetime +
+                '}';
+    }
 }

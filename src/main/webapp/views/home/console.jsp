@@ -49,20 +49,20 @@
             color: #0098ea;
         }
 
-
+        .layui-table-cell .layui-form-checkbox[lay-skin=primary] {
+            top: 6px;
+        }
         .layui-form-checked[lay-skin=primary] i {
             border-color: #0098ea;
             background-color: transparent;
             color: #09AAFF;
             font-weight: bolder;
+
         }
 
         .layui-form-checkbox[lay-skin=primary]:hover i {
             border-color: #0098ea;
             color: #09AAFF;
-        }
-        .layui-form-checked{
-            margin-top: 10px;
         }
     </style>
 </head>
@@ -76,7 +76,7 @@
                     <button type="button" class="layui-btn layui-btn-sm layui-btn-normal">
                         <i class="fa fa-upload"></i>文件上传
                     </button>
-                    <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                    <button class="layui-btn layui-btn-sm layui-btn-primary" onclick="addFolder()">
                         <i class="fa fa-folder-o"></i>新建文件夹
                     </button>
                     <div class="layui-btn-group layui-hide">
@@ -108,17 +108,18 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table'], function () {
-        var table = layui.table;
+        var table = layui.table
+        ,layer = layui.layer;
 
         table.render({
             elem: '#test-table-checkbox'
             , skin: 'row'
-            , url: layui.setter.base + 'json/table/user.js'//获取数据的地方
+            , url: 'folder/folders'//获取数据的地方
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , cols: [[{type: 'checkbox'}
-                , {field: 'folder', width: 600, title: '文件名', sort: true}
-                , {field: 'size', width: 220, title: '大小', sort: true}
-                , {field: 'updatetime', title: '修改日期', sort: true} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
+                , {field: 'folderName', width: 600, title: '文件名', sort: true}
+                , {field: 'size', width: 220, title: '大小', sort: true, text:'-'}
+                , {field: 'folderCreatetime', title: '修改日期', templet: "<div>{{layui.util.toDateString(d.folderCreatetime, 'yyyy-MM-dd HH:mm:ss')}}</div>", sort: true} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
             ]]
         });
 
@@ -136,7 +137,25 @@
                 $('.layui-btn-group').addClass('layui-hide');
             }
         });
+
     });
+
+    function addFolder() {
+        layer.prompt({
+            type: 1,
+            title:['<i class="fa fa-folder-o"></i>新建文件夹','color:#0098ea'],
+            offset: '100px',
+            btn:['创建','取消']},
+            function(text,index)
+            {
+                //index为当前层索引
+                //layero 为 弹出层对象
+                //在回调函数末尾添加 “return false”可以禁止点击该按钮关闭弹出层
+                console.log(text);
+                layer.close(index);
+        });
+    }
+
 </script>
 </body>
 </html>
