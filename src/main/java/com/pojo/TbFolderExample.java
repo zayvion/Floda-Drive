@@ -1,6 +1,7 @@
 package com.pojo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TbFolderExample {
@@ -351,6 +352,66 @@ public class TbFolderExample {
 
         public Criteria andFolderUserNotBetween(Long value1, Long value2) {
             addCriterion("folder_user not between", value1, value2, "folderUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andFolderCreatetimeIsNull() {
+            addCriterion("folder_createtime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFolderCreatetimeIsNotNull() {
+            addCriterion("folder_createtime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFolderCreatetimeEqualTo(Date value) {
+            addCriterion("folder_createtime =", value, "folderCreatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFolderCreatetimeNotEqualTo(Date value) {
+            addCriterion("folder_createtime <>", value, "folderCreatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFolderCreatetimeGreaterThan(Date value) {
+            addCriterion("folder_createtime >", value, "folderCreatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFolderCreatetimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("folder_createtime >=", value, "folderCreatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFolderCreatetimeLessThan(Date value) {
+            addCriterion("folder_createtime <", value, "folderCreatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFolderCreatetimeLessThanOrEqualTo(Date value) {
+            addCriterion("folder_createtime <=", value, "folderCreatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFolderCreatetimeIn(List<Date> values) {
+            addCriterion("folder_createtime in", values, "folderCreatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFolderCreatetimeNotIn(List<Date> values) {
+            addCriterion("folder_createtime not in", values, "folderCreatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFolderCreatetimeBetween(Date value1, Date value2) {
+            addCriterion("folder_createtime between", value1, value2, "folderCreatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFolderCreatetimeNotBetween(Date value1, Date value2) {
+            addCriterion("folder_createtime not between", value1, value2, "folderCreatetime");
             return (Criteria) this;
         }
     }

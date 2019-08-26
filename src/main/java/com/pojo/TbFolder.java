@@ -1,5 +1,7 @@
 package com.pojo;
 
+import java.util.Date;
+
 public class TbFolder {
     private Long folderId;
 
@@ -8,6 +10,8 @@ public class TbFolder {
     private Long folderFather;
 
     private Long folderUser;
+
+    private Date folderCreatetime;
 
     public Long getFolderId() {
         return folderId;
@@ -39,5 +43,13 @@ public class TbFolder {
 
     public void setFolderUser(Long folderUser) {
         this.folderUser = folderUser;
+    }
+
+    public Date getFolderCreatetime() {
+        return folderCreatetime;
+    }
+
+    public void setFolderCreatetime(Date folderCreatetime) {
+        this.folderCreatetime = folderCreatetime;
     }
 }

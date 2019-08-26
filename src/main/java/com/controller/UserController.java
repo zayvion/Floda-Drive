@@ -2,6 +2,7 @@ package com.controller;
 
 import com.mapper.TbUserMapper;
 import com.pojo.TbUser;
+import com.service.UserService;
 import com.utils.MailUtil;
 import com.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  * @Auther: zayvion
@@ -25,7 +25,7 @@ import java.util.Scanner;
 public class UserController {
 
     @Autowired
-    private TbUserMapper userMapper;
+    private UserService userService;
 
     /**
      * 用户注册
@@ -38,12 +38,33 @@ public class UserController {
     @RequestMapping("/register")
     public String register(@ModelAttribute("user") TbUser user, HttpSession session, @RequestParam String mailCode, Model model){
         if (((String) session.getAttribute("regCode")).equals(mailCode)) {
-            userMapper.insertSelective(user);
+            userService.addUser(user);
             session.setAttribute("onlineuser",user);
             return "index";
         }
+        // 验证码不正确向前台传值
         model.addAttribute("msg", "验证码输入错误！");
         return "reg";
+    }
+
+    /**
+     * 用户登录
+     * @param username 用户名
+     * @param password 密码
+     * @param model
+     * @param session
+     * @return 登录成功重定向到index.jsp，失败返回login.jsp并给出提示
+     */
+    @RequestMapping("/login")
+    public String login(@RequestParam String username, @RequestParam String password, Model model, HttpSession session){
+        TbUser user = userService.login(username, password);
+        if (user != null) {
+            // 登录成功将用户对象放入session
+            session.setAttribute("onlineuser", user);
+            return "redirect:index";
+        }
+        model.addAttribute("msg", "用户名或密码错误！");
+        return "login";
     }
 
     /**

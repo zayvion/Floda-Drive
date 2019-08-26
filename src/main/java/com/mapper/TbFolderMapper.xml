@@ -1,31 +1,32 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.mapper.TbFolderMapper" >
-  <resultMap id="BaseResultMap" type="com.pojo.TbFolder" >
-    <id column="folder_id" property="folderId" jdbcType="BIGINT" />
-    <result column="folder_name" property="folderName" jdbcType="VARCHAR" />
-    <result column="folder_father" property="folderFather" jdbcType="BIGINT" />
-    <result column="folder_user" property="folderUser" jdbcType="BIGINT" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.TbFolderMapper">
+  <resultMap id="BaseResultMap" type="com.pojo.TbFolder">
+    <id column="folder_id" jdbcType="BIGINT" property="folderId" />
+    <result column="folder_name" jdbcType="VARCHAR" property="folderName" />
+    <result column="folder_father" jdbcType="BIGINT" property="folderFather" />
+    <result column="folder_user" jdbcType="BIGINT" property="folderUser" />
+    <result column="folder_createtime" jdbcType="TIMESTAMP" property="folderCreatetime" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -36,25 +37,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -65,128 +66,334 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
-    folder_id, folder_name, folder_father, folder_user
+  <sql id="Base_Column_List">
+    folder_id, folder_name, folder_father, folder_user, folder_createtime
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pojo.TbFolderExample" >
+  <select id="selectByExample" parameterType="com.pojo.TbFolderExample" resultMap="BaseResultMap">
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     from tb_folder
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
     <include refid="Base_Column_List" />
     from tb_folder
     where folder_id = #{folderId,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from tb_folder
     where folder_id = #{folderId,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.pojo.TbFolderExample" >
+  <delete id="deleteByExample" parameterType="com.pojo.TbFolderExample">
     delete from tb_folder
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.pojo.TbFolder" >
-    insert into tb_folder (folder_id, folder_name, folder_father, 
-      folder_user)
-    values (#{folderId,jdbcType=BIGINT}, #{folderName,jdbcType=VARCHAR}, #{folderFather,jdbcType=BIGINT}, 
-      #{folderUser,jdbcType=BIGINT})
+  <insert id="insert" parameterType="com.pojo.TbFolder">
+    insert into tb_folder (folder_id, folder_name, folder_father,
+      folder_user, folder_createtime)
+    values (#{folderId,jdbcType=BIGINT}, #{folderName,jdbcType=VARCHAR}, #{folderFather,jdbcType=BIGINT},
+      #{folderUser,jdbcType=BIGINT}, #{folderCreatetime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.pojo.TbFolder" >
+  <insert id="insertSelective" parameterType="com.pojo.TbFolder">
     insert into tb_folder
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="folderId != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="folderId != null">
         folder_id,
       </if>
-      <if test="folderName != null" >
+      <if test="folderName != null">
         folder_name,
       </if>
-      <if test="folderFather != null" >
+      <if test="folderFather != null">
         folder_father,
       </if>
-      <if test="folderUser != null" >
+      <if test="folderUser != null">
+        folder_user,
+      </if>
+      <if test="folderCreatetime != null">
+        folder_createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="folderId != null">
+        #{folderId,jdbcType=BIGINT},
+      </if>
+      <if test="folderName != null">
+        #{folderName,jdbcType=VARCHAR},
+      </if>
+      <if test="folderFather != null">
+        #{folderFather,jdbcType=BIGINT},
+      </if>
+      <if test="folderUser != null">
+        #{folderUser,jdbcType=BIGINT},
+      </if>
+      <if test="folderCreatetime != null">
+        #{folderCreatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pojo.TbFolderExample" resultType="java.lang.Integer">
+    select count(*) from tb_folder
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_folder
+    <set>
+      <if test="record.folderId != null">
+        folder_id = #{record.folderId,jdbcType=BIGINT},
+      </if>
+      <if test="record.folderName != null">
+        folder_name = #{record.folderName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.folderFather != null">
+        folder_father = #{record.folderFather,jdbcType=BIGINT},
+      </if>
+      <if test="record.folderUser != null">
+        folder_user = #{record.folderUser,jdbcType=BIGINT},
+      </if>
+      <if test="record.folderCreatetime != null">
+        folder_createtime = #{record.folderCreatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_folder
+    set folder_id = #{record.folderId,jdbcType=BIGINT},
+    folder_name = #{record.folderName,jdbcType=VARCHAR},
+    folder_father = #{record.folderFather,jdbcType=BIGINT},
+    folder_user = #{record.folderUser,jdbcType=BIGINT},
+    folder_createtime = #{record.folderCreatetime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.TbFolder">
+    update tb_folder
+    <set>
+      <if test="folderName != null">
+        folder_name = #{folderName,jdbcType=VARCHAR},
+      </if>
+      <if test="folderFather != null">
+        folder_father = #{folderFather,jdbcType=BIGINT},
+      </if>
+      <if test="folderUser != null">
+        folder_user = #{folderUser,jdbcType=BIGINT},
+      </if>
+      <if test="folderCreatetime != null">
+        folder_createtime = #{folderCreatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where folder_id = #{folderId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pojo.TbFolder">
+    update tb_folder
+    set folder_name = #{folderName,jdbcType=VARCHAR},
+      folder_father = #{folderFather,jdbcType=BIGINT},
+      folder_user = #{folderUser,jdbcType=BIGINT},
+      folder_createtime = #{folderCreatetime,jdbcType=TIMESTAMP}
+    where folder_id = #{folderId,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.pojo.TbFolder">
+    <id column="folder_id" jdbcType="BIGINT" property="folderId" />
+    <result column="folder_name" jdbcType="VARCHAR" property="folderName" />
+    <result column="folder_father" jdbcType="BIGINT" property="folderFather" />
+    <result column="folder_user" jdbcType="BIGINT" property="folderUser" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    folder_id, folder_name, folder_father, folder_user
+  </sql>
+  <select id="selectByExample" parameterType="com.pojo.TbFolderExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_folder
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_folder
+    where folder_id = #{folderId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from tb_folder
+    where folder_id = #{folderId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pojo.TbFolderExample">
+    delete from tb_folder
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pojo.TbFolder">
+    insert into tb_folder (folder_id, folder_name, folder_father,
+      folder_user)
+    values (#{folderId,jdbcType=BIGINT}, #{folderName,jdbcType=VARCHAR}, #{folderFather,jdbcType=BIGINT},
+      #{folderUser,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pojo.TbFolder">
+    insert into tb_folder
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="folderId != null">
+        folder_id,
+      </if>
+      <if test="folderName != null">
+        folder_name,
+      </if>
+      <if test="folderFather != null">
+        folder_father,
+      </if>
+      <if test="folderUser != null">
         folder_user,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="folderId != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="folderId != null">
         #{folderId,jdbcType=BIGINT},
       </if>
-      <if test="folderName != null" >
+      <if test="folderName != null">
         #{folderName,jdbcType=VARCHAR},
       </if>
-      <if test="folderFather != null" >
+      <if test="folderFather != null">
         #{folderFather,jdbcType=BIGINT},
       </if>
-      <if test="folderUser != null" >
+      <if test="folderUser != null">
         #{folderUser,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.pojo.TbFolderExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.pojo.TbFolderExample" resultType="java.lang.Integer">
     select count(*) from tb_folder
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <update id="updateByExampleSelective" parameterType="map">
     update tb_folder
-    <set >
-      <if test="record.folderId != null" >
+    <set>
+      <if test="record.folderId != null">
         folder_id = #{record.folderId,jdbcType=BIGINT},
       </if>
-      <if test="record.folderName != null" >
+      <if test="record.folderName != null">
         folder_name = #{record.folderName,jdbcType=VARCHAR},
       </if>
-      <if test="record.folderFather != null" >
+      <if test="record.folderFather != null">
         folder_father = #{record.folderFather,jdbcType=BIGINT},
       </if>
-      <if test="record.folderUser != null" >
+      <if test="record.folderUser != null">
         folder_user = #{record.folderUser,jdbcType=BIGINT},
       </if>
     </set>
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
+  <update id="updateByExample" parameterType="map">
     update tb_folder
     set folder_id = #{record.folderId,jdbcType=BIGINT},
-      folder_name = #{record.folderName,jdbcType=VARCHAR},
-      folder_father = #{record.folderFather,jdbcType=BIGINT},
-      folder_user = #{record.folderUser,jdbcType=BIGINT}
-    <if test="_parameter != null" >
+    folder_name = #{record.folderName,jdbcType=VARCHAR},
+    folder_father = #{record.folderFather,jdbcType=BIGINT},
+    folder_user = #{record.folderUser,jdbcType=BIGINT}
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.TbFolder" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.TbFolder">
     update tb_folder
-    <set >
-      <if test="folderName != null" >
+    <set>
+      <if test="folderName != null">
         folder_name = #{folderName,jdbcType=VARCHAR},
       </if>
-      <if test="folderFather != null" >
+      <if test="folderFather != null">
         folder_father = #{folderFather,jdbcType=BIGINT},
       </if>
-      <if test="folderUser != null" >
+      <if test="folderUser != null">
         folder_user = #{folderUser,jdbcType=BIGINT},
       </if>
     </set>
     where folder_id = #{folderId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.pojo.TbFolder" >
+  <update id="updateByPrimaryKey" parameterType="com.pojo.TbFolder">
     update tb_folder
     set folder_name = #{folderName,jdbcType=VARCHAR},
       folder_father = #{folderFather,jdbcType=BIGINT},
