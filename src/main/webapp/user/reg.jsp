@@ -25,65 +25,68 @@
     <base href="<%=basePath%>">
 </head>
 <body>
-<div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
-    <div class="layadmin-user-login-main">
-        <div class="layadmin-user-login-box layadmin-user-login-header">
-            <img src="../views/imgs/logo200.png">
-        </div>
-        <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
-            <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-cellphone"
-                       for="LAY-user-login-cellphone"></label>
-                <input type="text" name="cellphone" id="LAY-user-login-cellphone" lay-verify="phone" placeholder="手机"
-                       class="layui-input">
+    <div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
+        <div class="layadmin-user-login-main">
+            <div class="layadmin-user-login-box layadmin-user-login-header">
+                <img src="../views/imgs/logo200.png">
             </div>
-            <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-reply-fill"
-                       for="LAY-user-login-cellemail"></label>
-                <input type="text" name="cellemail" id="LAY-user-login-cellemail" lay-verify="email" placeholder="邮箱"
-                       class="layui-input">
+            <form action="/user/register" method="post">
+            <div>
+                <c:if test="${msg != null}">${msg}</c:if>
             </div>
-            <div class="layui-form-item">
-                <div class="layui-row">
-                    <div class="layui-col-xs7">
-                        <label class="layadmin-user-login-icon layui-icon layui-icon-vercode"
-                               for="LAY-user-login-vercode"></label>
-                        <input type="text" name="vercode" id="LAY-user-login-vercode" lay-verify="required" placeholder="验证码"
-                               class="layui-input">
-                    </div>
-                    <div class="layui-col-xs5">
-                        <div style="margin-left: 10px;">
-                            <a type="button" class="layui-btn layui-btn-primary layui-btn-fluid"
-                               id="btn_code" href="javascript:void(0)">获取验证码</a>
+            <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-cellphone"
+                           for="LAY-user-login-cellphone"></label>
+                    <input type="text" name="user.userPhone" id="LAY-user-login-cellphone" lay-verify="phone" placeholder="手机"
+                           class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-reply-fill"
+                           for="LAY-user-login-cellemail"></label>
+                    <input type="text" name="user.userEmail" id="LAY-user-login-cellemail" lay-verify="email" placeholder="邮箱"
+                           class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-row">
+                        <div class="layui-col-xs7">
+                            <label class="layadmin-user-login-icon layui-icon layui-icon-vercode"
+                                   for="LAY-user-login-vercode"></label>
+                            <input type="text" name="mailCode" id="LAY-user-login-vercode" lay-verify="required" placeholder="验证码"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-col-xs5">
+                            <div style="margin-left: 10px;">
+                                <a type="button" class="layui-btn layui-btn-primary layui-btn-fluid"
+                                   id="btn_code" href="javascript:void(0)">获取验证码</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
-                <input type="password" name="password" id="LAY-user-login-password" lay-verify="pass" placeholder="密码"
-                       class="layui-input">
-            </div>
-            <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-repass"></label>
-                <input type="password" name="repass" id="LAY-user-login-repass" lay-verify="required" placeholder="确认密码"
-                       class="layui-input">
-            </div>
-            <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-nickname"></label>
-                <input type="text" name="nickname" id="LAY-user-login-nickname" lay-verify="nickname" placeholder="昵称"
-                       class="layui-input">
-            </div>
-            <div class="layui-form-item" style="height: 30px">
-                <input type="checkbox" name="agreement" lay-skin="primary" title="同意用户协议" checked>
-                <a href="user/login.jsp" class="layadmin-user-jump-change" style="margin-top: 7px;">用已有帐号登入</a>
-            </div>
-            <div class="layui-form-item">
-                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="LAY-user-reg-submit" style="width: 100%">注 册</button>
-            </div>
-
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
+                    <input type="password" name="user.userPassword" id="LAY-user-login-password" lay-verify="pass" placeholder="密码"
+                           class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-repass"></label>
+                    <input type="password" id="LAY-user-login-repass" lay-verify="required" placeholder="确认密码"
+                           class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-nickname"></label>
+                    <input type="text" name="user.userName" id="LAY-user-login-nickname" lay-verify="nickname" placeholder="昵称"
+                           class="layui-input">
+                </div>
+                <div class="layui-form-item" style="height: 30px">
+                    <input type="checkbox" name="agreement" lay-skin="primary" title="同意用户协议" checked>
+                    <a href="user/login.jsp" class="layadmin-user-jump-change" style="margin-top: 7px;">用已有帐号登入</a>
+                </div>
+                <div class="layui-form-item">
+                    <input type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="LAY-user-reg-submit" style="width: 100%" value="注册"/>
+                </div>
+            </form>
         </div>
-
     </div>
 
     <script src="../layuiadmin/layui/layui.js"></script>
@@ -105,9 +108,10 @@
             //提交
             form.on('submit(LAY-user-reg-submit)', function (obj) {
                 var field = obj.field;
-
+                var pwd = $("#LAY-user-login-password").val();
+                var repwd = $("#LAY-user-login-repass").val();
                 //确认密码
-                if (field.password !== field.repass) {
+                if(pwd != repwd){
                     return layer.msg('两次密码输入不一致');
                 }
 
