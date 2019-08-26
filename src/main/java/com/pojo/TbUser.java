@@ -15,6 +15,10 @@ public class TbUser {
 
     private Long driveSize;
 
+    private String userNickname;
+
+    private String userImgurl;
+
     public Long getUserId() {
         return userId;
     }
@@ -69,5 +73,21 @@ public class TbUser {
 
     public void setDriveSize(Long driveSize) {
         this.driveSize = driveSize;
+    }
+
+    public String getUserNickname() {
+        return userNickname;
+    }
+
+    public void setUserNickname(String userNickname) {
+        this.userNickname = userNickname == null ? null : userNickname.trim();
+    }
+
+    public String getUserImgurl() {
+        return userImgurl;
+    }
+
+    public void setUserImgurl(String userImgurl) {
+        this.userImgurl = userImgurl == null ? null : userImgurl.trim();
     }
 }
