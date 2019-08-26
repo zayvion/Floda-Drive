@@ -74,13 +74,24 @@
                 </li>
                 <li class="layui-nav-item" lay-unselect>
                     <a href="javascript:;">
-                        <cite>贤心</cite>
+                        <cite>
+                           <c:choose>
+                               <c:when test="${onlineuser.userNickname!= null}">
+                                   ${onlineuser.userNickname}
+                               </c:when>
+                               <c:otherwise>
+                                   ${onlineuser.userName}
+                               </c:otherwise>
+                           </c:choose>
+
+
+                        </cite>
                     </a>
                     <dl class="layui-nav-child">
                         <dd><a lay-href="set/user/info.html">基本资料</a></dd>
                         <dd><a lay-href="set/user/password.html">修改密码</a></dd>
                         <hr>
-                        <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
+                        <dd style="text-align: center;"><a href="user/logout">退出</a></dd>
                     </dl>
                 </li>
 

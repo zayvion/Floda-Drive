@@ -8,6 +8,7 @@ import com.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
         TbUserExample.Criteria criteria2 = user1.createCriteria();
         criteria2.andUserPasswordEqualTo(MD5Util.getMD5(password));
         criteria2.andUserEmailEqualTo(username);
-        List<TbUser> emailList = userMapper.selectByExample(user1);
+        List<TbUser> emailList = userMapper.selectByExample(user2);
         /*
         两个条件满足一个都可以登录
          */

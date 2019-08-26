@@ -32,7 +32,9 @@
             <img src="../views/imgs/logo200.png">
         </div>
         <form action="/user/login" method="post">
-            <c:if test="${msg != null}">${msg}</c:if>
+            <c:if test="${msg != null}">
+                <p style="color: orangered;text-align: center;font-size: 16px">${msg}</p>
+            </c:if>
             <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
                 <div class="layui-form-item">
                     <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label>
@@ -55,19 +57,6 @@
     </div>
 
 
-
-    <!--<div class="ladmin-user-login-theme">
-      <script type="text/html" template>
-        <ul>
-          <li data-theme=""><img src="{{ layui.setter.base }}style/res/bg-none.jpg"></li>
-          <li data-theme="#03152A" style="background-color: #03152A;"></li>
-          <li data-theme="#2E241B" style="background-color: #2E241B;"></li>
-          <li data-theme="#50314F" style="background-color: #50314F;"></li>
-          <li data-theme="#344058" style="background-color: #344058;"></li>
-          <li data-theme="#20222A" style="background-color: #20222A;"></li>
-        </ul>
-      </script>
-    </div>-->
 
 </div>
 
@@ -92,7 +81,7 @@
 
             //请求登入接口
             admin.req({
-                url: layui.setter.base + 'json/user/login.js' //实际使用请改成服务端真实接口
+                url: 'user/login' //实际使用请改成服务端真实接口
                 ,data: obj.field
                 ,done: function(res){
 
@@ -108,7 +97,7 @@
                         ,icon: 1
                         ,time: 1000
                     }, function(){
-                        location.href = '..'; //后台主页
+                        location.href = 'index.jsp'; //后台主页
                     });
                 }
             });

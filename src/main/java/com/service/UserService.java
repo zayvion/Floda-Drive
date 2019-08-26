@@ -24,4 +24,5 @@ public interface UserService {
      * @return user实体
      */
     TbUser login(String username, String password);
+
 }

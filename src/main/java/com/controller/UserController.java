@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.Random;
@@ -40,11 +41,12 @@ public class UserController {
         if (((String) session.getAttribute("regCode")).equals(mailCode)) {
             userService.addUser(user);
             session.setAttribute("onlineuser",user);
+            model.addAttribute("msg", "恭喜您，注册成功！");
             return "user/login";
         }
         // 验证码不正确向前台传值
         model.addAttribute("msg", "验证码输入错误！");
-        return "reg";
+        return "user/reg";
     }
 
     /**
@@ -61,7 +63,7 @@ public class UserController {
         if (user != null) {
             // 登录成功将用户对象放入session
             session.setAttribute("onlineuser", user);
-            return "redirect:index";
+            return "redirect:/index.jsp";
         }
         model.addAttribute("msg", "用户名或密码错误！");
         return "user/login";
@@ -74,11 +76,18 @@ public class UserController {
      * @return json
      */
     @RequestMapping("/sendRegCode")
+    @ResponseBody
     public String sendRegCode(@RequestParam String mailBox, HttpSession session) {
         String redomCode = getRedomCode(4);
         MailUtil.sendMail(mailBox, redomCode,"您正在注册FlodaDrive网盘，您的验证码为:");
         session.setAttribute("regCode", redomCode);
         return ResponseResult.ok();
+    }
+
+    @RequestMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("onlineuser");
+        return "redirect:/user/login.jsp";
     }
 
     /**

@@ -90,4 +90,19 @@ public class TbUser {
     public void setUserImgurl(String userImgurl) {
         this.userImgurl = userImgurl == null ? null : userImgurl.trim();
     }
+
+    @Override
+    public String toString() {
+        return "TbUser{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", userPhone='" + userPhone + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", userLevel='" + userLevel + '\'' +
+                ", driveSize=" + driveSize +
+                ", userNickname='" + userNickname + '\'' +
+                ", userImgurl='" + userImgurl + '\'' +
+                '}';
+    }
 }

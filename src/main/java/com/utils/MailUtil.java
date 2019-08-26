@@ -30,7 +30,7 @@ public class MailUtil {
 
             mailMessage.setTo(to); 
             mailMessage.setFrom( "davy199766@vip.qq.com" );
-            mailMessage.setSubject( "Floda商城" );
+            mailMessage.setSubject( "FlodaDrive-您的私人网盘" );
             mailMessage.setText(content + code+"!");
 
             senderImpl.setUsername("davy199766@vip.qq.com");

@@ -32,19 +32,26 @@
             </div>
             <form action="/user/register" method="post">
             <div>
-                <c:if test="${msg != null}">${msg}</c:if>
+                <c:if test="${msg != null}">
+                    <p style="color: orangered;text-align: center;font-size: 16px">${msg}</p>
+                </c:if>
             </div>
             <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
                 <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-nickname"></label>
+                    <input type="text" name="userName" id="LAY-user-login-nickname" lay-verify="nickname" placeholder="用户名"
+                           class="layui-input">
+                </div>
+                <div class="layui-form-item">
                     <label class="layadmin-user-login-icon layui-icon layui-icon-cellphone"
                            for="LAY-user-login-cellphone"></label>
-                    <input type="text" name="user.userPhone" id="LAY-user-login-cellphone" lay-verify="phone" placeholder="手机"
+                    <input type="text" name="userPhone" id="LAY-user-login-cellphone" lay-verify="phone" placeholder="手机"
                            class="layui-input">
                 </div>
                 <div class="layui-form-item">
                     <label class="layadmin-user-login-icon layui-icon layui-icon-reply-fill"
                            for="LAY-user-login-cellemail"></label>
-                    <input type="text" name="user.userEmail" id="LAY-user-login-cellemail" lay-verify="email" placeholder="邮箱"
+                    <input type="text" name="userEmail" id="LAY-user-login-cellemail" lay-verify="email" placeholder="邮箱"
                            class="layui-input">
                 </div>
                 <div class="layui-form-item">
@@ -65,17 +72,12 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
-                    <input type="password" name="user.userPassword" id="LAY-user-login-password" lay-verify="pass" placeholder="密码"
+                    <input type="password" name="userPassword" id="LAY-user-login-password" lay-verify="pass" placeholder="密码"
                            class="layui-input">
                 </div>
                 <div class="layui-form-item">
                     <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-repass"></label>
                     <input type="password" id="LAY-user-login-repass" lay-verify="required" placeholder="确认密码"
-                           class="layui-input">
-                </div>
-                <div class="layui-form-item">
-                    <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-nickname"></label>
-                    <input type="text" name="user.userName" id="LAY-user-login-nickname" lay-verify="nickname" placeholder="昵称"
                            class="layui-input">
                 </div>
                 <div class="layui-form-item" style="height: 30px">
@@ -122,8 +124,9 @@
 
                 //请求接口
                 admin.req({
-                    url: layui.setter.base + 'json/user/reg.js' //实际使用请改成服务端真实接口
+                    url: 'user/register' //实际使用请改成服务端真实接口
                     , data: field
+                    , type: POST
                     , done: function (res) {
                         layer.msg('注册成功', {
                             offset: '15px'
