@@ -73,8 +73,9 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal">
-                        <i class="fa fa-upload"></i>文件上传
+                    <button type="button" name="file" class="layui-btn layui-btn-sm layui-btn-normal" id="test"
+                            lay-data="{url: '/upload/', accept: 'file'}">
+                        <i class="fa fa-upload"></i>上传文件
                     </button>
                     <button class="layui-btn layui-btn-sm layui-btn-primary" onclick="addFolder()">
                         <i class="fa fa-folder-o"></i>新建文件夹
@@ -103,6 +104,18 @@
 <script src="../../layuiadmin/layui/layui.js?t=1"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script>
+    //上传
+    layui.use('upload', function(){
+        var upload = layui.upload;
+        //执行实例
+        upload.render({
+            elem: '#test'
+            ,done: function(res, index, upload){
+                //获取当前触发上传的元素，一般用于 elem 绑定 class 的情况，注意：此乃 layui 2.1.0 新增
+                var item = this.item;
+            }
+        })
+    });
     layui.config({
         base: '../../layuiadmin/' //静态资源所在路径
     }).extend({
@@ -110,7 +123,6 @@
     }).use(['index', 'table'], function () {
         var table = layui.table
         ,layer = layui.layer;
-
         table.render({
             elem: '#test-table-checkbox'
             , skin: 'row'
