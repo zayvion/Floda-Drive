@@ -32,6 +32,7 @@ public class FolderController {
     @RequestMapping(value = "/folders")
     @ResponseBody
     public ShowFolders folders(@SessionAttribute TbUser onlineuser, @RequestParam(defaultValue = "0") Long folder_father){
+        System.out.println(folderServiceImpl.findFolders(onlineuser.getUserId(),folder_father));
         return folderServiceImpl.findFolders(onlineuser.getUserId(),folder_father);
     }
 
