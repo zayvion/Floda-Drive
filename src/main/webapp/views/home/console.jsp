@@ -76,7 +76,7 @@
                     <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="uploadFile()">
                         <i class="fa fa-upload"></i>上传文件
                     </button>
-                    <button class="layui-btn layui-btn-sm layui-btn-primary" onclick="addFolder()">
+                    <button class="layui-btn layui-btn-sm layui-btn-primary" onclick="addFolder(0)">
                         <i class="fa fa-folder-o"></i>新建文件夹
                     </button>
                     <div class="layui-btn-group layui-hide">
@@ -86,7 +86,7 @@
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
                             <i class="fa fa-trash"></i>删除
                         </button>
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="renameFolder()">
                             <i class="fa fa-pencil"></i>重命名
                         </button>
                     </div>
@@ -100,11 +100,11 @@
     </div>
 </div>
 
-
-
 <script src="../../layuiadmin/layui/layui.js?t=1"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script>
+    var table, layer,tableIns;
+
     //上传
     function uploadFile(){
         layer.open({
@@ -122,17 +122,32 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table'], function () {
-        var table = layui.table
-        ,layer = layui.layer;
-        table.render({
+            table = layui.table,
+            layer = layui.layer;
+
+        tableIns = table.render({
             elem: '#test-table-checkbox'
             , skin: 'row'
             , url: 'folder/folders'//获取数据的地方
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            , id:'test-table-checkbox'
             , cols: [[{type: 'checkbox'}
-                , {field: 'folderName', width: 600, title: '文件名', sort: true}
-                , {field: 'size', width: 220, title: '大小', sort: true, text:'-'}
-                , {field: 'folderCreatetime', title: '修改日期', templet: "<div>{{layui.util.toDateString(d.folderCreatetime, 'yyyy-MM-dd HH:mm:ss')}}</div>", sort: true} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
+                , {
+                    field: 'folderName',
+                    width: 600,
+                    title: '文件名',
+                    sort: true,
+                    templet: function (d) {
+                        return "<i class='fa fa-folder' style='font-size:18px;color:rgb(255,214,89);margin:8px 5px 0 0'></i>"+d.folderName;
+                    }
+                }
+                , {field: 'size', width: 220, title: '大小', sort: true}
+                , {
+                    field: 'folderCreatetime',
+                    title: '修改日期',
+                    templet: "<div>{{layui.util.toDateString(d.folderCreatetime, 'yyyy-MM-dd HH:mm:ss')}}</div>",
+                    sort: true
+                }
             ]]
         });
 
@@ -141,31 +156,91 @@
             //console.log("当前选中的个数："+checkStatus.data.length);//输出当前选中的个数
             //console.log("相关数据："+checkStatus.data); //选中行的相关数据
             //console.log("是否全选:"+checkStatus.isAll); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
-            if (checkStatus.data.length > 0){
+            if (checkStatus.data.length > 0) {
                 $('.layui-btn-group').removeClass('layui-hide');
-                // if (checkStatus.data.length > 1){
-                //
-                // }
-            }else {
+                if (checkStatus.data.length > 1) {
+                    $('.layui-btn-group button').eq(2).addClass('layui-btn-disabled').attr("disabled", 'disabled');
+                } else {
+                    $('.layui-btn-group button').eq(2).removeClass('layui-btn-disabled').removeAttr('disabled');
+                }
+            } else {
                 $('.layui-btn-group').addClass('layui-hide');
             }
         });
 
+
     });
 
+    //创建文件夹
     function addFolder() {
         layer.prompt({
-            type: 1,
-            title:['<i class="fa fa-folder-o"></i>新建文件夹','color:#0098ea'],
-            offset: '100px',
-            btn:['创建','取消']},
-            function(text,index) {
+                type: 1,
+                title: ['<i class="fa fa-folder-o"></i>新建文件夹', 'color:#0098ea'],
+                offset: '100px',
+                btn: ['创建', '取消']
+            },
+            function (text, index) {
+                $.post('folder/create',{folderName:text},function (data,status) {
+                    if (data.status === 200){
+                        layer.msg(data.msg,{
+                            icon:1,
+                            offset: '200px'
+                        });
+                        //需改数据后表格局部刷新
+                        tableIns.reload({
+                            where: { //设定异步数据接口的额外参数，任意设
+                                folderName: 'folderName'
+                            }
+                        });
+                    }else {
+                        layer.msg(data.msg,{
+                            icon:2,
+                            offset: '200px'
+                        });
+                    }
+                });
+                layer.close(index);//index为当前层索引
+            });
+    }
+
+    //重命名文件夹
+    function renameFolder() {
+        var checkStatus = table.checkStatus('test-table-checkbox');
+        layer.prompt({
+                type: 1,
+                title: ['<i class="fa fa-pencil"></i>重命名', 'color:#0098ea'],
+                offset: '100px',
+                value:checkStatus.data[0].folderName
+            },
+            function (text, index) {
                 //index为当前层索引
-                //layero 为 弹出层对象
+                //text为输入参数
                 //在回调函数末尾添加 “return false”可以禁止点击该按钮关闭弹出层
-                console.log(text);
+                checkStatus.data[0].folderName = text;
+                //修改后触发ajax方法，异步请求后台修改数据库
+                $.post('/folder/rename',{'folder':JSON.stringify(checkStatus.data[0])},function (data,status) {
+                    if (data.status === 200){
+                        layer.msg(data.msg,{
+                            icon:1,
+                            offset: '200px'
+                        });
+                        //需改数据后表格局部刷新
+                        tableIns.reload({
+                            where: { //设定异步数据接口的额外参数，任意设
+                                folderName: 'folderName'
+                            }
+                        });
+                        $('.layui-btn-group').addClass('layui-hide');
+
+                    }else {
+                        layer.msg(data.msg,{
+                            icon:2,
+                            offset: '200px'
+                        });
+                    }
+                });
                 layer.close(index);
-        });
+            });
     }
 
 </script>
