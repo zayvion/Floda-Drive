@@ -73,8 +73,7 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    <button type="button" name="file" class="layui-btn layui-btn-sm layui-btn-normal" id="test"
-                            lay-data="{url: '/upload/', accept: 'file'}">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="uploadFile()">
                         <i class="fa fa-upload"></i>上传文件
                     </button>
                     <button class="layui-btn layui-btn-sm layui-btn-primary" onclick="addFolder()">
@@ -101,21 +100,23 @@
     </div>
 </div>
 
+
+
 <script src="../../layuiadmin/layui/layui.js?t=1"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script>
     //上传
-    layui.use('upload', function(){
-        var upload = layui.upload;
-        //执行实例
-        upload.render({
-            elem: '#test'
-            ,done: function(res, index, upload){
-                //获取当前触发上传的元素，一般用于 elem 绑定 class 的情况，注意：此乃 layui 2.1.0 新增
-                var item = this.item;
-            }
-        })
-    });
+    function uploadFile(){
+        layer.open({
+            title: ['<i class="fa fa-upload"></i>上传文件','color:#0098ea']
+            ,content: '<form action="/upload" method="post" enctype="multipart/form-data" id="test">\n' +
+                '    <input type="file" name="files"><br>\n' +
+                '    <input type="reset" class="layui-btn layui-btn-sm layui-btn-normal" value="取消" style="float: right;margin-left: 10px"><input type="submit" class="layui-btn layui-btn-sm layui-btn-normal" value="上传" style="float: right">\n' +
+                '</form>'
+            ,btn:''
+        });
+    }
+
     layui.config({
         base: '../../layuiadmin/' //静态资源所在路径
     }).extend({
@@ -158,8 +159,7 @@
             title:['<i class="fa fa-folder-o"></i>新建文件夹','color:#0098ea'],
             offset: '100px',
             btn:['创建','取消']},
-            function(text,index)
-            {
+            function(text,index) {
                 //index为当前层索引
                 //layero 为 弹出层对象
                 //在回调函数末尾添加 “return false”可以禁止点击该按钮关闭弹出层
