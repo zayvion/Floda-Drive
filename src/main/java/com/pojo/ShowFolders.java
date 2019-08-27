@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @Auther: dc
  * @Date: 2019/8/26 16:59
- * @Description:
+ * @Description:layui规定展示样式
  */
 public class ShowFolders {
     private int code = 0;

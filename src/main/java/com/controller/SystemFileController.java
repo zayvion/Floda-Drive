@@ -44,6 +44,11 @@ public class SystemFileController {
     @RequestMapping("/upload")
     public String uploadFile(HttpSession session, @RequestParam("files") MultipartFile file, Model model) throws IOException {
         TbUser user = (TbUser) session.getAttribute("onlineuser");
+        // session没有用户信息直接返回错误信息
+        if (user == null){
+            model.addAttribute("msg","登录信息异常，请退出后重新登录！");
+            return "error";
+        }
         if (file != null) {
             /**
              * 拿到文件应先判断是否之前有用户上传过
@@ -116,6 +121,7 @@ public class SystemFileController {
             userFileService.addFile(userFile);
             return "/views/home/console";
         } else {
+            model.addAttribute("msg", "上传发生错误，青重试！");
             return "error";
         }
 
