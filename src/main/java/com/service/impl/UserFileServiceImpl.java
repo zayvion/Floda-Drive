@@ -35,4 +35,10 @@ public class UserFileServiceImpl implements UserFileService {
         int count = userFileMapper.countByExample(userFileExample);
         return count;
     }
+
+    @Override
+    public void updateUserFile(TbUserFile userFile) {
+        userFile.setUploadTime(new Date());
+        userFileMapper.insertSelective(userFile);
+    }
 }

@@ -70,7 +70,7 @@ public class SystemFileController {
                     userFile.setUserFileName(file.getOriginalFilename());
                 }
                 userFile.setUserSysfileId(existFile.getFileId());
-                //这里还暂时获取不到用户需要存的位置，后期请补充
+                // 这里还暂时获取不到用户需要存的位置，后期请补充
                 userFile.setFileLocation(0l);
                 userFileService.addFile(userFile);
                 return "/views/home/console";

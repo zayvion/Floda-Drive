@@ -34,10 +34,8 @@
                             <label class="layui-form-label">我的角色</label>
                             <div class="layui-input-inline">
                                 <select name="role" lay-verify="">
-                                    <option value="1" selected>超级管理员</option>
-                                    <option value="2" disabled>普通管理员</option>
-                                    <option value="3" disabled>审核员</option>
-                                    <option value="4" disabled>编辑人员</option>
+                                    <option value="1" selected>普通用户</option>
+                                    <option value="2">高级用户</option>
                                 </select>
                             </div>
                             <div class="layui-form-mid layui-word-aux">当前角色不可更改为其它角色</div>
@@ -84,12 +82,6 @@
                             <label class="layui-form-label">邮箱</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="email" value="" lay-verify="email" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-form-item layui-form-text">
-                            <label class="layui-form-label">备注</label>
-                            <div class="layui-input-block">
-                                <textarea name="remarks" placeholder="请输入内容" class="layui-textarea"></textarea>
                             </div>
                         </div>
                         <div class="layui-form-item">

@@ -25,4 +25,10 @@ public interface UserFileService {
      * @return
      */
     int getSameNameFile(String filename);
+
+    /**
+     * 重命名文件
+     * @param userFile
+     */
+    void updateUserFile(TbUserFile userFile);
 }
