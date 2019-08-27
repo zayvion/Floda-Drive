@@ -11,7 +11,7 @@ public class ShowFolders {
     private int code = 0;
     private String msg;
     private int count = 1000;
-    private List<TbFolder> data;
+    private List data;
 
     public int getCode() {
         return code;
@@ -37,11 +37,11 @@ public class ShowFolders {
         this.count = count;
     }
 
-    public List<TbFolder> getData() {
+    public List getData() {
         return data;
     }
 
-    public void setData(List<TbFolder> data) {
+    public void setData(List data) {
         this.data = data;
     }
 

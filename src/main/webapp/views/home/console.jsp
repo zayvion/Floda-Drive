@@ -132,19 +132,57 @@
             , id:'test-table-checkbox'
             , cols: [[{type: 'checkbox'}
                 , {
-                    field: 'folderName',
+                    field: 'fileName',
                     width: 600,
                     title: '文件名',
                     sort: true,
                     templet: function (d) {
-                        return "<i class='fa fa-folder' style='font-size:18px;color:rgb(255,214,89);margin:8px 5px 0 0'></i>"+d.folderName;
+                        var icon = "";
+                        switch (d.fileType) {
+                            case '0':
+                                icon = "<i class='fa fa-folder' style='font-size:18px;color:rgb(255,214,89);margin:8px 5px 0 0'></i>";
+                                break;
+                            case '1':
+                                icon = "<i class='fa fa-file-photo-o' style='font-size:18px;color:rgb(255,119,67);margin:8px 5px 0 0'></i>";
+                                break;
+                            case '2':
+                                icon = "<i class='fa fa-file-audio-o' style='font-size:18px;color:rgb(129,131,241);margin:8px 5px 0 0'></i>";
+                                break;
+                            case '3':
+                                icon = "<i class='fa fa-file-video-o' style='font-size:18px;color:rgb(129,131,241);margin:8px 5px 0 0'></i>";
+                                break;
+                            case '4':
+                                icon = "<i class='fa fa-file-text' style='font-size:18px;color:rgb(77,151,255);margin:8px 5px 0 0'></i>";
+                                break;
+                            case '5':
+                                icon = "<i class='fa fa-file' style='font-size:18px;color:rgb(185,201,254);margin:8px 5px 0 0'></i>";
+                                break;
+                        }
+                        return icon+d.fileName;
                     }
                 }
-                , {field: 'size', width: 220, title: '大小', sort: true}
                 , {
-                    field: 'folderCreatetime',
+                    field: 'fileSize',
+                    width: 220,
+                    title: '大小',
+                    templet: function (d) {
+                        console.log(typeof d.fileSize);
+                        if (d.fileSize !== undefined){
+                            if (d.fileSize >= 1024){
+                                return (d.fileSize/1024).toFixed(1)+"MB";
+                            }else {
+                                return d.fileSize+"KB";
+                            }
+                        }else {
+                            return '-';
+                        }
+                    },
+                    sort: true
+                }
+                , {
+                    field: 'updatetime',
                     title: '修改日期',
-                    templet: "<div>{{layui.util.toDateString(d.folderCreatetime, 'yyyy-MM-dd HH:mm:ss')}}</div>",
+                    templet: "<div>{{layui.util.toDateString(d.updatetime, 'yyyy-MM-dd HH:mm:ss')}}</div>",
                     sort: true
                 }
             ]]
@@ -241,6 +279,7 @@
                 layer.close(index);
             });
     }
+
 
 </script>
 </body>
