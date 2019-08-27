@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.google.gson.Gson;
+import com.pojo.FolderAndFile;
 import com.pojo.ShowFolders;
 import com.pojo.TbFolder;
 import com.pojo.TbUser;
@@ -32,7 +33,6 @@ public class FolderController {
     @RequestMapping(value = "/folders")
     @ResponseBody
     public ShowFolders folders(@SessionAttribute TbUser onlineuser, @RequestParam(defaultValue = "0") Long folder_father){
-        System.out.println(folderServiceImpl.findFolders(onlineuser.getUserId(),folder_father));
         return folderServiceImpl.findFolders(onlineuser.getUserId(),folder_father);
     }
 
@@ -44,8 +44,14 @@ public class FolderController {
     @RequestMapping(value = "/rename",produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String rename(String folder){
-        TbFolder fromJson = new Gson().fromJson(folder, TbFolder.class);
-        return folderServiceImpl.updateFolder(fromJson);
+        FolderAndFile folderAndFile = new Gson().fromJson(folder, FolderAndFile.class);
+        TbFolder newFolder  = new TbFolder();
+        newFolder.setFolderId(folderAndFile.getId());
+        newFolder.setFolderName(folderAndFile.getFileName());
+        newFolder.setFolderUser(folderAndFile.getBelong());
+        newFolder.setFolderFather(folderAndFile.getParentId());
+        newFolder.setFolderCreatetime(folderAndFile.getUpdatetime());
+        return folderServiceImpl.updateFolder(newFolder);
     }
 
     /**
