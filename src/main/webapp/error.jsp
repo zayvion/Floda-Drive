@@ -27,6 +27,15 @@
     <STYLE type=text/css>.mod-notfound {
         BORDER-RIGHT: #e1e1e1 1px solid; BORDER-TOP: #e1e1e1 1px solid; MARGIN-TOP: 10px; BACKGROUND: #fff; BORDER-LEFT: #e1e1e1 1px solid; BORDER-BOTTOM: #e1e1e1 1px solid; HEIGHT: 585px; TEXT-ALIGN: center; border-radius: 10px
     }
+        .myFile{
+            font-size: 20px;
+            color: #1471ff;
+        }
+        .myFile:hover{
+            color: #cc0000;
+            text-decoration: underline;
+        }
+
     </STYLE>
 
     <META content="MSHTML 6.00.6000.17117" name=GENERATOR></HEAD>
@@ -38,8 +47,10 @@
                 <P style="FONT-SIZE: 24px; LINE-HEIGHT: 70px; color: #c55454">
                     <c:if test="${msg != null}">${msg}</c:if>
                 </P>
-                <P style="FONT-SIZE: 14px; LINE-HEIGHT: 20px">您可以回到 <A
-                        href="views/home/console.jsp">网站首页</A></DIV></DIV></DIV></SECTION><FOOTER
+                <P style="FONT-SIZE: 14px; LINE-HEIGHT: 20px">您可以回到
+                    <A href="views/home/console.jsp" class="myFile">我的文件</A>
+                </P>
+            </DIV></DIV></DIV></SECTION><FOOTER
         class="mod-footer mod-cs-footer">
     <DIV class="clearfix hidden-box"></DIV>
     </FOOTER>

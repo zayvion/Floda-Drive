@@ -105,7 +105,7 @@
                                     <i class="fa fa-download"></i>下载
                                 </button>
                                 <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="cleanImgCheck()">
-                                    <span class="layui-badge layui-bg-gray" style="margin:8px 10px 0 0;padding: 0 4px;color: #1E9FFF">1</span>取消
+                                    <span class="layui-badge layui-bg-gray" style="border-radius:10px;border: 1px solid #1E9FFF;margin:7px 7px 0 0;color: #1E9FFF!important;background-color:#eee!important;">1</span>取消
                                 </button>
                             </div>
                         </ul>
