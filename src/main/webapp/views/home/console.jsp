@@ -109,7 +109,7 @@
     function uploadFile(){
         layer.open({
             title: ['<i class="fa fa-upload"></i>上传文件','color:#0098ea']
-            ,content: '<form action="/upload" method="post" enctype="multipart/form-data" id="test">\n' +
+            ,content: '<form action="/sysfile/upload" method="post" enctype="multipart/form-data" id="test">\n' +
                 '    <input type="file" required name="files"><br><br>\n' +
                 '    <input type="reset" class="layui-btn layui-btn-sm layui-btn-normal" value="重置" style="float: right;margin-left: 10px"><input type="submit" class="layui-btn layui-btn-sm layui-btn-normal" value="上传" style="float: right">\n' +
                 '</form>'

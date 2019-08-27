@@ -3,6 +3,7 @@
 <mapper namespace="com.mapper.TbUserFileMapper" >
   <resultMap id="BaseResultMap" type="com.pojo.TbUserFile" >
     <id column="userfile_id" property="userfileId" jdbcType="BIGINT" />
+    <result column="user_sysfile_id" property="userSysfileId" jdbcType="BIGINT" />
     <result column="user_file_name" property="userFileName" jdbcType="VARCHAR" />
     <result column="belong_user" property="belongUser" jdbcType="BIGINT" />
     <result column="file_type" property="fileType" jdbcType="CHAR" />
@@ -69,7 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    userfile_id, user_file_name, belong_user, file_type, file_size, file_location, upload_time
+    userfile_id, user_sysfile_id, user_file_name, belong_user, file_type, file_size,
+    file_location, upload_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pojo.TbUserFileExample" >
     select
@@ -86,7 +88,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from tb_user_file
     where userfile_id = #{userfileId,jdbcType=BIGINT}
@@ -102,18 +104,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.pojo.TbUserFile" >
-    insert into tb_user_file (userfile_id, user_file_name, belong_user, 
-      file_type, file_size, file_location, 
-      upload_time)
-    values (#{userfileId,jdbcType=BIGINT}, #{userFileName,jdbcType=VARCHAR}, #{belongUser,jdbcType=BIGINT}, 
-      #{fileType,jdbcType=CHAR}, #{fileSize,jdbcType=DECIMAL}, #{fileLocation,jdbcType=BIGINT}, 
-      #{uploadTime,jdbcType=TIMESTAMP})
+    insert into tb_user_file (userfile_id, user_sysfile_id, user_file_name,
+      belong_user, file_type, file_size,
+      file_location, upload_time)
+    values (#{userfileId,jdbcType=BIGINT}, #{userSysfileId,jdbcType=BIGINT}, #{userFileName,jdbcType=VARCHAR},
+      #{belongUser,jdbcType=BIGINT}, #{fileType,jdbcType=CHAR}, #{fileSize,jdbcType=DECIMAL},
+      #{fileLocation,jdbcType=BIGINT}, #{uploadTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.pojo.TbUserFile" >
     insert into tb_user_file
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="userfileId != null" >
         userfile_id,
+      </if>
+      <if test="userSysfileId != null" >
+        user_sysfile_id,
       </if>
       <if test="userFileName != null" >
         user_file_name,
@@ -137,6 +142,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userfileId != null" >
         #{userfileId,jdbcType=BIGINT},
+      </if>
+      <if test="userSysfileId != null" >
+        #{userSysfileId,jdbcType=BIGINT},
       </if>
       <if test="userFileName != null" >
         #{userFileName,jdbcType=VARCHAR},
@@ -170,6 +178,9 @@
       <if test="record.userfileId != null" >
         userfile_id = #{record.userfileId,jdbcType=BIGINT},
       </if>
+      <if test="record.userSysfileId != null" >
+        user_sysfile_id = #{record.userSysfileId,jdbcType=BIGINT},
+      </if>
       <if test="record.userFileName != null" >
         user_file_name = #{record.userFileName,jdbcType=VARCHAR},
       </if>
@@ -196,12 +207,13 @@
   <update id="updateByExample" parameterType="map" >
     update tb_user_file
     set userfile_id = #{record.userfileId,jdbcType=BIGINT},
-      user_file_name = #{record.userFileName,jdbcType=VARCHAR},
-      belong_user = #{record.belongUser,jdbcType=BIGINT},
-      file_type = #{record.fileType,jdbcType=CHAR},
-      file_size = #{record.fileSize,jdbcType=DECIMAL},
-      file_location = #{record.fileLocation,jdbcType=BIGINT},
-      upload_time = #{record.uploadTime,jdbcType=TIMESTAMP}
+    user_sysfile_id = #{record.userSysfileId,jdbcType=BIGINT},
+    user_file_name = #{record.userFileName,jdbcType=VARCHAR},
+    belong_user = #{record.belongUser,jdbcType=BIGINT},
+    file_type = #{record.fileType,jdbcType=CHAR},
+    file_size = #{record.fileSize,jdbcType=DECIMAL},
+    file_location = #{record.fileLocation,jdbcType=BIGINT},
+    upload_time = #{record.uploadTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -209,6 +221,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.pojo.TbUserFile" >
     update tb_user_file
     <set >
+      <if test="userSysfileId != null" >
+        user_sysfile_id = #{userSysfileId,jdbcType=BIGINT},
+      </if>
       <if test="userFileName != null" >
         user_file_name = #{userFileName,jdbcType=VARCHAR},
       </if>
@@ -232,7 +247,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.pojo.TbUserFile" >
     update tb_user_file
-    set user_file_name = #{userFileName,jdbcType=VARCHAR},
+    set user_sysfile_id = #{userSysfileId,jdbcType=BIGINT},
+      user_file_name = #{userFileName,jdbcType=VARCHAR},
       belong_user = #{belongUser,jdbcType=BIGINT},
       file_type = #{fileType,jdbcType=CHAR},
       file_size = #{fileSize,jdbcType=DECIMAL},

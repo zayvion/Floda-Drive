@@ -6,6 +6,8 @@ import java.util.Date;
 public class TbUserFile {
     private Long userfileId;
 
+    private Long userSysfileId;
+
     private String userFileName;
 
     private Long belongUser;
@@ -24,6 +26,14 @@ public class TbUserFile {
 
     public void setUserfileId(Long userfileId) {
         this.userfileId = userfileId;
+    }
+
+    public Long getUserSysfileId() {
+        return userSysfileId;
+    }
+
+    public void setUserSysfileId(Long userSysfileId) {
+        this.userSysfileId = userSysfileId;
     }
 
     public String getUserFileName() {

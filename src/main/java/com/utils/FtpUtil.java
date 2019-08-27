@@ -74,6 +74,7 @@ public class FtpUtil {
 				try {
 					ftp.disconnect();
 				} catch (IOException ioe) {
+					ioe.printStackTrace();
 				}
 			}
 		}

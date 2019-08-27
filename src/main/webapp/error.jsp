@@ -39,7 +39,7 @@
                     <c:if test="${msg != null}">${msg}</c:if>
                 </P>
                 <P style="FONT-SIZE: 14px; LINE-HEIGHT: 20px">您可以回到 <A
-                        href="/">网站首页</A></DIV></DIV></DIV></SECTION><FOOTER
+                        href="views/home/console.jsp">网站首页</A></DIV></DIV></DIV></SECTION><FOOTER
         class="mod-footer mod-cs-footer">
     <DIV class="clearfix hidden-box"></DIV>
     </FOOTER>

@@ -8,6 +8,7 @@
     <result column="upload_user" property="uploadUser" jdbcType="BIGINT" />
     <result column="file_type" property="fileType" jdbcType="CHAR" />
     <result column="file_size" property="fileSize" jdbcType="DECIMAL" />
+    <result column="file_md5" property="fileMd5" jdbcType="VARCHAR" />
     <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP" />
     <result column="file_remark" property="fileRemark" jdbcType="VARCHAR" />
   </resultMap>
@@ -70,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    file_id, file_name, file_url, upload_user, file_type, file_size, upload_time, file_remark
+    file_id, file_name, file_url, upload_user, file_type, file_size, file_md5, upload_time,
+    file_remark
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pojo.TbSystemFileExample" >
     select
@@ -87,7 +89,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from tb_system_file
     where file_id = #{fileId,jdbcType=BIGINT}
@@ -103,14 +105,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.pojo.TbSystemFile" >
-    insert into tb_system_file (file_id, file_name, file_url, 
-      upload_user, file_type, file_size, 
-      upload_time, file_remark)
-    values (#{fileId,jdbcType=BIGINT}, #{fileName,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, 
-      #{uploadUser,jdbcType=BIGINT}, #{fileType,jdbcType=CHAR}, #{fileSize,jdbcType=DECIMAL}, 
-      #{uploadTime,jdbcType=TIMESTAMP}, #{fileRemark,jdbcType=VARCHAR})
+    insert into tb_system_file (file_id, file_name, file_url,
+      upload_user, file_type, file_size,
+      file_md5, upload_time, file_remark
+      )
+    values (#{fileId,jdbcType=BIGINT}, #{fileName,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR},
+      #{uploadUser,jdbcType=BIGINT}, #{fileType,jdbcType=CHAR}, #{fileSize,jdbcType=DECIMAL},
+      #{fileMd5,jdbcType=VARCHAR}, #{uploadTime,jdbcType=TIMESTAMP}, #{fileRemark,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.pojo.TbSystemFile" >
+  <insert id="insertSelective" parameterType="com.pojo.TbSystemFile"  useGeneratedKeys="true" keyProperty="file_id">
     insert into tb_system_file
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="fileId != null" >
@@ -130,6 +134,9 @@
       </if>
       <if test="fileSize != null" >
         file_size,
+      </if>
+      <if test="fileMd5 != null" >
+        file_md5,
       </if>
       <if test="uploadTime != null" >
         upload_time,
@@ -156,6 +163,9 @@
       </if>
       <if test="fileSize != null" >
         #{fileSize,jdbcType=DECIMAL},
+      </if>
+      <if test="fileMd5 != null" >
+        #{fileMd5,jdbcType=VARCHAR},
       </if>
       <if test="uploadTime != null" >
         #{uploadTime,jdbcType=TIMESTAMP},
@@ -192,6 +202,9 @@
       <if test="record.fileSize != null" >
         file_size = #{record.fileSize,jdbcType=DECIMAL},
       </if>
+      <if test="record.fileMd5 != null" >
+        file_md5 = #{record.fileMd5,jdbcType=VARCHAR},
+      </if>
       <if test="record.uploadTime != null" >
         upload_time = #{record.uploadTime,jdbcType=TIMESTAMP},
       </if>
@@ -206,13 +219,14 @@
   <update id="updateByExample" parameterType="map" >
     update tb_system_file
     set file_id = #{record.fileId,jdbcType=BIGINT},
-      file_name = #{record.fileName,jdbcType=VARCHAR},
-      file_url = #{record.fileUrl,jdbcType=VARCHAR},
-      upload_user = #{record.uploadUser,jdbcType=BIGINT},
-      file_type = #{record.fileType,jdbcType=CHAR},
-      file_size = #{record.fileSize,jdbcType=DECIMAL},
-      upload_time = #{record.uploadTime,jdbcType=TIMESTAMP},
-      file_remark = #{record.fileRemark,jdbcType=VARCHAR}
+    file_name = #{record.fileName,jdbcType=VARCHAR},
+    file_url = #{record.fileUrl,jdbcType=VARCHAR},
+    upload_user = #{record.uploadUser,jdbcType=BIGINT},
+    file_type = #{record.fileType,jdbcType=CHAR},
+    file_size = #{record.fileSize,jdbcType=DECIMAL},
+    file_md5 = #{record.fileMd5,jdbcType=VARCHAR},
+    upload_time = #{record.uploadTime,jdbcType=TIMESTAMP},
+    file_remark = #{record.fileRemark,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -235,6 +249,9 @@
       <if test="fileSize != null" >
         file_size = #{fileSize,jdbcType=DECIMAL},
       </if>
+      <if test="fileMd5 != null" >
+        file_md5 = #{fileMd5,jdbcType=VARCHAR},
+      </if>
       <if test="uploadTime != null" >
         upload_time = #{uploadTime,jdbcType=TIMESTAMP},
       </if>
@@ -251,6 +268,7 @@
       upload_user = #{uploadUser,jdbcType=BIGINT},
       file_type = #{fileType,jdbcType=CHAR},
       file_size = #{fileSize,jdbcType=DECIMAL},
+      file_md5 = #{fileMd5,jdbcType=VARCHAR},
       upload_time = #{uploadTime,jdbcType=TIMESTAMP},
       file_remark = #{fileRemark,jdbcType=VARCHAR}
     where file_id = #{fileId,jdbcType=BIGINT}

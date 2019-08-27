@@ -16,6 +16,8 @@ public class TbSystemFile {
 
     private BigDecimal fileSize;
 
+    private String fileMd5;
+
     private Date uploadTime;
 
     private String fileRemark;
@@ -66,6 +68,14 @@ public class TbSystemFile {
 
     public void setFileSize(BigDecimal fileSize) {
         this.fileSize = fileSize;
+    }
+
+    public String getFileMd5() {
+        return fileMd5;
+    }
+
+    public void setFileMd5(String fileMd5) {
+        this.fileMd5 = fileMd5 == null ? null : fileMd5.trim();
     }
 
     public Date getUploadTime() {

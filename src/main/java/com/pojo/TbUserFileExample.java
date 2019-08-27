@@ -166,6 +166,66 @@ public class TbUserFileExample {
             return (Criteria) this;
         }
 
+        public Criteria andUserSysfileIdIsNull() {
+            addCriterion("user_sysfile_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSysfileIdIsNotNull() {
+            addCriterion("user_sysfile_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSysfileIdEqualTo(Long value) {
+            addCriterion("user_sysfile_id =", value, "userSysfileId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSysfileIdNotEqualTo(Long value) {
+            addCriterion("user_sysfile_id <>", value, "userSysfileId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSysfileIdGreaterThan(Long value) {
+            addCriterion("user_sysfile_id >", value, "userSysfileId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSysfileIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("user_sysfile_id >=", value, "userSysfileId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSysfileIdLessThan(Long value) {
+            addCriterion("user_sysfile_id <", value, "userSysfileId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSysfileIdLessThanOrEqualTo(Long value) {
+            addCriterion("user_sysfile_id <=", value, "userSysfileId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSysfileIdIn(List<Long> values) {
+            addCriterion("user_sysfile_id in", values, "userSysfileId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSysfileIdNotIn(List<Long> values) {
+            addCriterion("user_sysfile_id not in", values, "userSysfileId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSysfileIdBetween(Long value1, Long value2) {
+            addCriterion("user_sysfile_id between", value1, value2, "userSysfileId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSysfileIdNotBetween(Long value1, Long value2) {
+            addCriterion("user_sysfile_id not between", value1, value2, "userSysfileId");
+            return (Criteria) this;
+        }
+
         public Criteria andUserFileNameIsNull() {
             addCriterion("user_file_name is null");
             return (Criteria) this;
