@@ -32,7 +32,7 @@ public class FolderController {
      */
     @RequestMapping(value = "/folders")
     @ResponseBody
-    public ShowFolders folders(@SessionAttribute TbUser onlineuser, @RequestParam(defaultValue = "0") Long folder_father){
+    public ShowFolders folders(@SessionAttribute TbUser onlineuser, Long folder_father){
         return folderServiceImpl.findFolders(onlineuser.getUserId(),folder_father);
     }
 
@@ -45,7 +45,6 @@ public class FolderController {
     @ResponseBody
     public String rename(String folder){
         FolderAndFile folderAndFile = new Gson().fromJson(folder, FolderAndFile.class);
-        System.out.println(folderAndFile);
         if (folderAndFile.getFileType().equals("0")){
             TbFolder newFolder  = new TbFolder();
             newFolder.setFolderId(folderAndFile.getId());

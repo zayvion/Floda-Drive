@@ -64,6 +64,12 @@
             border-color: #0098ea;
             color: #09AAFF;
         }
+
+        .folderList{
+            font-size: 12px;
+            margin: 5px 0;
+            color: #1E9FFF;
+        }
     </style>
 </head>
 <body>
@@ -92,7 +98,8 @@
                     </div>
                 </div>
                 <div class="layui-card-body">
-                    <p style="font-size: 12px;margin: 5px 0">全部文件</p>
+                    <a href="javascript:void(0)" class="folderList" onclick="interFolder(0)">全部文件</a>
+                    <a href="javascript:void(0)" class="folderList" style="visibility: hidden;"> | 返回上一级</a>
                     <table class="layui-hide" id="test-table-checkbox" lay-filter="test-table-checkbox"></table>
                 </div>
             </div>
@@ -103,7 +110,7 @@
 <script src="../../layuiadmin/layui/layui.js?t=1"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script>
-    var table, layer,tableIns;
+    var table,layer,tableIns;
 
     //上传
     function uploadFile(){
@@ -128,6 +135,7 @@
             elem: '#test-table-checkbox'
             , skin: 'row'
             , url: 'folder/folders'//获取数据的地方
+            , where:{folder_father:0}//传递参数的地方
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , id:'test-table-checkbox'
             , cols: [[{type: 'checkbox'}
@@ -137,10 +145,11 @@
                     title: '文件名',
                     sort: true,
                     templet: function (d) {
-                        var icon = "";
+                        var icon = "";prefix = "",suffix = "</a>";
                         switch (d.fileType) {
                             case '0':
                                 icon = "<i class='fa fa-folder' style='font-size:18px;color:rgb(255,214,89);margin:8px 5px 0 0'></i>";
+                                prefix = "<a href='javascript:void(0)' onclick='interFolder("+d.id+","+d.parentId+")'>";
                                 break;
                             case '1':
                                 icon = "<i class='fa fa-file-photo-o' style='font-size:18px;color:rgb(255,119,67);margin:8px 5px 0 0'></i>";
@@ -158,7 +167,7 @@
                                 icon = "<i class='fa fa-file' style='font-size:18px;color:rgb(185,201,214);margin:8px 5px 0 0'></i>";
                                 break;
                         }
-                        return icon+d.fileName;
+                        return icon+prefix+d.fileName+suffix;
                     }
                 }
                 , {
@@ -203,8 +212,6 @@
                 $('.layui-btn-group').addClass('layui-hide');
             }
         });
-
-
     });
 
     //创建文件夹
@@ -280,6 +287,38 @@
             });
     }
 
+    //下一级文件夹
+    var parentIds = [];//记录所有父文件夹的id
+    function interFolder(folder_father,parentId) {
+        parentIds.push(parentId);
+        tableIns.reload({
+            where: {
+                //设定异步数据接口的额外参数，任意设
+                folder_father: folder_father
+            }
+        });
+        //显示返回上一级文件夹
+        $('.folderList').eq(1).css('visibility','visible');
+        $('.folderList').eq(1).attr('onclick','preFolder()');
+    }
+
+    //把上一级id添加到返回上一级的方法中
+    function preFolder() {
+        tableIns.reload({
+            where: {
+                //设定异步数据接口的额外参数，任意设
+                folder_father:parentIds[parentIds.length-1]
+            }
+        });
+        if (parentIds.length > 1){
+            parentIds.pop();
+        }
+    }
+
+    //图片预览
+    function showPhoto() {
+        
+    }
 
 </script>
 </body>
