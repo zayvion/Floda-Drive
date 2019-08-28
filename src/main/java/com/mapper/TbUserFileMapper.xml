@@ -10,6 +10,7 @@
     <result column="file_size" property="fileSize" jdbcType="DECIMAL" />
     <result column="file_location" property="fileLocation" jdbcType="BIGINT" />
     <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP" />
+    <result column="isDel" property="isdel" jdbcType="SMALLINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -71,7 +72,7 @@
   </sql>
   <sql id="Base_Column_List" >
     userfile_id, user_sysfile_id, user_file_name, belong_user, file_type, file_size,
-    file_location, upload_time
+    file_location, upload_time, isDel
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pojo.TbUserFileExample" >
     select
@@ -106,10 +107,12 @@
   <insert id="insert" parameterType="com.pojo.TbUserFile" >
     insert into tb_user_file (userfile_id, user_sysfile_id, user_file_name,
       belong_user, file_type, file_size,
-      file_location, upload_time)
+      file_location, upload_time, isDel
+      )
     values (#{userfileId,jdbcType=BIGINT}, #{userSysfileId,jdbcType=BIGINT}, #{userFileName,jdbcType=VARCHAR},
       #{belongUser,jdbcType=BIGINT}, #{fileType,jdbcType=CHAR}, #{fileSize,jdbcType=DECIMAL},
-      #{fileLocation,jdbcType=BIGINT}, #{uploadTime,jdbcType=TIMESTAMP})
+      #{fileLocation,jdbcType=BIGINT}, #{uploadTime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=SMALLINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.pojo.TbUserFile" >
     insert into tb_user_file
@@ -138,6 +141,9 @@
       <if test="uploadTime != null" >
         upload_time,
       </if>
+      <if test="isdel != null" >
+        isDel,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userfileId != null" >
@@ -163,6 +169,9 @@
       </if>
       <if test="uploadTime != null" >
         #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdel != null" >
+        #{isdel,jdbcType=SMALLINT},
       </if>
     </trim>
   </insert>
@@ -199,6 +208,9 @@
       <if test="record.uploadTime != null" >
         upload_time = #{record.uploadTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.isdel != null" >
+        isDel = #{record.isdel,jdbcType=SMALLINT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -213,7 +225,8 @@
     file_type = #{record.fileType,jdbcType=CHAR},
     file_size = #{record.fileSize,jdbcType=DECIMAL},
     file_location = #{record.fileLocation,jdbcType=BIGINT},
-    upload_time = #{record.uploadTime,jdbcType=TIMESTAMP}
+    upload_time = #{record.uploadTime,jdbcType=TIMESTAMP},
+    isDel = #{record.isdel,jdbcType=SMALLINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -242,6 +255,9 @@
       <if test="uploadTime != null" >
         upload_time = #{uploadTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="isdel != null" >
+        isDel = #{isdel,jdbcType=SMALLINT},
+      </if>
     </set>
     where userfile_id = #{userfileId,jdbcType=BIGINT}
   </update>
@@ -253,7 +269,8 @@
       file_type = #{fileType,jdbcType=CHAR},
       file_size = #{fileSize,jdbcType=DECIMAL},
       file_location = #{fileLocation,jdbcType=BIGINT},
-      upload_time = #{uploadTime,jdbcType=TIMESTAMP}
+      upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      isDel = #{isdel,jdbcType=SMALLINT}
     where userfile_id = #{userfileId,jdbcType=BIGINT}
   </update>
 </mapper>

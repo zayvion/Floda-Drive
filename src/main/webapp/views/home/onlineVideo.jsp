@@ -33,8 +33,8 @@
 <body>
 <div class="text">
     <sapn><b>文件名：</b>${fileInfo.fileName}</sapn>
-    <sapn><b>文件大小：</b>${fileInfo.fileSize}</sapn>
-    <sapn><b>修改日期：</b>${fileInfo.updatetime}</sapn>
+    <sapn><b>文件大小：</b>${fileSize}</sapn>
+    <sapn><b>修改日期：</b>${fileUploadTime}</sapn>
 </div>
 <div>
     <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="800px">

@@ -75,7 +75,7 @@ public class UserController {
         if (user != null) {
             // 登录成功将用户对象放入session
             session.setAttribute("onlineuser", user);
-            return "redirect:/index.jsp";
+            return "redirect:/index";
         }
         model.addAttribute("msg", "用户名或密码错误！");
         return "user/login";
@@ -96,6 +96,42 @@ public class UserController {
         session.setAttribute("regCode", redomCode);
         return ResponseResult.ok();
     }
+
+    /**
+     * 修改密码获取验证码
+     * @param session
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/sendUpdatePasswordCode",produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String sendUpdatePasswordCode( HttpSession session,Model model) {
+        TbUser user = (TbUser) session.getAttribute("onlineuser");
+        if (user.getUserEmail() == null||user.getUserEmail().equals("")) {
+            return ResponseResult.build(500, "您还没有填写邮箱，请您在个人资料页面补全邮箱再试！");
+        }
+        String redomCode = getRedomCode(4);
+        MailUtil.sendMail(user.getUserEmail(), redomCode, "您正在使用FlodaDrive网盘重置密码，您的验证码为:");
+        session.setAttribute("regCode", redomCode);
+        return null;
+    }
+
+    @RequestMapping(value = "/updatePassword",produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String updatePassword(String password,String mailCode,HttpSession session) {
+        try {
+            TbUser onlineuser = (TbUser) session.getAttribute("onlineuser");
+            TbUser tbUser = new TbUser();
+            tbUser.setUserId(onlineuser.getUserId());
+            tbUser.setUserPassword(MD5Util.getMD5(password));
+            userService.updateInfo(tbUser);
+            return ResponseResult.ok();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseResult.build(500, "发生错误!");
+    }
+
 
     /**
      * 用户登出

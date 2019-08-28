@@ -20,6 +20,8 @@ public class TbUserFile {
 
     private Date uploadTime;
 
+    private Short isdel;
+
     public Long getUserfileId() {
         return userfileId;
     }
@@ -82,5 +84,13 @@ public class TbUserFile {
 
     public void setUploadTime(Date uploadTime) {
         this.uploadTime = uploadTime;
+    }
+
+    public Short getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(Short isdel) {
+        this.isdel = isdel;
     }
 }

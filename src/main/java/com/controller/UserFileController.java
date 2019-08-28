@@ -10,6 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -64,10 +68,18 @@ public class UserFileController {
             folderAndFile.setUserSysfileId(systemFile.getFileId());
             folderAndFile.setFile_url(systemFile.getFileUrl());
             folderAndFile.setFileName(userFile.getUserFileName());
-            folderAndFile.setFileSize(userFile.getFileSize());
-            folderAndFile.setUpdatetime(userFile.getUploadTime());
             // 把文件的信息传给前台
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss") ;
+            String updateTime = dateFormat.format(userFile.getUploadTime());
+            BigDecimal fileSize = userFile.getFileSize();
+            if (fileSize.floatValue() < 1024) {
+                model.addAttribute("fileSize", fileSize + "KB");
+            } else {
+                DecimalFormat decimalFormat = new DecimalFormat(".0");
+                model.addAttribute("fileSize",  decimalFormat.format(fileSize.doubleValue() / 1024)+ "MB");
+            }
             model.addAttribute("fileInfo", folderAndFile);
+            model.addAttribute("fileUploadTime", updateTime);
             return "/views/home/onlineVideo";
         }else if (type==4){
 

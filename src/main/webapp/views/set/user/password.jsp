@@ -32,15 +32,9 @@
 
                     <div class="layui-form" lay-filter="">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">邮箱</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="email" id="LAY-user-login-cellemail" lay-verify="email" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
                                 <label class="layui-form-label">验证码</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="mailCode" id="LAY-user-login-vercode" lay-verify="required" class="layui-input">
+                                    <input type="text" name="mailCode" id="mailcode" lay-verify="required" class="layui-input">
                                 </div>
                                 <div  class="layui-input-inline">
                                     <div style="margin-left: 10px;">
@@ -51,19 +45,19 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">新密码</label>
                             <div class="layui-input-inline">
-                                <input type="password" name="password" lay-verify="pass" lay-verType="tips" autocomplete="off" id="LAY_password" class="layui-input">
+                                <input type="password" id="password" lay-verify="pass" lay-verType="tips" autocomplete="off" id="LAY_password" class="layui-input">
                             </div>
                             <div class="layui-form-mid layui-word-aux">6到16个字符</div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">确认新密码</label>
                             <div class="layui-input-inline">
-                                <input type="password" name="repassword" lay-verify="repass" lay-verType="tips" autocomplete="off" class="layui-input">
+                                <input type="password" id="repassword" lay-verify="repass" lay-verType="tips" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-block">
-                                <button class="layui-btn" lay-submit lay-filter="setmypass">确认修改</button>
+                                <button class="layui-btn layui-btn-normal" id="updateBtn" lay-filter="setmypass">确认修改</button>
                             </div>
                         </div>
                     </div>
@@ -83,39 +77,60 @@
         index: 'lib/index' //主入口模块
     }).use(['index', 'set']);
     $("#btn_code").click(function () {
-        var email = $("#LAY-user-login-cellemail").val();
-        console.log(email);
-        var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-        console.log(!reg.test(email));
-        if(email == '' || !reg.test(email)){
-            alert("邮箱格式错误");
+        $.post("/user/sendUpdatePasswordCode", function (result) {
+            console.log(result)
+            if (result.status == 500) {
+                layer.msg(result.msg)
+
+
+            }else{
+                var count = 60;
+                const countDown = setInterval(() => {
+                    if (count === 0) {
+                    $('#btn_code').text('重新发送').removeAttr('disabled');
+                    $('#btn_code').css({
+                        background: '#EEEEEE',
+                        color: '#666666',
+                        cursor: 'pointer'
+                    });
+                    clearInterval(countDown);
+                } else {
+                    $('#btn_code').attr('disabled', true);
+                    $('#btn_code').css({
+                        background: '#F6F6F6',
+                        color: '#C5C5C5',
+                        cursor: 'default'
+                    });
+                    $('#btn_code').text(count + '秒可重新获取');
+                    count--;
+
+                }
+            }, 1000);
+            }
+        })
+
+
+    })
+    $("#updateBtn").click(function () {
+       var password = $("#password").val();
+       var repass = $("#repassword").val();
+       var mailcode = $("#mailcode").val();
+
+        if (password!=repass) {
+            layer.msg("两次密码输入不一致，请重新输入！")
+            return;
+        }else if (password ==""){
+            layer.msg("请输入密码！")
             return;
         }
-        $.post('/user/sendRegCode?mailBox='+email, function () {
-            console.log('验证码发送成功');
-        });
-        var count = 60;
-        const countDown = setInterval(() => {
-            if (count === 0) {
-            $('#btn_code').text('重新发送').removeAttr('disabled');
-            $('#btn_code').css({
-                background: '#EEEEEE',
-                color: '#666666',
-                cursor: 'pointer'
-            });
-            clearInterval(countDown);
-        } else {
-            $('#btn_code').attr('disabled', true);
-            $('#btn_code').css({
-                background: '#F6F6F6',
-                color: '#C5C5C5',
-                cursor: 'default'
-            });
-            $('#btn_code').text(count + '秒可重新获取');
-            count--;
-
-        }
-    }, 1000);
+        $.post('/user/updatePassword?password='+password+'&mailCode='+mailcode, function (result) {
+            console.log(result)
+            if (result.status == 200){
+                layer.msg("密码修改成功！")
+            }else{
+                layer.msg("修改密码发生错误，请重试！")
+            }
+        })
 
     })
 </script>
