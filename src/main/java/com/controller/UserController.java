@@ -142,7 +142,7 @@ public class UserController {
         }
         user.setUserId(onlineuser.getUserId());
         userService.updateInfo(user);
-        session.setAttribute("onlineuser", user);
+        session.setAttribute("onlineuser", userService.getUserInfo(onlineuser.getUserId()));
         return "views/set/user/info";
     }
 
@@ -173,14 +173,16 @@ public class UserController {
             try {
                 FtpUtil.uploadFile("182.254.180.106", 21, "image", "image", "/img", path, newName, file.getInputStream());
                 TbUser u = new TbUser();
+                u.setUserId(user.getUserId());
                 u.setUserImgurl("http://image.lzllzl.cn/img/" + path + "/" + newName);
                 userService.updateInfo(u);
-                //返回页面
+                session.setAttribute("onlineuser", userService.getUserInfo(user.getUserId()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-        return null;
+        //返回页面
+        return "redirect:/user/info";
     }
 
     /**

@@ -45,8 +45,8 @@ public class SystemFileController {
     public String uploadFile(HttpSession session, @RequestParam("files") MultipartFile file, Model model) throws IOException {
         TbUser user = (TbUser) session.getAttribute("onlineuser");
         // session没有用户信息直接返回错误信息
-        if (user == null){
-            model.addAttribute("msg","登录信息异常，请退出后重新登录！");
+        if (user == null) {
+            model.addAttribute("msg", "登录信息异常，请退出后重新登录！");
             return "error";
         }
         if (file != null) {
@@ -62,9 +62,9 @@ public class SystemFileController {
                 userFile.setBelongUser(user.getUserId());
                 userFile.setFileSize(existFile.getFileSize());
                 userFile.setFileType(existFile.getFileType());
-                int sameNameFile = userFileService.getSameNameFile(file.getOriginalFilename(),user.getUserId());
+                int sameNameFile = userFileService.getSameNameFile(file.getOriginalFilename(), user.getUserId());
                 if (sameNameFile > 0) {
-                    model.addAttribute("msg","云端有相同文件名文件，请重新上传！");
+                    model.addAttribute("msg", "云端有相同文件名文件，请重新上传！");
                     return "error";
                 } else {
                     userFile.setUserFileName(file.getOriginalFilename());
@@ -77,7 +77,13 @@ public class SystemFileController {
             }
             System.out.println(file.getOriginalFilename());
             String oldFileName = file.getOriginalFilename();
-            String extension = oldFileName.substring(oldFileName.indexOf("."));
+            // 文件扩展名开始的下标
+            int dotIndex = oldFileName.indexOf(".");
+            if (dotIndex == 0) {
+                model.addAttribute("msg", "不支持的文件类型，请重试！");
+                return "error";
+            }
+            String extension = oldFileName.substring(dotIndex);
             String newName = UUID.randomUUID().toString().substring(0, 15) + extension;
             String path = getDate();
             System.out.println(newName);
@@ -129,6 +135,7 @@ public class SystemFileController {
 
     /**
      * 获取当前如期作为文件夹名
+     *
      * @return
      */
     public String getDate() {

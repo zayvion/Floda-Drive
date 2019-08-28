@@ -58,14 +58,14 @@
                             <div class="layui-input-inline">
                                 <input type="text" name="username" value="${onlineuser.userName}" readonly class="layui-input">
                             </div>
-                            <div class="layui-form-mid layui-word-aux">不可修改。一般用于后台登入名</div>
+                            <div class="layui-form-mid layui-word-aux">不可修改。一般用于登录</div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">头像</label>
                             <div class="layui-input-inline">
-                                <input name="avatar" lay-verify="" id="LAY_avatarSrc" placeholder="图片地址" value="${onlineuser.userImgurl}" class="layui-input">
+                                <input name="avatar" lay-verify="" id="LAY_avatarSrc" placeholder="图片地址" readonly value="${onlineuser.userImgurl}" class="layui-input">
                             </div>
-                            <form action="/user/uploadImg" method="post">
+                            <form action="/user/uploadImg" method="post" enctype="multipart/form-data">
                                 <div class="layui-input-inline layui-btn-container" style="width: auto;">
                                     <input type="file" name="img" accept="image/*" />
                                     <input type="submit" value="上传图片" class="layui-btn layui-btn-primary"/>

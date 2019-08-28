@@ -31,5 +31,12 @@ public interface UserService {
      */
     void updateInfo(TbUser user);
 
+    /**
+     * 根据id获取用户的信息
+     * @param userId
+     * @return
+     */
+    TbUser getUserInfo(Long userId);
+
 
 }
