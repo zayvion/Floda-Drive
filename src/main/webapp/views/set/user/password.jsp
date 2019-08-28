@@ -32,10 +32,21 @@
 
                     <div class="layui-form" lay-filter="">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">当前密码</label>
+                            <label class="layui-form-label">邮箱</label>
                             <div class="layui-input-inline">
-                                <input type="password" name="oldPassword" lay-verify="required" lay-verType="tips" class="layui-input">
+                                <input type="text" name="email" id="LAY-user-login-cellemail" lay-verify="email" class="layui-input">
                             </div>
+                        </div>
+                        <div class="layui-form-item">
+                                <label class="layui-form-label">验证码</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="mailCode" id="LAY-user-login-vercode" lay-verify="required" class="layui-input">
+                                </div>
+                                <div  class="layui-input-inline">
+                                    <div style="margin-left: 10px;">
+                                        <a type="button" class="layui-btn layui-btn-primary layui-btn-fluid" id="btn_code" href="javascript:void(0)">获取验证码</a>
+                                    </div>
+                                </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">新密码</label>
@@ -64,12 +75,49 @@
 </div>
 
 <script src="../../../layuiadmin/layui/layui.js"></script>
+<script src="../../../layuiadmin/layui/jquery.min.js"></script>
 <script>
     layui.config({
         base: '../../../layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'set']);
+    $("#btn_code").click(function () {
+        var email = $("#LAY-user-login-cellemail").val();
+        console.log(email);
+        var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+        console.log(!reg.test(email));
+        if(email == '' || !reg.test(email)){
+            alert("邮箱格式错误");
+            return;
+        }
+        $.post('/user/sendRegCode?mailBox='+email, function () {
+            console.log('验证码发送成功');
+        });
+        var count = 60;
+        const countDown = setInterval(() => {
+            if (count === 0) {
+            $('#btn_code').text('重新发送').removeAttr('disabled');
+            $('#btn_code').css({
+                background: '#EEEEEE',
+                color: '#666666',
+                cursor: 'pointer'
+            });
+            clearInterval(countDown);
+        } else {
+            $('#btn_code').attr('disabled', true);
+            $('#btn_code').css({
+                background: '#F6F6F6',
+                color: '#C5C5C5',
+                cursor: 'default'
+            });
+            $('#btn_code').text(count + '秒可重新获取');
+            count--;
+
+        }
+    }, 1000);
+
+    })
 </script>
 </body>
 </html>

@@ -67,11 +67,11 @@
                             </div>
                             <form action="/user/uploadImg" method="post" enctype="multipart/form-data">
                                 <div class="layui-input-inline layui-btn-container" style="width: auto;">
-                                    <input type="file" name="img" accept="image/*" />
+                                    <input type="file" name="img" accept="image/*" required style="font-size: 10px;width: 200px;"/>
                                     <input type="submit" value="上传图片" class="layui-btn layui-btn-primary"/>
                                 </div>
                             </form>
-                            <button class="layui-btn layui-btn-primary" layadmin-event="avartatPreview">查看图片</button >
+                            <button class="layui-btn layui-btn-primary" layadmin-event="avartatPreview">查看图片</button>
                         </div>
                         <form action="/user/updateInfo" method="post">
                         <div class="layui-form-item">
