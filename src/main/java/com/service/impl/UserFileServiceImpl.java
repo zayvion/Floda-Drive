@@ -1,13 +1,17 @@
 package com.service.impl;
 
 import com.mapper.TbUserFileMapper;
+import com.pojo.FolderAndFile;
+import com.pojo.TbSystemFile;
 import com.pojo.TbUserFile;
 import com.pojo.TbUserFileExample;
+import com.service.SystemFileService;
 import com.service.UserFileService;
 import com.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +25,8 @@ public class UserFileServiceImpl implements UserFileService {
 
     @Autowired
     private TbUserFileMapper userFileMapper;
+    @Autowired
+    private SystemFileService systemFileService;
 
     @Override
     public void addFile(TbUserFile userFile) {
@@ -37,15 +43,37 @@ public class UserFileServiceImpl implements UserFileService {
         return count;
     }
 
+
     @Override
-    public String updateUserFile(TbUserFile userFile) {
-        try {
-            userFile.setUploadTime(new Date());
-            userFileMapper.updateByPrimaryKey(userFile);
-            return ResponseResult.build(200,"修改成功");
-        } catch (Exception e) {
-            e.printStackTrace();
+    public List getUserFileWithType(long userId, String type) {
+        TbUserFileExample userFileExample = new TbUserFileExample();
+        TbUserFileExample.Criteria fileExampleCriteria = userFileExample.createCriteria();
+        fileExampleCriteria.andFileTypeEqualTo(type);
+        fileExampleCriteria.andBelongUserEqualTo(userId);
+        List<TbUserFile> fileList = userFileMapper.selectByExample(userFileExample);
+        ArrayList<FolderAndFile> files = new ArrayList<>();
+        for (TbUserFile tbUserFile : fileList) {
+            FolderAndFile folderAndFile = new FolderAndFile();
+            folderAndFile.setBelong(tbUserFile.getBelongUser());
+            folderAndFile.setFileSize(tbUserFile.getFileSize());
+            folderAndFile.setFileType(tbUserFile.getFileType());
+            folderAndFile.setUpdatetime(tbUserFile.getUploadTime());
+            TbSystemFile systemFile = systemFileService.getSystemFile(tbUserFile.getUserSysfileId());
+            folderAndFile.setFile_url(systemFile.getFileUrl());
+            files.add(folderAndFile);
         }
-        return ResponseResult.build(500,"修改失败");
+        return files;
     }
-}
+        @Override
+        public String updateUserFile (TbUserFile userFile){
+            try {
+                userFile.setUploadTime(new Date());
+                userFileMapper.updateByPrimaryKey(userFile);
+                return ResponseResult.build(200, "修改成功");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return ResponseResult.build(500, "修改失败");
+        }
+    }
+

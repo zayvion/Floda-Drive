@@ -31,4 +31,14 @@ public interface UserFileService {
      * @param userFile
      */
     String updateUserFile(TbUserFile userFile);
+
+    /**
+     * 根据类型返回相关的文件
+     * @param userId
+     * @param type 类型
+     * @return list
+     */
+    List getUserFileWithType(long userId, String type);
+
+
 }

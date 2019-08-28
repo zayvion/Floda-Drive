@@ -43,27 +43,40 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">用户名</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="username" value="xianxin" readonly class="layui-input">
+                                <input type="text" name="username" value="${onlineuser.userName}" readonly class="layui-input">
                             </div>
                             <div class="layui-form-mid layui-word-aux">不可修改。一般用于后台登入名</div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">昵称</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="nickname" value="贤心" lay-verify="nickname" autocomplete="off" placeholder="请输入昵称" class="layui-input">
+                                <input type="text" name="nickname" value="${onlineuser.userNickname}" lay-verify="nickname" autocomplete="off" placeholder="请输入昵称" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">性别</label>
                             <div class="layui-input-block">
-                                <input type="radio" name="sex" value="男" title="男">
-                                <input type="radio" name="sex" value="女" title="女" checked>
+                                <c:choose>
+                                    <c:when test='${onlineuser.userSex==F}'>
+                                        <input type="radio" name="sex" value="男" title="男">
+                                        <input type="radio" name="sex" value="女" title="女" checked>
+                                    </c:when>
+                                    <c:when test='${onlineuser.userSex==M}'>
+                                        <input type="radio" name="sex" value="男" title="男" checked>
+                                        <input type="radio" name="sex" value="女" title="女">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="radio" name="sex" value="男" title="男">
+                                        <input type="radio" name="sex" value="女" title="女">
+                                    </c:otherwise>
+                                </c:choose>
+
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">头像</label>
                             <div class="layui-input-inline">
-                                <input name="avatar" lay-verify="required" id="LAY_avatarSrc" placeholder="图片地址" value="http://cdn.layui.com/avatar/168.jpg" class="layui-input">
+                                <input name="avatar" lay-verify="required" id="LAY_avatarSrc" placeholder="图片地址" value="${onlineuser.userImgurl}" class="layui-input">
                             </div>
                             <div class="layui-input-inline layui-btn-container" style="width: auto;">
                                 <button type="button" class="layui-btn layui-btn-primary" id="LAY_avatarUpload">
@@ -75,13 +88,13 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">手机</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="cellphone" value="" lay-verify="phone" autocomplete="off" class="layui-input">
+                                <input type="text" name="cellphone" value="${onlineuser.userPhone}" lay-verify="phone" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">邮箱</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="email" value="" lay-verify="email" autocomplete="off" class="layui-input">
+                                <input type="text" name="email" value="${onlineuser.userEmail}" lay-verify="email" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -99,6 +112,7 @@
 </div>
 
 <script src="../../../layuiadmin/layui/layui.js"></script>
+<script   src="https://code.jquery.com/jquery-3.4.1.slim.min.js"   integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="   crossorigin="anonymous"></script>
 <script>
     layui.config({
         base: '../../../layuiadmin/' //静态资源所在路径
