@@ -239,7 +239,7 @@
             });
     }
 
-    //重命名文件夹
+    //重命名
     function renameFolder() {
         var checkStatus = table.checkStatus('test-table-checkbox');
         layer.prompt({
@@ -251,10 +251,10 @@
             function (text, index) {
                 //index为当前层索引
                 //text为输入参数
-                //在回调函数末尾添加 “return false”可以禁止点击该按钮关闭弹出层
+                //+checkStatus.data[0].fileName.substring(checkStatus.data[0].fileName.lastIndexOf("."))
                 checkStatus.data[0].fileName = text;
                 //修改后触发ajax方法，异步请求后台修改数据库
-                console.log(JSON.stringify(checkStatus.data[0]));
+                console.log(checkStatus.data[0]);
                 $.post('/folder/rename',{'folder':JSON.stringify(checkStatus.data[0])},function (data,status) {
                     if (data.status === 200){
                         layer.msg(data.msg,{

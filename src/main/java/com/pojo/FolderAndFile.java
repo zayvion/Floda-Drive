@@ -17,6 +17,8 @@ public class FolderAndFile {
     private Date updatetime;
     private BigDecimal fileSize;
     private String fileType;
+    private Long userSysfileId;
+    private String file_url;
 
     public Long getId() {
         return id;
@@ -74,6 +76,22 @@ public class FolderAndFile {
         this.fileType = fileType;
     }
 
+    public Long getUserSysfileId() {
+        return userSysfileId;
+    }
+
+    public void setUserSysfileId(Long userSysfileId) {
+        this.userSysfileId = userSysfileId;
+    }
+
+    public String getFile_url() {
+        return file_url;
+    }
+
+    public void setFile_url(String file_url) {
+        this.file_url = file_url;
+    }
+
     @Override
     public String toString() {
         return "FolderAndFile{" +
@@ -84,6 +102,8 @@ public class FolderAndFile {
                 ", updatetime=" + updatetime +
                 ", fileSize=" + fileSize +
                 ", fileType='" + fileType + '\'' +
+                ", userSysfileId=" + userSysfileId +
+                ", file_url='" + file_url + '\'' +
                 '}';
     }
 }

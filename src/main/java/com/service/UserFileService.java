@@ -30,5 +30,5 @@ public interface UserFileService {
      * 重命名文件
      * @param userFile
      */
-    void updateUserFile(TbUserFile userFile);
+    String updateUserFile(TbUserFile userFile);
 }

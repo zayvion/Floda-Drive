@@ -75,6 +75,7 @@ public class FolderServiceImpl implements FolderService {
             ff.setParentId(tbUserFile.getFileLocation());
             ff.setFileSize(tbUserFile.getFileSize());
             ff.setUpdatetime(tbUserFile.getUploadTime());
+            ff.setUserSysfileId(tbUserFile.getUserSysfileId());
             ffs.add(ff);
         }
         showFolders.setData(ffs);

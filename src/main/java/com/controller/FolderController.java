@@ -1,11 +1,9 @@
 package com.controller;
 
 import com.google.gson.Gson;
-import com.pojo.FolderAndFile;
-import com.pojo.ShowFolders;
-import com.pojo.TbFolder;
-import com.pojo.TbUser;
+import com.pojo.*;
 import com.service.FolderService;
+import com.service.UserFileService;
 import com.utils.ResponseResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +24,8 @@ public class FolderController {
 
     @Resource
     private FolderService folderServiceImpl;
+    @Resource
+    private UserFileService userFileServiceImpl;
 
     /**
      * 根据用户id查询当前用户的所有文件夹
@@ -45,13 +45,25 @@ public class FolderController {
     @ResponseBody
     public String rename(String folder){
         FolderAndFile folderAndFile = new Gson().fromJson(folder, FolderAndFile.class);
-        TbFolder newFolder  = new TbFolder();
-        newFolder.setFolderId(folderAndFile.getId());
-        newFolder.setFolderName(folderAndFile.getFileName());
-        newFolder.setFolderUser(folderAndFile.getBelong());
-        newFolder.setFolderFather(folderAndFile.getParentId());
-        newFolder.setFolderCreatetime(folderAndFile.getUpdatetime());
-        return folderServiceImpl.updateFolder(newFolder);
+        System.out.println(folderAndFile);
+        if (folderAndFile.getFileType().equals("0")){
+            TbFolder newFolder  = new TbFolder();
+            newFolder.setFolderId(folderAndFile.getId());
+            newFolder.setFolderName(folderAndFile.getFileName());
+            newFolder.setFolderUser(folderAndFile.getBelong());
+            newFolder.setFolderFather(folderAndFile.getParentId());
+            return folderServiceImpl.updateFolder(newFolder);
+        }else {
+            TbUserFile userFile = new TbUserFile();
+            userFile.setBelongUser(folderAndFile.getBelong());
+            userFile.setFileLocation(folderAndFile.getParentId());
+            userFile.setFileSize(folderAndFile.getFileSize());
+            userFile.setFileType(folderAndFile.getFileType());
+            userFile.setUserfileId(folderAndFile.getId());
+            userFile.setUserFileName(folderAndFile.getFileName());
+            userFile.setUserSysfileId(folderAndFile.getUserSysfileId());
+            return userFileServiceImpl.updateUserFile(userFile);
+        }
     }
 
     /**

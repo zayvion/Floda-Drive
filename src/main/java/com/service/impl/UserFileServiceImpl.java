@@ -4,6 +4,7 @@ import com.mapper.TbUserFileMapper;
 import com.pojo.TbUserFile;
 import com.pojo.TbUserFileExample;
 import com.service.UserFileService;
+import com.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,8 +38,14 @@ public class UserFileServiceImpl implements UserFileService {
     }
 
     @Override
-    public void updateUserFile(TbUserFile userFile) {
-        userFile.setUploadTime(new Date());
-        userFileMapper.insertSelective(userFile);
+    public String updateUserFile(TbUserFile userFile) {
+        try {
+            userFile.setUploadTime(new Date());
+            userFileMapper.updateByPrimaryKey(userFile);
+            return ResponseResult.build(200,"修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseResult.build(500,"修改失败");
     }
 }
