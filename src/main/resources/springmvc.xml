@@ -22,6 +22,7 @@
         <!-- 设置上传文件的最大尺寸为50MB -->
         <property name="maxUploadSize" value="52428800"></property>
         <property name="defaultEncoding" value="utf-8"></property>
+        <property name="maxInMemorySize" value="5242880"/>
     </bean>
 
     <!-- 静态资源放行 -->

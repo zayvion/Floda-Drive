@@ -34,8 +34,12 @@
                             <label class="layui-form-label">我的角色</label>
                             <div class="layui-input-inline">
                                 <select name="role" lay-verify="">
-                                    <option value="1" selected>普通用户</option>
-                                    <option value="2">高级用户</option>
+                                    <c:choose>
+                                        <c:when test='onlineuser.userLevel=="2"'>
+                                            <option value="1">普通用户</option>
+                                            <option value="2" selected>高级用户</option>
+                                        </c:when>
+                                    </c:choose>
                                 </select>
                             </div>
                             <div class="layui-form-mid layui-word-aux">当前角色不可更改为其它角色</div>
@@ -57,11 +61,11 @@
                             <label class="layui-form-label">性别</label>
                             <div class="layui-input-block">
                                 <c:choose>
-                                    <c:when test='${onlineuser.userSex==F}'>
+                                    <c:when test='${onlineuser.userSex=="F"}'>
                                         <input type="radio" name="sex" value="男" title="男">
                                         <input type="radio" name="sex" value="女" title="女" checked>
                                     </c:when>
-                                    <c:when test='${onlineuser.userSex==M}'>
+                                    <c:when test='${onlineuser.userSex=="M"}'>
                                         <input type="radio" name="sex" value="男" title="男" checked>
                                         <input type="radio" name="sex" value="女" title="女">
                                     </c:when>

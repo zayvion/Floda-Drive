@@ -35,10 +35,11 @@ public class UserFileServiceImpl implements UserFileService {
     }
 
     @Override
-    public int getSameNameFile(String filename) {
+    public int getSameNameFile(String filename,long userId) {
         TbUserFileExample userFileExample = new TbUserFileExample();
         TbUserFileExample.Criteria fileExampleCriteria = userFileExample.createCriteria();
         fileExampleCriteria.andUserFileNameLike(filename);
+        fileExampleCriteria.andBelongUserEqualTo(userId);
         int count = userFileMapper.countByExample(userFileExample);
         return count;
     }

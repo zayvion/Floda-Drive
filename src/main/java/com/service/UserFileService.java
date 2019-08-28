@@ -24,7 +24,7 @@ public interface UserFileService {
      * @param filename
      * @return
      */
-    int getSameNameFile(String filename);
+    int getSameNameFile(String filename,long userId);
 
     /**
      * 重命名文件

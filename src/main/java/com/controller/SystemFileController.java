@@ -62,7 +62,7 @@ public class SystemFileController {
                 userFile.setBelongUser(user.getUserId());
                 userFile.setFileSize(existFile.getFileSize());
                 userFile.setFileType(existFile.getFileType());
-                int sameNameFile = userFileService.getSameNameFile(file.getOriginalFilename());
+                int sameNameFile = userFileService.getSameNameFile(file.getOriginalFilename(),user.getUserId());
                 if (sameNameFile > 0) {
                     model.addAttribute("msg","云端有相同文件名文件，请重新上传！");
                     return "error";

@@ -84,12 +84,27 @@ public class UserController {
         return ResponseResult.ok();
     }
 
+    /**
+     * 用户登出
+     * @param session
+     * @return login.jsp
+     */
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
         session.removeAttribute("onlineuser");
         return "redirect:/user/login.jsp";
     }
 
+    @RequestMapping("/info")
+    public String getUserInfo(HttpSession session,Model model) {
+        TbUser user = (TbUser) session.getAttribute("onlineuser");
+        if (user == null) {
+            model.addAttribute("msg", "登录状态错误，请重新登录后再试！");
+            return "error";
+        }
+
+        return "views/set/user/info";
+    }
     /**
      * 获取一串随机验证码
      * @param n 需要多少位
