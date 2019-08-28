@@ -43,11 +43,12 @@ public class UserFileController {
         return null;
     }
 
-    @RequestMapping("getFileType")
+    @RequestMapping(value = "/getFileType",produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getFileType(HttpSession session, @RequestParam String type, Model model) {
         TbUser user = ((TbUser) session.getAttribute("onlineuser"));
         ShowFolders showFolders = new ShowFolders();
+        System.out.println(type);
         List files = userFileService.getUserFileWithType(user.getUserId(), type);
         showFolders.setData(files);
         return new Gson().toJson(showFolders);

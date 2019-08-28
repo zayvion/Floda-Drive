@@ -55,6 +55,7 @@ public class UserFileServiceImpl implements UserFileService {
         ArrayList<FolderAndFile> files = new ArrayList<>();
         for (TbUserFile tbUserFile : fileList) {
             FolderAndFile folderAndFile = new FolderAndFile();
+            folderAndFile.setFileName(tbUserFile.getUserFileName());
             folderAndFile.setBelong(tbUserFile.getBelongUser());
             folderAndFile.setFileSize(tbUserFile.getFileSize());
             folderAndFile.setFileType(tbUserFile.getFileType());

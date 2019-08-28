@@ -134,7 +134,7 @@
                                 </a>
                             </dd>
                             <dd data-name="console">
-                                <a lay-href="home/homepage2.html">
+                                <a lay-href="./views/home/video.jsp">
                                     视频
                                 </a>
                             </dd>
