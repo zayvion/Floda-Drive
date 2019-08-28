@@ -69,7 +69,9 @@ public class UserFileController {
             // 把文件的信息传给前台
             model.addAttribute("fileInfo", folderAndFile);
             return "/views/home/onlineVideo";
-        }else if ()
+        }else if (type==4){
+
+        }
         return "123";
 
     }
