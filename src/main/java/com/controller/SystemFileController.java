@@ -127,6 +127,10 @@ public class SystemFileController {
 
     }
 
+    /**
+     * 获取当前如期作为文件夹名
+     * @return
+     */
     public String getDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String format = sdf.format(new Date());

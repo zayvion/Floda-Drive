@@ -114,7 +114,10 @@
       #{fileMd5,jdbcType=VARCHAR}, #{uploadTime,jdbcType=TIMESTAMP}, #{fileRemark,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.pojo.TbSystemFile"  useGeneratedKeys="true" keyProperty="file_id">
+  <insert id="insertSelective" parameterType="com.pojo.TbSystemFile">
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="fileId">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into tb_system_file
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="fileId != null" >

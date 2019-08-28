@@ -23,8 +23,8 @@ public class SystemFileServiceImpl implements SystemFileService {
     @Override
     public long addFile(TbSystemFile systemFile) {
         systemFile.setUploadTime(new Date());
-        int i = systemFileMappermapper.insertSelective(systemFile);
-        return i;
+        systemFileMappermapper.insertSelective(systemFile);
+        return systemFile.getFileId();
     }
 
     @Override

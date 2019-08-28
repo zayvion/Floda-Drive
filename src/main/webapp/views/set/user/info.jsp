@@ -33,16 +33,25 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">我的角色</label>
                             <div class="layui-input-inline">
-                                <select name="role" lay-verify="">
+
                                     <c:choose>
-                                        <c:when test='onlineuser.userLevel=="2"'>
-                                            <option value="1">普通用户</option>
-                                            <option value="2" selected>高级用户</option>
+                                        <c:when test='${onlineuser.userLevel=="2"}'>
+                                            <input type="text" name="username" value="高级用户" readonly class="layui-input">
                                         </c:when>
+                                        <c:otherwise>
+                                            <input type="text" name="username" value="普通用户" readonly class="layui-input">
+                                        </c:otherwise>
                                     </c:choose>
-                                </select>
+
                             </div>
-                            <div class="layui-form-mid layui-word-aux">当前角色不可更改为其它角色</div>
+                            <c:choose>
+                                <c:when test='${onlineuser.userLevel=="2"}'>
+                                    <div class="layui-form-mid layui-word-aux">您已经是高级用户，解锁全部功能！</div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="layui-form-mid layui-word-aux">您当前是普通用户，<a href="javascript:void(0)">成为高级用户</a></div>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">用户名</label>
@@ -52,9 +61,23 @@
                             <div class="layui-form-mid layui-word-aux">不可修改。一般用于后台登入名</div>
                         </div>
                         <div class="layui-form-item">
+                            <label class="layui-form-label">头像</label>
+                            <div class="layui-input-inline">
+                                <input name="avatar" lay-verify="" id="LAY_avatarSrc" placeholder="图片地址" value="${onlineuser.userImgurl}" class="layui-input">
+                            </div>
+                            <form action="/user/uploadImg" method="post">
+                                <div class="layui-input-inline layui-btn-container" style="width: auto;">
+                                    <input type="file" name="img" accept="image/*" />
+                                    <input type="submit" value="上传图片" class="layui-btn layui-btn-primary"/>
+                                </div>
+                            </form>
+                            <button class="layui-btn layui-btn-primary" layadmin-event="avartatPreview">查看图片</button >
+                        </div>
+                        <form action="/user/updateInfo" method="post">
+                        <div class="layui-form-item">
                             <label class="layui-form-label">昵称</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="nickname" value="${onlineuser.userNickname}" lay-verify="nickname" autocomplete="off" placeholder="请输入昵称" class="layui-input">
+                                <input type="text" name="userNickname" value="${onlineuser.userNickname}" lay-verify="nickname" autocomplete="off" placeholder="请输入昵称" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -62,53 +85,41 @@
                             <div class="layui-input-block">
                                 <c:choose>
                                     <c:when test='${onlineuser.userSex=="F"}'>
-                                        <input type="radio" name="sex" value="男" title="男">
-                                        <input type="radio" name="sex" value="女" title="女" checked>
+                                        <input type="radio" name="userSex" value="M" title="男">
+                                        <input type="radio" name="userSex" value="F" title="女" checked>
                                     </c:when>
                                     <c:when test='${onlineuser.userSex=="M"}'>
-                                        <input type="radio" name="sex" value="男" title="男" checked>
-                                        <input type="radio" name="sex" value="女" title="女">
+                                        <input type="radio" name="userSex" value="M" title="男" checked>
+                                        <input type="radio" name="userSex" value="F" title="女">
                                     </c:when>
                                     <c:otherwise>
-                                        <input type="radio" name="sex" value="男" title="男">
-                                        <input type="radio" name="sex" value="女" title="女">
+                                        <input type="radio" name="userSex" value="M" title="男">
+                                        <input type="radio" name="userSex" value="F" title="女">
                                     </c:otherwise>
                                 </c:choose>
 
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">头像</label>
-                            <div class="layui-input-inline">
-                                <input name="avatar" lay-verify="required" id="LAY_avatarSrc" placeholder="图片地址" value="${onlineuser.userImgurl}" class="layui-input">
-                            </div>
-                            <div class="layui-input-inline layui-btn-container" style="width: auto;">
-                                <button type="button" class="layui-btn layui-btn-primary" id="LAY_avatarUpload">
-                                    <i class="layui-icon">&#xe67c;</i>上传图片
-                                </button>
-                                <button class="layui-btn layui-btn-primary" layadmin-event="avartatPreview">查看图片</button >
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
                             <label class="layui-form-label">手机</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="cellphone" value="${onlineuser.userPhone}" lay-verify="phone" autocomplete="off" class="layui-input">
+                                <input type="text" name="userPhone" value="${onlineuser.userPhone}" lay-verify="phone" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">邮箱</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="email" value="${onlineuser.userEmail}" lay-verify="email" autocomplete="off" class="layui-input">
+                                <input type="text" name="userEmail" value="${onlineuser.userEmail}" lay-verify="email" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-block">
-                                <button class="layui-btn" lay-submit lay-filter="setmyinfo">确认修改</button>
-                                <button type="reset" class="layui-btn layui-btn-primary">重新填写</button>
+                                <input type="submit" class="layui-btn layui-btn-normal"  lay-filter="setmyinfo"value="确认修改"/>
                             </div>
                         </div>
+                        </form>
                     </div>
-
+                </div>
                 </div>
             </div>
         </div>

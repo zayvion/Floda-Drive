@@ -25,5 +25,11 @@ public interface UserService {
      */
     TbUser login(String username, String password);
 
+    /**
+     * 修改用户基本信息
+     * @param user
+     */
+    void updateInfo(TbUser user);
+
 
 }
