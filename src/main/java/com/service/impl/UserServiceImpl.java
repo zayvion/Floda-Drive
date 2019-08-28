@@ -50,9 +50,9 @@ public class UserServiceImpl implements UserService {
         /*
         两个条件满足一个都可以登录
          */
-        if (usernameList.size() > 0) {
+        if (usernameList.size() == 1) {
             return usernameList.get(0);
-        } else if (emailList.size() > 0){
+        } else if (emailList.size() == 0){
             return emailList.get(0);
         }
             return null;

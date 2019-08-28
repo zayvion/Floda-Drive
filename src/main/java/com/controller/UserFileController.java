@@ -1,18 +1,13 @@
 package com.controller;
 
 import com.google.gson.Gson;
-import com.pojo.FolderAndFile;
-import com.pojo.ShowFolders;
-import com.pojo.TbUser;
-import com.pojo.TbUserFile;
+import com.pojo.*;
+import com.service.SystemFileService;
 import com.service.UserFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -27,7 +22,9 @@ import java.util.List;
 public class UserFileController {
 
     @Autowired
-    public UserFileService userFileService;
+    private UserFileService userFileService;
+    @Autowired
+    private SystemFileService systemFileService;
 
     /**
      * 重命名文件
@@ -43,7 +40,7 @@ public class UserFileController {
         return null;
     }
 
-    @RequestMapping(value = "/getFileType",produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/getFileType", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getFileType(HttpSession session, @RequestParam String type, Model model) {
         TbUser user = ((TbUser) session.getAttribute("onlineuser"));
@@ -52,6 +49,29 @@ public class UserFileController {
         List files = userFileService.getUserFileWithType(user.getUserId(), type);
         showFolders.setData(files);
         return new Gson().toJson(showFolders);
+    }
+
+    @RequestMapping(value = "/previewFile")
+    public String previewFile(long fileId, int type, Model model) {
+        if (fileId == 0l || type == 0) {
+            model.addAttribute("msg", " 参数异常，请重试！");
+            return "error";
+        }
+        if (type == 3) {
+            TbUserFile userFile = userFileService.getUserFile(fileId);
+            TbSystemFile systemFile = systemFileService.getSystemFile(userFile.getUserSysfileId());
+            FolderAndFile folderAndFile = new FolderAndFile();
+            folderAndFile.setUserSysfileId(systemFile.getFileId());
+            folderAndFile.setFile_url(systemFile.getFileUrl());
+            folderAndFile.setFileName(userFile.getUserFileName());
+            folderAndFile.setFileSize(userFile.getFileSize());
+            folderAndFile.setUpdatetime(userFile.getUploadTime());
+            // 把文件的信息传给前台
+            model.addAttribute("fileInfo", folderAndFile);
+            return "/views/home/onlineVideo";
+        }else if ()
+        return "123";
+
     }
 
 }

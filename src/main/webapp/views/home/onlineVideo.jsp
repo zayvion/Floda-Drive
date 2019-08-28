@@ -32,13 +32,13 @@
 </head>
 <body>
 <div class="text">
-    <sapn>文件名：</sapn>
-    <sapn>文件大小：</sapn>
-    <sapn>文件日期：</sapn>
+    <sapn><b>文件名：</b>${fileInfo.fileName}</sapn>
+    <sapn><b>文件大小：</b>${fileInfo.fileSize}</sapn>
+    <sapn><b>修改日期：</b>${fileInfo.updatetime}</sapn>
 </div>
 <div>
     <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="800px">
-        <source src="http://image.lzllzl.cn/img/2019-08-28/33b1df16-8af8-4.mp4" type="video/mp4">
+        <source src="${fileInfo.file_url}" type="video/mp4">
     </video>
 </div>
 <script src="../../layuiadmin/layui/video.min.js"></script>

@@ -60,13 +60,20 @@ public class UserFileServiceImpl implements UserFileService {
             folderAndFile.setFileSize(tbUserFile.getFileSize());
             folderAndFile.setFileType(tbUserFile.getFileType());
             folderAndFile.setUpdatetime(tbUserFile.getUploadTime());
+            folderAndFile.setUserSysfileId(tbUserFile.getUserfileId());
             TbSystemFile systemFile = systemFileService.getSystemFile(tbUserFile.getUserSysfileId());
             folderAndFile.setFile_url(systemFile.getFileUrl());
             files.add(folderAndFile);
         }
         return files;
     }
-        @Override
+
+    @Override
+    public TbUserFile getUserFile(long userFileId) {
+        return userFileMapper.selectByPrimaryKey(userFileId);
+    }
+
+    @Override
         public String updateUserFile (TbUserFile userFile){
             try {
                 userFile.setUploadTime(new Date());

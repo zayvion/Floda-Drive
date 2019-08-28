@@ -40,5 +40,12 @@ public interface UserFileService {
      */
     List getUserFileWithType(long userId, String type);
 
+    /**
+     * 获取一个用户文件
+     * @param userFileId
+     * @return
+     */
+    TbUserFile getUserFile(long userFileId);
+
 
 }
