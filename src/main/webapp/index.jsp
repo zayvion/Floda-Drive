@@ -112,10 +112,6 @@
                 </div>
 
                 <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-                    <li data-name="get" class="layui-nav-item" style="margin-top: 70px;margin-left: 6px">
-                        <div class="layui-progress-bar layui-bg-blue" lay-percent="30%" style="width: ${sizePresent}%;height: 8px"><span class="layui-progress-text" style="color: #F6F6F6">${sizePresent}%</span></div>
-                        <span>网盘容量：${userTotalSize}M/${TotalSize}M</span>
-                    </li>
                     <li data-name="home" class="layui-nav-item layui-nav-itemed">
                         <a href="javascript:;" lay-tips="主页" lay-direction="2">
                             <i class="layui-icon layui-icon-list"></i>
@@ -367,8 +363,12 @@
                             <cite>回收站</cite>
                         </a>
                     </li>
-
                 </ul>
+
+               <div style="width: 220px;height: 50px;position: relative;top: 200px;">
+                   <div class="layui-progress-bar layui-bg-blue" lay-percent="30%" style="width: ${sizePresent}%;height: 8px;position: absolute;"><span class="layui-progress-text" style="color: #F6F6F6">${sizePresent}%</span></div>
+                   <span style="display:inline-block;margin-top:20px;">网盘容量：${userTotalSize}M/${TotalSize}M</span>
+               </div>
             </div>
         </div>
 
