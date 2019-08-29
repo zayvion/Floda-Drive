@@ -20,6 +20,11 @@ public class FolderAndFile {
     private Long userSysfileId;
     private String file_url;
 
+    //封装图片预览所需参数
+    private String title;
+    private String description;
+    private String src;
+
     public Long getId() {
         return id;
     }
@@ -92,6 +97,30 @@ public class FolderAndFile {
         this.file_url = file_url;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getSrc() {
+        return src;
+    }
+
+    public void setSrc(String src) {
+        this.src = src;
+    }
+
     @Override
     public String toString() {
         return "FolderAndFile{" +
@@ -104,6 +133,9 @@ public class FolderAndFile {
                 ", fileType='" + fileType + '\'' +
                 ", userSysfileId=" + userSysfileId +
                 ", file_url='" + file_url + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", src='" + src + '\'' +
                 '}';
     }
 }

@@ -79,7 +79,7 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="uploadFile()">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="uploadFile(0)">
                         <i class="fa fa-upload"></i>上传文件
                     </button>
                     <button class="layui-btn layui-btn-sm layui-btn-primary" onclick="addFolder(0)">
@@ -90,10 +90,19 @@
                             <i class="fa fa-share"></i>分享
                         </button>
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                            <i class="fa fa-download"></i>下载
+                        </button>
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="trash(0)">
                             <i class="fa fa-trash"></i>删除
                         </button>
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="renameFolder()">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="renameFolder(0)">
                             <i class="fa fa-pencil"></i>重命名
+                        </button>
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                            移动到
+                        </button>
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                            复制到
                         </button>
                     </div>
                 </div>
@@ -109,20 +118,10 @@
 
 <script src="../../layuiadmin/layui/layui.js?t=1"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script src="../../layuiadmin/lib/spotlight/js/spotlight.bundle.js"></script>
 <script>
-    var table,layer,tableIns;
+    var table,layer,tableIns,folderId=0,gallery = [],count = 0;
 
-    //上传
-    function uploadFile(){
-        layer.open({
-            title: ['<i class="fa fa-upload"></i>上传文件','color:#0098ea']
-            ,content: '<form action="/sysfile/upload" method="post" enctype="multipart/form-data" id="test">\n' +
-                '    <input type="file" required name="files"><br><br>\n' +
-                '    <input type="reset" class="layui-btn layui-btn-sm layui-btn-normal" value="重置" style="float: right;margin-left: 10px"><input type="submit" class="layui-btn layui-btn-sm layui-btn-normal" value="上传" style="float: right">\n' +
-                '</form>'
-            ,btn:''
-        });
-    }
     layui.config({
         base: '../../layuiadmin/' //静态资源所在路径
     }).extend({
@@ -135,7 +134,7 @@
             elem: '#test-table-checkbox'
             , skin: 'row'
             , url: 'folder/folders'//获取数据的地方
-            , where:{folder_father:0}//传递参数的地方
+            , where:{folder_father:folderId}//传递参数的地方
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , id:'test-table-checkbox'
             , cols: [[{type: 'checkbox'}
@@ -152,6 +151,9 @@
                                 prefix = "<a href='javascript:void(0)' onclick='interFolder("+d.id+","+d.parentId+")'>";
                                 break;
                             case '1':
+                                gallery.push(d);
+                                count ++;
+                                prefix = "<a href='javascript:void(0)' onclick='showGallery("+count+")'>";
                                 icon = "<i class='fa fa-file-photo-o' style='font-size:18px;color:rgb(255,119,67);margin:8px 5px 0 0'></i>";
                                 break;
                             case '2':
@@ -195,7 +197,6 @@
                 }
             ]]
         });
-
         table.on('checkbox(test-table-checkbox)', function (obj) {
             var checkStatus = table.checkStatus('test-table-checkbox');
             //console.log("当前选中的个数："+checkStatus.data.length);//输出当前选中的个数
@@ -204,9 +205,9 @@
             if (checkStatus.data.length > 0) {
                 $('.layui-btn-group').removeClass('layui-hide');
                 if (checkStatus.data.length > 1) {
-                    $('.layui-btn-group button').eq(2).addClass('layui-btn-disabled').attr("disabled", 'disabled');
+                    $('.layui-btn-group button').eq(3).addClass('layui-btn-disabled').attr("disabled", 'disabled');
                 } else {
-                    $('.layui-btn-group button').eq(2).removeClass('layui-btn-disabled').removeAttr('disabled');
+                    $('.layui-btn-group button').eq(3).removeClass('layui-btn-disabled').removeAttr('disabled');
                 }
             } else {
                 $('.layui-btn-group').addClass('layui-hide');
@@ -214,8 +215,23 @@
         });
     });
 
-    //创建文件夹
-    function addFolder() {
+    //上传
+    function uploadFile(folder_father){
+        folderId = folder_father;
+        layer.open({
+            title: ['<i class="fa fa-upload"></i>上传文件','color:#0098ea']
+            ,content: '<form action="/sysfile/upload" method="post" enctype="multipart/form-data" id="test">\n' +
+                '    <input type="file" required name="files"><br><br>\n' +
+                '    <input type="hidden" required value="'+folder_father+'" name="folder_id"><br><br>\n' +
+                '    <input type="reset" class="layui-btn layui-btn-sm layui-btn-normal" value="重置" style="float: right;margin-left: 10px">' +
+                '    <input type="submit" class="layui-btn layui-btn-sm layui-btn-normal" value="上传" style="float: right">\n' +
+                '</form>'
+            ,btn:''
+        });
+    }
+
+    //在指定目录下创建文件夹
+    function addFolder(folder_father) {
         layer.prompt({
                 type: 1,
                 title: ['<i class="fa fa-folder-o"></i>新建文件夹', 'color:#0098ea'],
@@ -223,7 +239,7 @@
                 btn: ['创建', '取消']
             },
             function (text, index) {
-                $.post('folder/create',{folderName:text},function (data,status) {
+                $.post('folder/create',{folderName:text,folder_father:folder_father},function (data,status) {
                     if (data.status === 200){
                         layer.msg(data.msg,{
                             icon:1,
@@ -232,7 +248,7 @@
                         //需改数据后表格局部刷新
                         tableIns.reload({
                             where: { //设定异步数据接口的额外参数，任意设
-                                folderName: 'folderName'
+                                folder_father:folder_father
                             }
                         });
                     }else {
@@ -247,7 +263,7 @@
     }
 
     //重命名
-    function renameFolder() {
+    function renameFolder(folder_father) {
         var checkStatus = table.checkStatus('test-table-checkbox');
         layer.prompt({
                 type: 1,
@@ -258,10 +274,8 @@
             function (text, index) {
                 //index为当前层索引
                 //text为输入参数
-                //+checkStatus.data[0].fileName.substring(checkStatus.data[0].fileName.lastIndexOf("."))
                 checkStatus.data[0].fileName = text;
                 //修改后触发ajax方法，异步请求后台修改数据库
-                console.log(checkStatus.data[0]);
                 $.post('/folder/rename',{'folder':JSON.stringify(checkStatus.data[0])},function (data,status) {
                     if (data.status === 200){
                         layer.msg(data.msg,{
@@ -271,11 +285,10 @@
                         //需改数据后表格局部刷新
                         tableIns.reload({
                             where: { //设定异步数据接口的额外参数，任意设
-                                fileName: 'fileName'
+                                folder_father: folder_father
                             }
                         });
                         $('.layui-btn-group').addClass('layui-hide');
-
                     }else {
                         layer.msg(data.msg,{
                             icon:2,
@@ -297,9 +310,15 @@
                 folder_father: folder_father
             }
         });
+        //清空图片集合以及下标
+        gallery = [];
+        count = 0;
         //显示返回上一级文件夹
         $('.folderList').eq(1).css('visibility','visible');
         $('.folderList').eq(1).attr('onclick','preFolder()');
+        $('.layui-card-header button').eq(1).attr('onclick','addFolder('+folder_father+')');
+        $('.layui-card-header button').eq(0).attr('onclick','uploadFile('+folder_father+')');
+        $('.layui-btn-group button').eq(2).attr('onclick','renameFolder('+folder_father+')');
     }
 
     //把上一级id添加到返回上一级的方法中
@@ -310,14 +329,27 @@
                 folder_father:parentIds[parentIds.length-1]
             }
         });
+        //清空图片集合以及下标
+        gallery = [];
+        count = 0;
+        $('.layui-card-header button').eq(1).attr('onclick','addFolder('+parentIds[parentIds.length-1]+')');
         if (parentIds.length > 1){
             parentIds.pop();
         }
     }
 
     //图片预览
-    function showPhoto() {
-        
+    function showGallery(index) {
+        Spotlight.show(gallery, {
+            index: index,
+            theme: "dark"
+        });
+    }
+
+    //文件夹、文件删除
+    function trash(folder_father) {
+        var checkStatus = table.checkStatus('test-table-checkbox');
+        console.log(gallery);
     }
 
 </script>

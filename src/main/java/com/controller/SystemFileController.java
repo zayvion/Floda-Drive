@@ -42,7 +42,7 @@ public class SystemFileController {
     private UserFileService userFileService;
 
     @RequestMapping("/upload")
-    public String uploadFile(HttpSession session, @RequestParam("files") MultipartFile file, Model model) throws IOException {
+    public String uploadFile(HttpSession session, @RequestParam("files") MultipartFile file, Model model,Long folder_id) throws IOException {
         TbUser user = (TbUser) session.getAttribute("onlineuser");
         // session没有用户信息直接返回错误信息
         if (user == null) {
@@ -71,7 +71,7 @@ public class SystemFileController {
                 }
                 userFile.setUserSysfileId(existFile.getFileId());
                 // 这里还暂时获取不到用户需要存的位置，后期请补充
-                userFile.setFileLocation(0l);
+                userFile.setFileLocation(folder_id);
                 userFileService.addFile(userFile);
                 return "/views/home/console";
             }
@@ -123,7 +123,7 @@ public class SystemFileController {
             userFile.setUserFileName(file.getOriginalFilename());
             userFile.setUserSysfileId(newFileId);
             //这里还暂时获取不到用户需要存的位置，后期请补充
-            userFile.setFileLocation(0l);
+            userFile.setFileLocation(folder_id);
             userFileService.addFile(userFile);
             return "/views/home/console";
         } else {

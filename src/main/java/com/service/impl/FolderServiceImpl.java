@@ -1,6 +1,7 @@
 package com.service.impl;
 
 import com.mapper.TbFolderMapper;
+import com.mapper.TbSystemFileMapper;
 import com.mapper.TbUserFileMapper;
 import com.pojo.*;
 import com.service.FolderService;
@@ -24,6 +25,8 @@ public class FolderServiceImpl implements FolderService {
     private TbFolderMapper folderMapper;
     @Autowired
     private TbUserFileMapper userFileMapper;
+    @Autowired
+    private TbSystemFileMapper tbSystemFileMapper;
 
     @Override
     public String addFolder(TbFolder folder) {
@@ -76,6 +79,11 @@ public class FolderServiceImpl implements FolderService {
             ff.setFileSize(tbUserFile.getFileSize());
             ff.setUpdatetime(tbUserFile.getUploadTime());
             ff.setUserSysfileId(tbUserFile.getUserSysfileId());
+            TbSystemFile tbSystemFile = tbSystemFileMapper.selectByPrimaryKey(tbUserFile.getUserSysfileId());
+            ff.setFile_url(tbSystemFile.getFileUrl());
+            ff.setSrc(tbSystemFile.getFileUrl());
+            ff.setTitle(tbUserFile.getUserFileName());
+            ff.setDescription("大小："+tbUserFile.getFileSize()+" 日期："+tbUserFile.getUploadTime());
             ffs.add(ff);
         }
         showFolders.setData(ffs);
