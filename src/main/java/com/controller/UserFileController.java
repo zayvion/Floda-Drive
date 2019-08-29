@@ -49,7 +49,6 @@ public class UserFileController {
     public String getFileType(HttpSession session, @RequestParam String type, Model model) {
         TbUser user = ((TbUser) session.getAttribute("onlineuser"));
         ShowFolders showFolders = new ShowFolders();
-        System.out.println(type);
         List files = userFileService.getUserFileWithType(user.getUserId(), type);
         showFolders.setData(files);
         return new Gson().toJson(showFolders);
@@ -85,7 +84,7 @@ public class UserFileController {
             TbUserFile userFile = userFileService.getUserFile(fileId);
             TbSystemFile systemFile = systemFileService.getSystemFile(userFile.getUserSysfileId());
             String extession = userFile.getUserFileName().substring(userFile.getUserFileName().lastIndexOf("."));
-            if (extession.equals(".docx")||extession.equals(".doc")||extession.equals(".xls")||extession.equals(".xlsx")||extession.equals(".ppt")||extession.equals(".pptx")) {
+            if (extession.toLowerCase().equals(".docx")||extession.toLowerCase().equals(".doc")||extession.toLowerCase().equals(".xls")||extession.toLowerCase().equals(".xlsx")||extession.toLowerCase().equals(".ppt")||extession.toLowerCase().equals(".pptx")) {
                 return "redirect:https://view.officeapps.live.com/op/view.aspx?src=" + systemFile.getFileUrl();
             }else if (extession.equals(".pdf"))
                 return "redirect:" + systemFile.getFileUrl();

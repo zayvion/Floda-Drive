@@ -160,7 +160,7 @@
                             case '4':
                                 console.log(d);
                                 icon = "<i class='fa fa-file-text' style='font-size:18px;color:rgb(77,151,255);margin:8px 5px 0 0'></i>";
-                                prefix = "<a lay-href='userfile/previewFile?fileId="+d.userSysfileId+"&type="+d.fileType+"'>";
+                                prefix = "<a lay-href='userfile/previewFile?fileId="+d.id+"&type="+d.fileType+"'>";
                                 break;
                             case '5':
                                 icon = "<i class='fa fa-file' style='font-size:18px;color:rgb(185,201,214);margin:8px 5px 0 0'></i>";
@@ -198,9 +198,10 @@
             var checkStatus = table.checkStatus('test-table-checkbox');
             var fileId = "";
             for (var i = 0; i < checkStatus.data.length; i ++){
-                fileId += checkStatus.data[i].id+"&";
+                fileId += checkStatus.data[i].id+",";
             }
-            $('.layui-btn-group a').attr("href","/sysfile/download2?userFileId="+fileId.substring(0,fileId.lastIndexOf('&')));
+            console.log(fileId.substring(0,fileId.lastIndexOf(',')))
+            $('.layui-btn-group a').attr("href","/sysfile/download?userFileId="+fileId.substring(0,fileId.lastIndexOf(',')));
             //console.log("当前选中的个数："+checkStatus.data.length);//输出当前选中的个数
             //console.log("相关数据："+checkStatus.data); //选中行的相关数据
             //console.log("是否全选:"+checkStatus.isAll); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
