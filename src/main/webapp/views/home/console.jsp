@@ -31,7 +31,7 @@
             color: #0098ea;
             margin-right: 10px;
         }
-        .layui-card-header .layui-btn-group button {
+        .layui-card-header .layui-btn-group button,.layui-card-header .layui-btn-group a {
             border-color: #c3eaff;
             color: #0098ea;
         }
@@ -39,7 +39,7 @@
             border-color: #c3eaff;
             color: #0098ea;
         }
-        .layui-card-header .layui-btn-group button:hover {
+        .layui-card-header .layui-btn-group button,.layui-card-header .layui-btn-group a:hover {
             border-color: #c3eaff;
             color: #0098ea;
         }
@@ -83,9 +83,9 @@
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
                             <i class="fa fa-share"></i>分享
                         </button>
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="downLoad()">
+                        <a type="button" class="layui-btn layui-btn-sm layui-btn-primary">
                             <i class="fa fa-download"></i>下载
-                        </button>
+                        </a>
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="trash(0)">
                             <i class="fa fa-trash"></i>删除
                         </button>
@@ -196,6 +196,11 @@
         });
         table.on('checkbox(test-table-checkbox)', function (obj) {
             var checkStatus = table.checkStatus('test-table-checkbox');
+            var fileId = "";
+            for (var i = 0; i < checkStatus.data.length; i ++){
+                fileId += checkStatus.data[i].id+"&";
+            }
+            $('.layui-btn-group a').attr("href","/sysfile/download2?userFileId="+fileId.substring(0,fileId.lastIndexOf('&')));
             //console.log("当前选中的个数："+checkStatus.data.length);//输出当前选中的个数
             //console.log("相关数据："+checkStatus.data); //选中行的相关数据
             //console.log("是否全选:"+checkStatus.isAll); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
@@ -347,15 +352,6 @@
     function trash(folder_father) {
         var checkStatus = table.checkStatus('test-table-checkbox');
         console.log(gallery);
-    }
-
-    //文件下载以及批量下载
-    function downLoad() {
-        var checkStatus = table.checkStatus('test-table-checkbox');
-        console.log(checkStatus.data);
-        $.post("sysfile/download2",{userFileId:JSON.stringify(checkStatus.data)},function (data,status) {
-            console.log("1111");
-        })
     }
 
 </script>
