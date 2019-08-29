@@ -57,6 +57,7 @@ public class UserFileController {
 
     @RequestMapping(value = "/previewFile")
     public String previewFile(long fileId, int type, Model model) {
+        System.out.println(fileId+"---"+type);
         if (fileId == 0l || type == 0) {
             model.addAttribute("msg", " 参数异常，请重试！");
             return "error";
@@ -83,6 +84,7 @@ public class UserFileController {
             return "/views/home/onlineVideo";
         }else if (type==4){
             TbUserFile userFile = userFileService.getUserFile(fileId);
+            System.out.println(userFile);
             TbSystemFile systemFile = systemFileService.getSystemFile(userFile.getUserSysfileId());
             String extession = userFile.getUserFileName().substring(userFile.getUserFileName().lastIndexOf("."));
             if (extession.equals(".docx")||extession.equals(".doc")||extession.equals(".xls")||extession.equals(".xlsx")||extession.equals(".ppt")||extession.equals(".pptx")) {

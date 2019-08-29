@@ -23,32 +23,26 @@
     <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
     <link href="../../layuiadmin/style/font-awesome.min.css" rel="stylesheet">
     <style>
-
         i {
             margin-right: 5px;
         }
-
         .layui-card-header button:nth-of-type(2) {
             border-color: #c3eaff;
             color: #0098ea;
             margin-right: 10px;
         }
-
         .layui-card-header .layui-btn-group button {
             border-color: #c3eaff;
             color: #0098ea;
         }
-
         .layui-card-header .layui-btn-group button:first-child {
             border-color: #c3eaff;
             color: #0098ea;
         }
-
         .layui-card-header .layui-btn-group button:hover {
             border-color: #c3eaff;
             color: #0098ea;
         }
-
         .layui-table-cell .layui-form-checkbox[lay-skin=primary] {
             top: 6px;
         }
@@ -163,7 +157,9 @@
                                 icon = "<i class='fa fa-file-video-o' style='font-size:18px;color:rgb(129,131,241);margin:8px 5px 0 0'></i>";
                                 break;
                             case '4':
+                                console.log(d);
                                 icon = "<i class='fa fa-file-text' style='font-size:18px;color:rgb(77,151,255);margin:8px 5px 0 0'></i>";
+                                prefix = "<a lay-href='userfile/previewFile?fileId="+d.userSysfileId+"&type="+d.fileType+"'>";
                                 break;
                             case '5':
                                 icon = "<i class='fa fa-file' style='font-size:18px;color:rgb(185,201,214);margin:8px 5px 0 0'></i>";
