@@ -82,7 +82,41 @@ public class UserFileController {
             model.addAttribute("fileUploadTime", updateTime);
             return "/views/home/onlineVideo";
         }else if (type==4){
+            TbUserFile userFile = userFileService.getUserFile(fileId);
+            TbSystemFile systemFile = systemFileService.getSystemFile(userFile.getUserSysfileId());
+            String extession = userFile.getUserFileName().substring(userFile.getUserFileName().lastIndexOf("."));
+            if (extession.equals(".docx")||extession.equals(".doc")||extession.equals(".xls")||extession.equals(".xlsx")||extession.equals(".ppt")||extession.equals(".pptx")) {
+                return "redirect:https://view.officeapps.live.com/op/view.aspx?src=" + systemFile.getFileUrl();
+            }else if (extession.equals(".pdf"))
+                return "redirect:" + systemFile.getFileUrl();
+            else if (extession.equals("") || extession == null) {
+                model.addAttribute("msg", "该文件暂不支持在线预览，系统将在后期将会支持该格式！");
+                return "error";
+            } else {
+                model.addAttribute("msg", "该文件暂不支持在线预览，系统将在后期将会支持该格式！");
+                return "error";
+            }
 
+        } else if (type == 2) {
+            TbUserFile userFile = userFileService.getUserFile(fileId);
+            TbSystemFile systemFile = systemFileService.getSystemFile(userFile.getUserSysfileId());
+            FolderAndFile folderAndFile = new FolderAndFile();
+            folderAndFile.setUserSysfileId(systemFile.getFileId());
+            folderAndFile.setFile_url(systemFile.getFileUrl());
+            folderAndFile.setFileName(userFile.getUserFileName());
+            // 把文件的信息传给前台
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss") ;
+            String updateTime = dateFormat.format(userFile.getUploadTime());
+            BigDecimal fileSize = userFile.getFileSize();
+            if (fileSize.floatValue() < 1024) {
+                model.addAttribute("fileSize", fileSize + "KB");
+            } else {
+                DecimalFormat decimalFormat = new DecimalFormat(".0");
+                model.addAttribute("fileSize",  decimalFormat.format(fileSize.doubleValue() / 1024)+ "MB");
+            }
+            model.addAttribute("fileInfo", folderAndFile);
+            model.addAttribute("fileUploadTime", updateTime);
+            return "/views/home/onlineMusic";
         }
         return "123";
 

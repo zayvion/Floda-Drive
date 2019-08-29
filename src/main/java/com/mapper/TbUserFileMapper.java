@@ -27,4 +27,5 @@ public interface TbUserFileMapper {
     int updateByPrimaryKeySelective(TbUserFile record);
 
     int updateByPrimaryKey(TbUserFile record);
+
 }

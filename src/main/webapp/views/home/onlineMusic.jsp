@@ -33,8 +33,8 @@
 <body>
 <div class="text">
     <sapn><b>文件名：</b>${fileInfo.fileName}</sapn>
-    <sapn><b>文件大小：</b>${fileInfo.fileSize}</sapn>
-    <sapn><b>修改日期：</b>${fileInfo.updatetime}</sapn>
+    <sapn><b>文件大小：</b>${fileSize}</sapn>
+    <sapn><b>修改日期：</b>${fileUploadTime}</sapn>
 </div>
 <div>
     <audio src="${fileInfo.file_url}" controls="controls">

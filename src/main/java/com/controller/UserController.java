@@ -1,9 +1,11 @@
 package com.controller;
 
+import com.mapper.TbUserFileMapper;
 import com.mapper.TbUserMapper;
 import com.pojo.TbSystemFile;
 import com.pojo.TbUser;
 import com.pojo.TbUserFile;
+import com.pojo.TbUserFileExample;
 import com.service.UserService;
 import com.utils.FtpUtil;
 import com.utils.MD5Util;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +40,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private TbUserFileMapper userFileMapper;
 
     /**
      * 用户注册
@@ -73,8 +78,22 @@ public class UserController {
     public String login(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
         TbUser user = userService.login(username, password);
         if (user != null) {
+            TbUserFile userFile = new TbUserFile();
+            TbUserFileExample userFileExample = new TbUserFileExample();
+            TbUserFileExample.Criteria fileExampleCriteria = userFileExample.createCriteria();
+            fileExampleCriteria.andBelongUserEqualTo(user.getUserId());
+            List<TbUserFile> tbUserFiles = userFileMapper.selectByExample(userFileExample);
+            double sum = 0.0;
+            for (TbUserFile tbUserFile : tbUserFiles) {
+                sum = sum + tbUserFile.getFileSize().doubleValue();
+            }
+            DecimalFormat decimalFormat=new DecimalFormat(".0");
+            String format = decimalFormat.format(sum/1024);
             // 登录成功将用户对象放入session
             session.setAttribute("onlineuser", user);
+            session.setAttribute("userTotalSize", format);
+            session.setAttribute("TotalSize", user.getDriveSize()/1024);
+            session.setAttribute("sizePresent",  decimalFormat.format(sum/1024/(user.getDriveSize()/1024)*100));
             return "redirect:/index";
         }
         model.addAttribute("msg", "用户名或密码错误！");
@@ -113,7 +132,7 @@ public class UserController {
         String redomCode = getRedomCode(4);
         MailUtil.sendMail(user.getUserEmail(), redomCode, "您正在使用FlodaDrive网盘重置密码，您的验证码为:");
         session.setAttribute("regCode", redomCode);
-        return null;
+        return ResponseResult.ok();
     }
 
     @RequestMapping(value = "/updatePassword",produces = "application/json;charset=UTF-8")
