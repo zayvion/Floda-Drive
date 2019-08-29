@@ -1,13 +1,15 @@
 package com.controller;
 
-import com.pojo.TbSystemFile;
-import com.pojo.TbUser;
-import com.pojo.TbUserFile;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mapper.TbUserFileMapper;
+import com.pojo.*;
 import com.service.SystemFileService;
 import com.service.UserFileService;
 import com.utils.FtpUtil;
 import com.utils.MD5Util;
 import com.utils.ResponseResult;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -17,15 +19,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @Auther: zayvion
@@ -40,9 +47,12 @@ public class SystemFileController {
     private SystemFileService systemFileService;
     @Autowired
     private UserFileService userFileService;
+    @Autowired
+    private TbUserFileMapper userFileMapper;
+    private InputStream in = null;
 
     @RequestMapping("/upload")
-    public String uploadFile(HttpSession session, @RequestParam("files") MultipartFile file, Model model,Long folder_id) throws IOException {
+    public String uploadFile(HttpSession session, @RequestParam("files") MultipartFile file, Model model, Long folder_id) throws IOException {
         TbUser user = (TbUser) session.getAttribute("onlineuser");
         // session没有用户信息直接返回错误信息
         if (user == null) {
@@ -50,6 +60,15 @@ public class SystemFileController {
             return "error";
         }
         if (file != null) {
+            // 先获得文件的大小，看看是否有空间
+            long size = (file.getSize()) / 1024 / 1000;
+            Long diskTotalSize = (Long) session.getAttribute("TotalSize");
+            String userTotalSize = (String) session.getAttribute("userTotalSize");
+            if (diskTotalSize - Double.parseDouble(userTotalSize) < size) {
+                model.addAttribute("msg", "您云盘的空间不足，成为超级用户尊享超大空间！");
+                return "error";
+            }
+
             /**
              * 拿到文件应先判断是否之前有用户上传过
              */
@@ -62,7 +81,7 @@ public class SystemFileController {
                 userFile.setBelongUser(user.getUserId());
                 userFile.setFileSize(existFile.getFileSize());
                 userFile.setFileType(existFile.getFileType());
-                int sameNameFile = userFileService.getSameNameFile(file.getOriginalFilename(), user.getUserId());
+                int sameNameFile = userFileService.getSameNameFile(file.getOriginalFilename(), user.getUserId(), folder_id);
                 if (sameNameFile > 0) {
                     model.addAttribute("msg", "云端有相同文件名文件，请重新上传！");
                     return "error";
@@ -70,9 +89,21 @@ public class SystemFileController {
                     userFile.setUserFileName(file.getOriginalFilename());
                 }
                 userFile.setUserSysfileId(existFile.getFileId());
-                // 这里还暂时获取不到用户需要存的位置，后期请补充
                 userFile.setFileLocation(folder_id);
                 userFileService.addFile(userFile);
+                TbUserFileExample userFileExample = new TbUserFileExample();
+                TbUserFileExample.Criteria fileExampleCriteria = userFileExample.createCriteria();
+                fileExampleCriteria.andBelongUserEqualTo(user.getUserId());
+                List<TbUserFile> tbUserFiles = userFileMapper.selectByExample(userFileExample);
+                double sum = 0.0;
+                for (TbUserFile tbUserFile : tbUserFiles) {
+                    sum = sum + tbUserFile.getFileSize().doubleValue();
+                }
+                DecimalFormat decimalFormat = new DecimalFormat(".0");
+                String format = decimalFormat.format(sum / 1024);
+                session.setAttribute("userTotalSize", format);
+                session.setAttribute("TotalSize", user.getDriveSize() / 1024);
+                session.setAttribute("sizePresent", decimalFormat.format(sum / 1024 / (user.getDriveSize() / 1024) * 100));
                 return "/views/home/console";
             }
             System.out.println(file.getOriginalFilename());
@@ -91,7 +122,7 @@ public class SystemFileController {
             // 保存文件
             try {
                 FtpUtil.uploadFile("182.254.180.106", 21, "image", "image", "/img", path, newName, file.getInputStream());
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             /**
@@ -99,7 +130,7 @@ public class SystemFileController {
              */
             TbSystemFile systemFile = new TbSystemFile();
             systemFile.setFileName(newName);
-            systemFile.setFileSize(BigDecimal.valueOf(file.getSize() / 1024));
+            systemFile.setFileSize(BigDecimal.valueOf(size / 1024));
             systemFile.setFileMd5(fileMd5);
             systemFile.setUploadUser(user.getUserId());
             systemFile.setFileUrl("http://image.lzllzl.cn/img/" + path + "/" + newName);
@@ -125,16 +156,111 @@ public class SystemFileController {
             //这里还暂时获取不到用户需要存的位置，后期请补充
             userFile.setFileLocation(folder_id);
             userFileService.addFile(userFile);
+            TbUserFileExample userFileExample = new TbUserFileExample();
+            TbUserFileExample.Criteria fileExampleCriteria = userFileExample.createCriteria();
+            fileExampleCriteria.andBelongUserEqualTo(user.getUserId());
+            List<TbUserFile> tbUserFiles = userFileMapper.selectByExample(userFileExample);
+            double sum = 0.0;
+            for (TbUserFile tbUserFile : tbUserFiles) {
+                sum = sum + tbUserFile.getFileSize().doubleValue();
+            }
+            DecimalFormat decimalFormat = new DecimalFormat(".0");
+            String format = decimalFormat.format(sum / 1024);
+            session.setAttribute("userTotalSize", format);
+            session.setAttribute("TotalSize", user.getDriveSize() / 1024);
+            session.setAttribute("sizePresent", decimalFormat.format(sum / 1024 / (user.getDriveSize() / 1024) * 100));
             return "/views/home/console";
         } else {
             model.addAttribute("msg", "上传发生错误，青重试！");
             return "error";
         }
 
+
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/download")
+    public String download(HttpServletRequest request, HttpServletResponse response, @RequestParam List<FolderAndFile> userFileId) {
+        System.out.println(userFileId);
+
+        System.out.println();
+        String showValue = "3af-4.jpg";
+        System.out.println(showValue);
+        try {
+            URL internetUrl = new URL("http://image.lzllzl.cn/img/2019-08-27/d927467d-c3af-4.jpg");
+            in = internetUrl.openStream();
+            // Read from is
+            //根据条件得到文件路径
+            System.out.println("===========文件路径===========" + internetUrl);
+            //将文件读入文件流
+
+            //获得浏览器代理信息
+            final String userAgent = request.getHeader("USER-AGENT");
+            //判断浏览器代理并分别设置响应给浏览器的编码格式
+            String finalFileName = null;
+            if (StringUtils.contains(userAgent, "MSIE") || StringUtils.contains(userAgent, "Trident")) {//IE浏览器
+                finalFileName = URLEncoder.encode(showValue, "UTF8");
+                System.out.println("IE浏览器");
+            } else if (StringUtils.contains(userAgent, "Mozilla")) {//google,火狐浏览器
+                finalFileName = new String(showValue.getBytes(), "ISO8859-1");
+            } else {
+                finalFileName = URLEncoder.encode(showValue, "UTF8");//其他浏览器
+            }
+            //设置HTTP响应头
+            response.reset();//重置 响应头
+            response.setContentType("application/x-download");//告知浏览器下载文件，而不是直接打开，浏览器默认为打开
+            response.addHeader("Content-Disposition", "attachment;filename=\"" + finalFileName + "\"");//下载文件的名称
+
+            // 循环取出流中的数据
+            byte[] b = new byte[1024];
+            int len;
+            while ((len = in.read(b)) > 0) {
+                response.getOutputStream().write(b, 0, len);
+            }
+            in.close();
+            response.getOutputStream().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    @RequestMapping("/download2")
+    public String download2(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            // 文件的名称
+            String downloadFilename = "文件名.zip";
+            downloadFilename = URLEncoder.encode(downloadFilename, "UTF-8");//转换中文否则可能会产生乱码
+            response.setContentType("application/octet-stream");// 指明response的返回对象是文件流
+            response.setHeader("Content-Disposition", "attachment;filename=" + downloadFilename);// 设置在下载框默认显示的文件名
+            ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
+            String[] files = new String[]{"http://image.lzllzl.cn/img/2019-08-27/d927467d-c3af-4.jpg", "http://image.lzllzl.cn/img/2019-08-27/e09137c8-e688-4.java"};
+            for (int i = 0; i < files.length; i++) {
+                URL url = new URL(files[i]);
+                String extession = files[i].substring(files[i].lastIndexOf("."));
+                zos.putNextEntry(new ZipEntry(i + extession));
+                //FileInputStream fis = new FileInputStream(new File(files[i]));
+                InputStream fis = url.openConnection().getInputStream();
+                byte[] buffer = new byte[1024];
+                int r = 0;
+                while ((r = fis.read(buffer)) != -1) {
+                    zos.write(buffer, 0, r);
+                }
+                fis.close();
+            }
+            zos.flush();
+            zos.close();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
-     * 获取当前如期作为文件夹名
+     * 获取当前日期作为文件夹名
      *
      * @return
      */

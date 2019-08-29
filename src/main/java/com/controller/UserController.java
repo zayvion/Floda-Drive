@@ -78,7 +78,6 @@ public class UserController {
     public String login(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
         TbUser user = userService.login(username, password);
         if (user != null) {
-            TbUserFile userFile = new TbUserFile();
             TbUserFileExample userFileExample = new TbUserFileExample();
             TbUserFileExample.Criteria fileExampleCriteria = userFileExample.createCriteria();
             fileExampleCriteria.andBelongUserEqualTo(user.getUserId());

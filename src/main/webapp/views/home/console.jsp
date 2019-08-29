@@ -348,6 +348,7 @@
         console.log(gallery);
     }
 
+
 </script>
 </body>
 </html>
