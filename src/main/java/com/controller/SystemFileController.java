@@ -181,10 +181,8 @@ public class SystemFileController {
 
     @ResponseBody
     @RequestMapping("/download")
-    public String download(HttpServletRequest request, HttpServletResponse response, @RequestParam List<FolderAndFile> userFileId) {
-        System.out.println(userFileId);
-
-        System.out.println();
+    public String download(HttpServletRequest request, HttpServletResponse response, String userFileId) {
+        System.out.println(userFileId+"------------");
         String showValue = "3af-4.jpg";
         System.out.println(showValue);
         try {

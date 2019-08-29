@@ -83,7 +83,7 @@
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
                             <i class="fa fa-share"></i>分享
                         </button>
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="downLoad()">
                             <i class="fa fa-download"></i>下载
                         </button>
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="trash(0)">
@@ -103,6 +103,7 @@
                 <div class="layui-card-body">
                     <a href="javascript:void(0)" class="folderList" onclick="interFolder(0)">全部文件</a>
                     <a href="javascript:void(0)" class="folderList" style="visibility: hidden;"> | 返回上一级</a>
+                    <%--<a href="/sysfile/download2" class="folderList" >下载</a>--%>
                     <table class="layui-hide" id="test-table-checkbox" lay-filter="test-table-checkbox"></table>
                 </div>
             </div>
@@ -348,6 +349,14 @@
         console.log(gallery);
     }
 
+    //文件下载以及批量下载
+    function downLoad() {
+        var checkStatus = table.checkStatus('test-table-checkbox');
+        console.log(checkStatus.data);
+        $.post("sysfile/download2",{userFileId:JSON.stringify(checkStatus.data)},function (data,status) {
+            console.log("1111");
+        })
+    }
 
 </script>
 </body>
