@@ -129,7 +129,7 @@
                                 </a>
                             </dd>
                             <dd data-name="console">
-                                <a lay-href="./views/home/homepage1.html">
+                                <a lay-href="./views/home/file.jsp">
                                     文档
                                 </a>
                             </dd>
@@ -139,12 +139,12 @@
                                 </a>
                             </dd>
                             <dd data-name="console">
-                                <a lay-href="home/homepage3.html">
+                                <a lay-href="./views/home/music.jsp">
                                     音乐
                                 </a>
                             </dd>
                             <dd data-name="console">
-                                <a lay-href="home/homepage4.html">
+                                <a lay-href="./views/home/other.jsp">
                                     其他
                                 </a>
                             </dd>
