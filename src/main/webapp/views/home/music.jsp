@@ -121,7 +121,7 @@
                     title: '文件名',
                     sort: true,
                     templet: function (d) {
-                        var icon = "<a href='userfile/previewFile?fileId="+d.userSysfileId+"&type="+d.fileType+"'><i class='fa fa-file-audio-o' style='font-size:18px;color:rgb(129,131,241);margin:8px 5px 0 0'></i>"+d.fileName+"</a>";
+                        var icon = "<a lay-href='userfile/previewFile?fileId="+d.userSysfileId+"&type="+d.fileType+"'><i class='fa fa-file-audio-o' style='font-size:18px;color:rgb(129,131,241);margin:8px 5px 0 0'></i>"+d.fileName+"</a>";
                         console.log(d);
                         return icon;
                     }

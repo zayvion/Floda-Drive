@@ -36,8 +36,8 @@
     <sapn><b>文件大小：</b>${fileSize}</sapn>
     <sapn><b>修改日期：</b>${fileUploadTime}</sapn>
 </div>
-<div>
-    <audio src="${fileInfo.file_url}" controls="controls">
+<div style="width: 600px;">
+    <audio src="${fileInfo.file_url}" controls="controls" style="width: 100%;height: 300px;">
         Your browser does not support the audio element.
     </audio>
 </video>
