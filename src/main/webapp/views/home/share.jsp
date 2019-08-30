@@ -1,8 +1,8 @@
 <%--
   User: zwf97
-  Date: 2019/8/28
-  Time: 8:44
-  Description：视频
+  Date: 2019/8/29
+  Time: 17：45
+  Description：我的分享
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -15,7 +15,7 @@
 <head>
     <base href="<%=basePath%>">
     <meta charset="utf-8">
-    <title>视频</title>
+    <title>我的分享</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -74,20 +74,14 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    <div class="layui-btn-group layui-hide" style="float: right">
+                    <div class="layui-btn-group layui-hide" style="margin-top: 5px">
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
-                            <i class="fa fa-share"></i>分享
-                        </button>
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
-                            <i class="fa fa-trash"></i>删除
-                        </button>
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="renameFolder()">
-                            <i class="fa fa-pencil"></i>重命名
+                            <i class="fa fa-exclamation-circle"></i>取消分享
                         </button>
                     </div>
                 </div>
                 <div class="layui-card-body" style="margin-top: -5px">
-                    <p style="font-size: 12px;">全部视频</p>
+                    <p style="font-size: 12px;">分享链接</p>
                     <table class="layui-hide" id="test-table-checkbox" lay-filter="test-table-checkbox"></table>
                 </div>
             </div>
@@ -106,30 +100,30 @@
         index: 'lib/index' //主入口模块
     }).use(['index', 'table'], function () {
         table = layui.table,
-        layer = layui.layer;
+            layer = layui.layer;
 
         tableIns = table.render({
             elem: '#test-table-checkbox'
             , skin: 'row'
-            , url: 'userfile/getFileType?type=3'//获取数据的地方
+            , url: 'userfile/getFileType?type=4'//获取数据的地方
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , id:'test-table-checkbox'
             , cols: [[{type: 'checkbox'}
                 , {
-                    field: 'fileName',
-                    width: 600,
-                    title: '文件名',
+                    field: 'shareFile',
+                    width: 400,
+                    title: '分享文件',
                     sort: true,
                     templet: function (d) {
-                        var icon = "<a lay-href='userfile/previewFile?fileId="+d.userSysfileId+"&type="+d.fileType+"'><i class='fa fa-file-video-o' style='font-size:18px;color:rgb(129,131,241);margin:8px 5px 0 0'></i>"+d.fileName+"</a>";
+                        var icon = "<a lay-href='userfile/previewFile?fileId="+d.userSysfileId+"&type="+d.fileType+"'><i class='fa fa-file-text' style='font-size:18px;color:rgb(77,151,255);margin:8px 5px 0 0'></i>"+d.fileName+"</a>";
                         console.log(d);
                         return icon;
                     }
                 }
                 , {
-                    field: 'fileSize',
+                    field: 'QRCode',
                     width: 220,
-                    title: '大小',
+                    title: '二维码',
                     templet: function (d) {
                         if (d.fileSize !== undefined){
                             if (d.fileSize >= 1024){
@@ -142,10 +136,19 @@
                         }
                     },
                     sort: true
+                }, {
+                    field: 'download',
+                    width: 500,
+                    title: '复制下载链接',
+                    templet: function (d) {
+                        var url = d.file_url;
+                        return url;
+                    },
+                    sort: true
                 }
                 , {
-                    field: 'updatetime',
-                    title: '修改日期',
+                    field: 'shareTime',
+                    title: '分享时间',
                     templet: "<div>{{layui.util.toDateString(d.updatetime, 'yyyy-MM-dd HH:mm:ss')}}</div>",
                     sort: true
                 }

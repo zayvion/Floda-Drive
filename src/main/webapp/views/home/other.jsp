@@ -86,8 +86,8 @@
                         </button>
                     </div>
                 </div>
-                <div class="layui-card-body" style="margin-top: -20px">
-                    <p style="font-size: 12px;">全部视频</p>
+                <div class="layui-card-body" style="margin-top: -5px">
+                    <p style="font-size: 12px;">其它文件</p>
                     <table class="layui-hide" id="test-table-checkbox" lay-filter="test-table-checkbox"></table>
                 </div>
             </div>

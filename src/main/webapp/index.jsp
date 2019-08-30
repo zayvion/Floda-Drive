@@ -151,13 +151,13 @@
                         </dl>
                     </li>
                     <li data-name="get" class="layui-nav-item">
-                        <a href="javascript:;" lay-href="//www.layui.com/admin/#get" lay-tips="我的分享" lay-direction="2">
+                        <a href="javascript:;" lay-href="./views/home/share.jsp" lay-tips="我的分享">
                             <i class="layui-icon layui-icon-share"></i>
                             <cite>我的分享</cite>
                         </a>
                     </li>
                     <li data-name="get" class="layui-nav-item">
-                        <a href="javascript:;" lay-href="//www.layui.com/admin/#get" lay-tips="回收站" lay-direction="2">
+                        <a href="javascript:;" lay-href="./views/home/trash.jsp" lay-tips="回收站">
                             <i class="layui-icon layui-icon-delete"></i>
                             <cite>回收站</cite>
                         </a>
