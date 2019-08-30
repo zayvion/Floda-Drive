@@ -91,6 +91,7 @@
 
 <script src="../../layuiadmin/layui/layui.js?t=1"></script>
 <script src="../../layuiadmin/layui/jquery.min.js"></script>
+<script src="../../layuiadmin/layui/clipboard.min.js"></script>
 <script>
     var table, layer,tableIns;
 
@@ -115,7 +116,7 @@
                     title: '文件名称',
                     sort: true,
                     templet: function (d) {
-                        var icon = "<a lay-href='userfile/previewFile?fileId="+d.userSysfileId+"&type="+d.fileType+"'><i class='fa fa-share-alt-square' style='font-size:18px;color:rgb(77,151,255);margin:8px 5px 0 0'></i>"+d.title+"</a>";
+                        var icon = "<a lay-href="+d.shareUrl+"><i class='fa fa-share-alt-square' style='font-size:18px;color:rgb(77,151,255);margin:8px 5px 0 0'></i>"+d.title+"</a>";
                         return icon;
                     }
                 }
@@ -133,7 +134,7 @@
                     width: 350,
                     title: '复制下载链接',
                     templet: function (d) {
-                        var url = '<input type="hidden" value="'+d.shareUrl+'" id="copy"/><input type="button" onclick="copy()" value="点击复制" title="'+d.shareUrl+'"/>';
+                        var url = '<input type="text" value="'+d.shareUrl+'" id="copy'+d.LAY_INDEX+'" style="width: 210px; margin-right: 10px;"/><input class="btn" data-clipboard-action="copy" data-clipboard-target="#copy'+d.LAY_INDEX+'" type="button" onclick="copy()" value="点击复制"/><a lay-href="'+d.QRCodeUrl+'"><i class="fa fa-qrcode" style="float: right;padding-top: 5px"></i></a>';
                         return url;
                     },
                     sort: true
@@ -210,13 +211,8 @@
 
     //点击复制
     function copy() {
-        //获取input对象
-        var obj = document.getElementById("copy");
-        console.log(obj)
-        //选择当前对象
-        obj.select();
-        document.execCommand("copy");
-        alert("复制成功！");
+        var clipboard = new ClipboardJS('.btn');
+        layer.msg("复制成功！",{icon:1,time:3000})
     }
 </script>
 </body>

@@ -74,7 +74,7 @@ public class ShareController {
                     shareItem.setShareUserfileId(shareFile.getFileId());
                     shareService.addShareItem(shareItem);
                 }
-                share.setShareUrl("http://localhost/share/view/"+shareId);
+                share.setShareUrl("http://localhost:8080/share/view/"+shareId);
                 shareService.updateUserShare(share);
                 return ResponseResult.ok("分享成功！");
             }
@@ -140,6 +140,7 @@ public class ShareController {
             folderAndFile.setFile_url(systemFile.getFileUrl());
             folderAndFile.setFileType(systemFile.getFileType());
             folderAndFile.setFileSize(systemFile.getFileSize());
+            folderAndFile.setId(userFile.getUserfileId());
             folderAndFiles.add(folderAndFile);
         }
         String json = new Gson().toJson(folderAndFiles);

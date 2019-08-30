@@ -77,14 +77,13 @@
                     <div style="width: 200px;margin: 0 auto">
                         <a href="/index"><img src="/views/imgs/logo200.png"></a>
                     </div>
-                    <p style="font-size: 20px;text-align: center;">
+                    <p style="font-size: 20px;text-align: center;margin-top: -50px">
                         FloadDrive——懂你的云盘
                     </p>
-                    <div></div>
-
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" style="margin-top: 160px">
-                            <i class="fa fa-exclamation-circle"></i>下载
-                        </button>
+                    <div class="layui-btn-group layui-hide">
+                        <a type="button" class="layui-btn layui-btn-sm layui-btn-primary" style="margin-top: -30px">
+                            <i class="fa fa-download"></i>下载
+                        </a>
                     </div>
                 </div>
                 <div class="layui-card-body" style="padding-top: -5px">
@@ -98,7 +97,9 @@
 
 <script src="../../layuiadmin/layui/layui.js?t=1"></script>
 <script src="../../layuiadmin/layui/jquery.min.js"></script>
+<script src="../../layuiadmin/lib/spotlight/js/spotlight.bundle.js"></script>
 <script>
+    var table,layer,tableIns,folderId=0,gallery = [],count = 0;
     var  shareId = window.location.href.substr(window.location.href.lastIndexOf("/")+1)
     console.log(shareId)
     var table, layer,tableIns;
@@ -145,7 +146,7 @@
                                 break;
                             case '4':
                                 icon = "<i class='fa fa-file-text' style='font-size:18px;color:rgb(77,151,255);margin:8px 5px 0 0'></i>";
-                                prefix = "<a lay-href='userfile/previewFile?fileId="+d.id+"&type="+d.fileType+"'>";
+                                prefix = "<a href='userfile/previewFile?fileId="+d.id+"&type="+d.fileType+"'>";
                                 break;
                             case '5':
                                 icon = "<i class='fa fa-file' style='font-size:18px;color:rgb(185,201,214);margin:8px 5px 0 0'></i>";
@@ -182,15 +183,23 @@
 
         table.on('checkbox(test-table-checkbox)', function (obj) {
             var checkStatus = table.checkStatus('test-table-checkbox');
+            var downObjs = [];
+            for (var i = 0; i < checkStatus.data.length; i ++){
+                var downObj = {id:"",fileType:""};
+                downObj.id = checkStatus.data[i].id;
+                downObj.fileType = checkStatus.data[i].fileType;
+                downObjs.push(downObj);
+            }
+            $('.layui-btn-group a').attr("href","/sysfile/download?downObjs="+JSON.stringify(downObjs));
             //console.log("当前选中的个数："+checkStatus.data.length);//输出当前选中的个数
             //console.log("相关数据："+checkStatus.data); //选中行的相关数据
             //console.log("是否全选:"+checkStatus.isAll); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
             if (checkStatus.data.length > 0) {
                 $('.layui-btn-group').removeClass('layui-hide');
                 if (checkStatus.data.length > 1) {
-                    $('.layui-btn-group button').eq(2).addClass('layui-btn-disabled').attr("disabled", 'disabled');
+                    $('.layui-btn-group button').eq(3).addClass('layui-btn-disabled').attr("disabled", 'disabled');
                 } else {
-                    $('.layui-btn-group button').eq(2).removeClass('layui-btn-disabled').removeAttr('disabled');
+                    $('.layui-btn-group button').eq(3).removeClass('layui-btn-disabled').removeAttr('disabled');
                 }
             } else {
                 $('.layui-btn-group').addClass('layui-hide');
@@ -200,7 +209,13 @@
 
     });
 
-
+    //图片预览
+    function showGallery(index) {
+        Spotlight.show(gallery, {
+            index: index,
+            theme: "dark"
+        });
+    }
 
 </script>
 </body>
