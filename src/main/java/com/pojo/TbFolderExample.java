@@ -414,6 +414,66 @@ public class TbFolderExample {
             addCriterion("folder_createtime not between", value1, value2, "folderCreatetime");
             return (Criteria) this;
         }
+
+        public Criteria andIsdelIsNull() {
+            addCriterion("isDel is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsdelIsNotNull() {
+            addCriterion("isDel is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsdelEqualTo(Short value) {
+            addCriterion("isDel =", value, "isdel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsdelNotEqualTo(Short value) {
+            addCriterion("isDel <>", value, "isdel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsdelGreaterThan(Short value) {
+            addCriterion("isDel >", value, "isdel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsdelGreaterThanOrEqualTo(Short value) {
+            addCriterion("isDel >=", value, "isdel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsdelLessThan(Short value) {
+            addCriterion("isDel <", value, "isdel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsdelLessThanOrEqualTo(Short value) {
+            addCriterion("isDel <=", value, "isdel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsdelIn(List<Short> values) {
+            addCriterion("isDel in", values, "isdel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsdelNotIn(List<Short> values) {
+            addCriterion("isDel not in", values, "isdel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsdelBetween(Short value1, Short value2) {
+            addCriterion("isDel between", value1, value2, "isdel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsdelNotBetween(Short value1, Short value2) {
+            addCriterion("isDel not between", value1, value2, "isdel");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

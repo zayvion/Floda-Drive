@@ -2,10 +2,7 @@ package com.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.pojo.ShowShare;
-import com.pojo.TbShare;
-import com.pojo.TbShareItem;
-import com.pojo.TbUser;
+import com.pojo.*;
 import com.service.ShareService;
 import com.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +47,9 @@ public class ShareController {
             } else {
                 TbShare share = new TbShare();
                 share.setShareComment(shareFiles.get(0).getComment());
+                if (shareFiles.size() > 1) {
+                    share.setShareTitle(shareFiles.get(0).getTitle()+shareFiles.size()+"个文件");
+                }
                 share.setShareTitle(shareFiles.get(0).getTitle());
                 share.setShareUser(user.getUserId());
                 share.setShareDate(new Date());
@@ -86,7 +86,9 @@ public class ShareController {
             share.setQRCodeUrl("http://qr.liantu.com/api.php?logo=182.254.180.106/img/123/yun-2.png&text="+share.getShareUrl());
             showShares.add(share);
         }
-        return new Gson().toJson(showShares);
+        ShowFolders showFolders = new ShowFolders();
+        showFolders.setData(showShares);
+        return new Gson().toJson(showFolders);
     }
 
 

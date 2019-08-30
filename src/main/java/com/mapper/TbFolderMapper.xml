@@ -7,6 +7,7 @@
     <result column="folder_father" property="folderFather" jdbcType="BIGINT" />
     <result column="folder_user" property="folderUser" jdbcType="BIGINT" />
     <result column="folder_createtime" property="folderCreatetime" jdbcType="TIMESTAMP" />
+    <result column="isDel" property="isdel" jdbcType="SMALLINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    folder_id, folder_name, folder_father, folder_user, folder_createtime
+    folder_id, folder_name, folder_father, folder_user, folder_createtime, isDel
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pojo.TbFolderExample" >
     select
@@ -84,7 +85,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select
+    select 
     <include refid="Base_Column_List" />
     from tb_folder
     where folder_id = #{folderId,jdbcType=BIGINT}
@@ -100,10 +101,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.pojo.TbFolder" >
-    insert into tb_folder (folder_id, folder_name, folder_father,
-      folder_user, folder_createtime)
-    values (#{folderId,jdbcType=BIGINT}, #{folderName,jdbcType=VARCHAR}, #{folderFather,jdbcType=BIGINT},
-      #{folderUser,jdbcType=BIGINT}, #{folderCreatetime,jdbcType=TIMESTAMP})
+    insert into tb_folder (folder_id, folder_name, folder_father, 
+      folder_user, folder_createtime, isDel
+      )
+    values (#{folderId,jdbcType=BIGINT}, #{folderName,jdbcType=VARCHAR}, #{folderFather,jdbcType=BIGINT}, 
+      #{folderUser,jdbcType=BIGINT}, #{folderCreatetime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=SMALLINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.pojo.TbFolder" >
     insert into tb_folder
@@ -123,6 +126,9 @@
       <if test="folderCreatetime != null" >
         folder_createtime,
       </if>
+      <if test="isdel != null" >
+        isDel,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="folderId != null" >
@@ -139,6 +145,9 @@
       </if>
       <if test="folderCreatetime != null" >
         #{folderCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdel != null" >
+        #{isdel,jdbcType=SMALLINT},
       </if>
     </trim>
   </insert>
@@ -166,6 +175,9 @@
       <if test="record.folderCreatetime != null" >
         folder_createtime = #{record.folderCreatetime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.isdel != null" >
+        isDel = #{record.isdel,jdbcType=SMALLINT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -174,10 +186,11 @@
   <update id="updateByExample" parameterType="map" >
     update tb_folder
     set folder_id = #{record.folderId,jdbcType=BIGINT},
-    folder_name = #{record.folderName,jdbcType=VARCHAR},
-    folder_father = #{record.folderFather,jdbcType=BIGINT},
-    folder_user = #{record.folderUser,jdbcType=BIGINT},
-    folder_createtime = #{record.folderCreatetime,jdbcType=TIMESTAMP}
+      folder_name = #{record.folderName,jdbcType=VARCHAR},
+      folder_father = #{record.folderFather,jdbcType=BIGINT},
+      folder_user = #{record.folderUser,jdbcType=BIGINT},
+      folder_createtime = #{record.folderCreatetime,jdbcType=TIMESTAMP},
+      isDel = #{record.isdel,jdbcType=SMALLINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -197,6 +210,9 @@
       <if test="folderCreatetime != null" >
         folder_createtime = #{folderCreatetime,jdbcType=TIMESTAMP},
       </if>
+      <if test="isdel != null" >
+        isDel = #{isdel,jdbcType=SMALLINT},
+      </if>
     </set>
     where folder_id = #{folderId,jdbcType=BIGINT}
   </update>
@@ -205,7 +221,8 @@
     set folder_name = #{folderName,jdbcType=VARCHAR},
       folder_father = #{folderFather,jdbcType=BIGINT},
       folder_user = #{folderUser,jdbcType=BIGINT},
-      folder_createtime = #{folderCreatetime,jdbcType=TIMESTAMP}
+      folder_createtime = #{folderCreatetime,jdbcType=TIMESTAMP},
+      isDel = #{isdel,jdbcType=SMALLINT}
     where folder_id = #{folderId,jdbcType=BIGINT}
   </update>
 </mapper>

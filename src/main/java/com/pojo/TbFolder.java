@@ -13,6 +13,8 @@ public class TbFolder {
 
     private Date folderCreatetime;
 
+    private Short isdel;
+
     public Long getFolderId() {
         return folderId;
     }
@@ -53,14 +55,11 @@ public class TbFolder {
         this.folderCreatetime = folderCreatetime;
     }
 
-    @Override
-    public String toString() {
-        return "TbFolder{" +
-                "folderId=" + folderId +
-                ", folderName='" + folderName + '\'' +
-                ", folderFather=" + folderFather +
-                ", folderUser=" + folderUser +
-                ", folderCreatetime=" + folderCreatetime +
-                '}';
+    public Short getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(Short isdel) {
+        this.isdel = isdel;
     }
 }
