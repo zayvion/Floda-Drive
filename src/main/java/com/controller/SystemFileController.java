@@ -1,9 +1,13 @@
 package com.controller;
 
+import com.alibaba.druid.sql.visitor.functions.If;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mapper.TbUserFileMapper;
 import com.pojo.*;
 import com.service.SystemFileService;
 import com.service.UserFileService;
+import com.sun.mail.imap.protocol.ID;
 import com.utils.FtpUtil;
 import com.utils.MD5Util;
 import org.apache.commons.lang.StringUtils;
@@ -18,11 +22,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -60,7 +66,7 @@ public class SystemFileController {
             System.out.println(size);
             Long diskTotalSize = (Long) session.getAttribute("TotalSize");
             String userTotalSize = (String) session.getAttribute("userTotalSize");
-            if (diskTotalSize - Double.parseDouble(userTotalSize) < size/1024/1000) {
+            if (diskTotalSize - Double.parseDouble(userTotalSize) < size / 1024 / 1000) {
                 model.addAttribute("msg", "您云盘的空间不足，成为超级用户尊享超大空间！");
                 return "error";
             }
@@ -170,85 +176,90 @@ public class SystemFileController {
             model.addAttribute("msg", "上传发生错误，青重试！");
             return "error";
         }
-
-
     }
 
-
-
+    /**
+     * 下载
+     *
+     * @param request
+     * @param response
+     * @param userFileId 前台传来的需要下载文件的ID
+     * @param model
+     * @return
+     */
     @RequestMapping("/download")
-    public String download(HttpServletRequest request, HttpServletResponse response, String userFileId,Model model) {
-        System.out.println(userFileId);
-        String[] split = userFileId.split(",");
-        if (split.length==0) {
-            model.addAttribute("msg", "参数异常，请重试");
-            return "error";
-        } else if (split.length==1) {
-            System.out.println("长度大于1，" + split.length);
-            TbUserFile file = userFileService.getUserFile(Long.valueOf(split[0]));
-            TbSystemFile systemFile = systemFileService.getSystemFile(file.getUserSysfileId());
-            String fileName = file.getUserFileName();
-            try {
-                URL internetUrl = new URL(systemFile.getFileUrl());
-                in = internetUrl.openStream();
-                // Read from is
-                //根据条件得到文件路径
-                System.out.println("===========文件路径===========" + internetUrl);
-                //将文件读入文件流
-
-                //获得浏览器代理信息
-                final String userAgent = request.getHeader("USER-AGENT");
-                //判断浏览器代理并分别设置响应给浏览器的编码格式
-                String finalFileName = null;
-                if (StringUtils.contains(userAgent, "MSIE") || StringUtils.contains(userAgent, "Trident")) {//IE浏览器
-                    finalFileName = URLEncoder.encode(fileName, "UTF8");
-                    System.out.println("IE浏览器");
-                } else if (StringUtils.contains(userAgent, "Mozilla")) {//google,火狐浏览器
-                    finalFileName = new String(fileName.getBytes(), "ISO8859-1");
-                } else {
-                    finalFileName = URLEncoder.encode(fileName, "UTF8");//其他浏览器
-                }
-                //设置HTTP响应头
-                response.reset();//重置 响应头
-                response.setContentType("application/x-download");//告知浏览器下载文件，而不是直接打开，浏览器默认为打开
-                response.addHeader("Content-Disposition", "attachment;filename=\"" + finalFileName + "\"");//下载文件的名称
-
-                // 循环取出流中的数据
-                byte[] b = new byte[1024];
-                int len;
-                while ((len = in.read(b)) > 0) {
-                    response.getOutputStream().write(b, 0, len);
-                }
-                in.close();
-                response.getOutputStream().close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        } else {
-            try {
-                TbUserFile file = userFileService.getUserFile(Long.valueOf(split[0]));
+    public String download(HttpServletRequest request, HttpServletResponse response, String userFileId, Model model, String downObjs) throws Exception {
+        String[] files = null;
+        System.out.println("downObjsz=" + downObjs);
+        Type type = new TypeToken<ArrayList<FolderAndFile>>() {
+        }.getType();
+        ArrayList<FolderAndFile> downloadObj = new Gson().fromJson(downObjs, type);
+        System.out.println(downloadObj.size());
+        for (FolderAndFile folderAndFile : downloadObj) {
+            if (downloadObj.size() == 1 && !folderAndFile.getFileType().equals("0")) {
+                TbUserFile file = userFileService.getUserFile(folderAndFile.getId());
                 TbSystemFile systemFile = systemFileService.getSystemFile(file.getUserSysfileId());
                 String fileName = file.getUserFileName();
+                try {
+                    URL internetUrl = new URL(systemFile.getFileUrl());
+                    in = internetUrl.openStream();
+                    // Read from is
+                    //根据条件得到文件路径
+                    System.out.println("===========文件路径===========" + internetUrl);
+                    //将文件读入文件流
 
+                    //获得浏览器代理信息
+                    final String userAgent = request.getHeader("USER-AGENT");
+                    //判断浏览器代理并分别设置响应给浏览器的编码格式
+                    String finalFileName = null;
+                    if (StringUtils.contains(userAgent, "MSIE") || StringUtils.contains(userAgent, "Trident")) {//IE浏览器
+                        finalFileName = URLEncoder.encode(fileName, "UTF8");
+                        System.out.println("IE浏览器");
+                    } else if (StringUtils.contains(userAgent, "Mozilla")) {//google,火狐浏览器
+                        finalFileName = new String(fileName.getBytes(), "ISO8859-1");
+                    } else {
+                        finalFileName = URLEncoder.encode(fileName, "UTF8");//其他浏览器
+                    }
+                    //设置HTTP响应头
+                    response.reset();// 重置响应头
+                    response.setContentType("application/x-download");//告知浏览器下载文件，而不是直接打开，浏览器默认为打开
+                    response.addHeader("Content-Disposition", "attachment;filename=\"" + finalFileName + "\"");//下载文件的名称
+
+                    // 循环取出流中的数据
+                    byte[] b = new byte[1024];
+                    int len;
+                    while ((len = in.read(b)) > 0) {
+                        response.getOutputStream().write(b, 0, len);
+                    }
+                    in.close();
+                    response.getOutputStream().close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            } else if (downloadObj.size() == 1 && folderAndFile.getFileType().equals("0")) {
+                List<TbUserFile> folderFiles = userFileService.getFolderFiles(folderAndFile.getId());
+                for (int i = 0; i < folderFiles.size(); i++) {
+                    TbSystemFile systemFile = systemFileService.getSystemFile(folderFiles.get(i).getUserSysfileId());
+                    String fileName = folderFiles.get(0).getUserFileName();
+                    // 获取下载地址
+                    files = new String[folderFiles.size()];
+                    for (int j = 0; j < folderFiles.size(); j++) {
+                        TbUserFile userFile = userFileService.getUserFile(folderFiles.get(j).getUserfileId());
+                        TbSystemFile sysFile = systemFileService.getSystemFile(userFile.getUserSysfileId());
+                        files[j] = sysFile.getFileUrl();
+                    }
+                }
                 // 文件的名称
-                String downloadFilename =  fileName.substring(0, fileName.lastIndexOf("."))+"等"+split.length+"个文件.zip";
+                String downloadFilename = folderFiles.size() + "个文件.zip";
                 downloadFilename = URLEncoder.encode(downloadFilename, "UTF-8");//转换中文否则可能会产生乱码
                 response.setContentType("application/octet-stream");// 指明response的返回对象是文件流
                 response.setHeader("Content-Disposition", "attachment;filename=" + downloadFilename);// 设置在下载框默认显示的文件名
                 ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
-                // 获取下载地址
-                String[] files = new String[split.length];
-                for (int i = 0; i < split.length; i++) {
-                    TbUserFile userFile = userFileService.getUserFile(Long.valueOf(split[i]));
-                    TbSystemFile sysFile = systemFileService.getSystemFile(userFile.getUserSysfileId());
-                    files[i] = sysFile.getFileUrl();
-                }
-
-                for (int i = 0; i < files.length; i++) {
-                    URL url = new URL(files[i]);
-                    String extession = files[i].substring(files[i].lastIndexOf("."));
-                    zos.putNextEntry(new ZipEntry(i + extession));
+                for (int k = 0; k < files.length; k++) {
+                    URL url = new URL(files[k]);
+                    String extession = files[k].substring(files[k].lastIndexOf("."));
+                    zos.putNextEntry(new ZipEntry(k + extession));
                     //FileInputStream fis = new FileInputStream(new File(files[i]));
                     InputStream fis = url.openConnection().getInputStream();
                     byte[] buffer = new byte[1024];
@@ -260,49 +271,48 @@ public class SystemFileController {
                 }
                 zos.flush();
                 zos.close();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
 
+                return null;
+            } else if (downloadObj.size() > 1 && !folderAndFile.getFileType().equals("0")) {
+                for (int i = 0; i < downloadObj.size(); i++) {
 
-    }
-
-    @RequestMapping("/download2")
-    public String download2(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            // 文件的名称
-            String downloadFilename = "文件名.zip";
-            downloadFilename = URLEncoder.encode(downloadFilename, "UTF-8");//转换中文否则可能会产生乱码
-            response.setContentType("application/octet-stream");// 指明response的返回对象是文件流
-            response.setHeader("Content-Disposition", "attachment;filename=" + downloadFilename);// 设置在下载框默认显示的文件名
-            ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
-            String[] files = new String[]{"http://image.lzllzl.cn/img/2019-08-27/d927467d-c3af-4.jpg", "http://image.lzllzl.cn/img/2019-08-27/e09137c8-e688-4.java"};
-            for (int i = 0; i < files.length; i++) {
-                URL url = new URL(files[i]);
-                String extession = files[i].substring(files[i].lastIndexOf("."));
-                zos.putNextEntry(new ZipEntry(i + extession));
-                //FileInputStream fis = new FileInputStream(new File(files[i]));
-                InputStream fis = url.openConnection().getInputStream();
-                byte[] buffer = new byte[1024];
-                int r = 0;
-                while ((r = fis.read(buffer)) != -1) {
-                    zos.write(buffer, 0, r);
                 }
-                fis.close();
+                // 获取下载地址
+                files = new String[downloadObj.size()];
+                for (int j = 0; j < downloadObj.size(); j++) {
+                    TbUserFile userFile = userFileService.getUserFile(downloadObj.get(j).getId());
+                    TbSystemFile sysFile = systemFileService.getSystemFile(userFile.getUserSysfileId());
+                    files[j] = sysFile.getFileUrl();
+                }
+                // 文件的名称
+                String downloadFilename = downloadObj.size() + "个文件.zip";
+                downloadFilename = URLEncoder.encode(downloadFilename, "UTF-8");//转换中文否则可能会产生乱码
+                response.setContentType("application/octet-stream");// 指明response的返回对象是文件流
+                response.setHeader("Content-Disposition", "attachment;filename=" + downloadFilename);// 设置在下载框默认显示的文件名
+                ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
+                for (int k = 0; k < files.length; k++) {
+                    URL url = new URL(files[k]);
+                    String extession = files[k].substring(files[k].lastIndexOf("."));
+                    zos.putNextEntry(new ZipEntry(k + extession));
+                    //FileInputStream fis = new FileInputStream(new File(files[i]));
+                    InputStream fis = url.openConnection().getInputStream();
+                    byte[] buffer = new byte[1024];
+                    int r = 0;
+                    while ((r = fis.read(buffer)) != -1) {
+                        zos.write(buffer, 0, r);
+                    }
+                    fis.close();
+                }
+                zos.flush();
+                zos.close();
+            } else {
+                model.addAttribute("msg", "暂不支持这种形式的下载请求，系统持续升级中！");
+                return "error";
             }
-            zos.flush();
-            zos.close();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return null;
     }
+
 
     /**
      * 获取当前日期作为文件夹名
@@ -314,7 +324,6 @@ public class SystemFileController {
         String format = sdf.format(new Date());
         return format;
     }
-
 
 
 }

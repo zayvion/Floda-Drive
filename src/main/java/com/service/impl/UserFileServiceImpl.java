@@ -75,6 +75,15 @@ public class UserFileServiceImpl implements UserFileService {
     }
 
     @Override
+    public List getFolderFiles(long folderId) {
+        TbUserFileExample userFileExample = new TbUserFileExample();
+        TbUserFileExample.Criteria criteria = userFileExample.createCriteria();
+        criteria.andFileLocationEqualTo(folderId);
+        List<TbUserFile> userFiles = userFileMapper.selectByExample(userFileExample);
+        return userFiles;
+    }
+
+    @Override
         public String updateUserFile (TbUserFile userFile){
             try {
                 userFile.setUploadTime(new Date());

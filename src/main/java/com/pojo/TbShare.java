@@ -3,8 +3,6 @@ package com.pojo;
 public class TbShare {
     private Long shareId;
 
-    private Long shareFile;
-
     private Long shareUser;
 
     private String shareComment;
@@ -19,14 +17,6 @@ public class TbShare {
 
     public void setShareId(Long shareId) {
         this.shareId = shareId;
-    }
-
-    public Long getShareFile() {
-        return shareFile;
-    }
-
-    public void setShareFile(Long shareFile) {
-        this.shareFile = shareFile;
     }
 
     public Long getShareUser() {

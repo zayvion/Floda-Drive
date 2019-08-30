@@ -164,66 +164,6 @@ public class TbShareExample {
             return (Criteria) this;
         }
 
-        public Criteria andShareFileIsNull() {
-            addCriterion("share_file is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareFileIsNotNull() {
-            addCriterion("share_file is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareFileEqualTo(Long value) {
-            addCriterion("share_file =", value, "shareFile");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareFileNotEqualTo(Long value) {
-            addCriterion("share_file <>", value, "shareFile");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareFileGreaterThan(Long value) {
-            addCriterion("share_file >", value, "shareFile");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareFileGreaterThanOrEqualTo(Long value) {
-            addCriterion("share_file >=", value, "shareFile");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareFileLessThan(Long value) {
-            addCriterion("share_file <", value, "shareFile");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareFileLessThanOrEqualTo(Long value) {
-            addCriterion("share_file <=", value, "shareFile");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareFileIn(List<Long> values) {
-            addCriterion("share_file in", values, "shareFile");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareFileNotIn(List<Long> values) {
-            addCriterion("share_file not in", values, "shareFile");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareFileBetween(Long value1, Long value2) {
-            addCriterion("share_file between", value1, value2, "shareFile");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareFileNotBetween(Long value1, Long value2) {
-            addCriterion("share_file not between", value1, value2, "shareFile");
-            return (Criteria) this;
-        }
-
         public Criteria andShareUserIsNull() {
             addCriterion("share_user is null");
             return (Criteria) this;

@@ -1,6 +1,7 @@
 package com.service;
 
 import com.mapper.TbUserFileMapper;
+import com.pojo.FolderAndFile;
 import com.pojo.TbUserFile;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -51,6 +52,13 @@ public interface UserFileService {
      * @return
      */
     TbUserFile getUserFile(long userFileId);
+
+    /**
+     * 获取文件夹下的文件
+     * @param folderId
+     * @return
+     */
+    List getFolderFiles(long folderId);
 
 
 }

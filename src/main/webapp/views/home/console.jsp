@@ -202,7 +202,7 @@
                 downObj.fileType = checkStatus.data[i].fileType;
                 downObjs.push(downObj);
             }
-            $('.layui-btn-group a').attr("href","/sysfile/download2?downObjs="+JSON.stringify(downObjs));
+            $('.layui-btn-group a').attr("href","/sysfile/download?downObjs="+JSON.stringify(downObjs));
             //console.log("当前选中的个数："+checkStatus.data.length);//输出当前选中的个数
             //console.log("相关数据："+checkStatus.data); //选中行的相关数据
             //console.log("是否全选:"+checkStatus.isAll); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
@@ -358,15 +358,17 @@
 
     //分享
     function addShare(folder_father) {
+
         var checkStatus = table.checkStatus('test-table-checkbox');
         if(checkStatus.data.length === 1){
-            var title = ['<i class="fa fa-share"></i>分享文件:'+checkStatus.data[0].fileName,'color:#0098ea']
+            var title = checkStatus.data[0].fileName;
+
         }else{
-            var title = ['<i class="fa fa-share"></i>分享文件:'+checkStatus.data[0].fileName+"等",'color:#0098ea']
+            var title = checkStatus.data[0].fileName+"等";
         }
         layer.prompt({
                 type: 1,
-                title: title,
+                title: ['<i class="fa fa-share"></i>分享文件:'+title,'color:#0098ea'],
                 offset: '100px',
                 value:checkStatus.data[0].fileName
             },
@@ -376,26 +378,23 @@
                 checkStatus.data[0].fileName = text;
                 var shareObjs = [];
                 for (var i = 0; i < checkStatus.data.length; i ++){
-                    var shareObj = {comment:"",fileId:""};
+                    var shareObj = {comment:"",fileId:"",title:""};
                     shareObj.comment = text;
+                    shareObj.title = title;
                     shareObj.fileId = checkStatus.data[i].id;
                     shareObj.type = checkStatus.data[i].fileType;
                     shareObjs.push(shareObj);
                 }
                 console.log(shareObjs);
                 //修改后触发ajax方法，异步请求后台修改数据库
-                $.post('/folder/rename',{'shareObjs':JSON.stringify(shareObjs)},function (data,status) {
+                $.post('/share/add',{'shareObjs':JSON.stringify(shareObjs)},function (data,status) {
+                    console.log(data);
                     if (data.status === 200){
-                        layer.msg(data.msg,{
+                        layer.msg(data.data,{
                             icon:1,
                             offset: '200px'
                         });
-                        //需改数据后表格局部刷新
-                        tableIns.reload({
-                            where: { //设定异步数据接口的额外参数，任意设
-                                folder_father: folder_father
-                            }
-                        });
+
                         $('.layui-btn-group').addClass('layui-hide');
                     }else {
                         layer.msg(data.msg,{

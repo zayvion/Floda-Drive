@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.mapper.TbShareMapper" >
-  <resultMap id="BaseResultMap" type="com.pojo.TbShare" >
-    <id column="share_id" property="shareId" jdbcType="BIGINT" />
-    <result column="share_user" property="shareUser" jdbcType="BIGINT" />
-    <result column="share_comment" property="shareComment" jdbcType="VARCHAR" />
-    <result column="share_title" property="shareTitle" jdbcType="VARCHAR" />
-    <result column="share_url" property="shareUrl" jdbcType="VARCHAR" />
+<mapper namespace="com.mapper.TbShareItemMapper" >
+  <resultMap id="BaseResultMap" type="com.pojo.TbShareItem" >
+    <id column="share_item_id" property="shareItemId" jdbcType="BIGINT" />
+    <result column="share_id" property="shareId" jdbcType="BIGINT" />
+    <result column="share_userfile_id" property="shareUserfileId" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    share_id, share_user, share_comment, share_title, share_url
+    share_item_id, share_id, share_userfile_id
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pojo.TbShareExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pojo.TbShareItemExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_share
+    from tb_share_item
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -86,85 +84,67 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    from tb_share
-    where share_id = #{shareId,jdbcType=BIGINT}
+    from tb_share_item
+    where share_item_id = #{shareItemId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from tb_share
-    where share_id = #{shareId,jdbcType=BIGINT}
+    delete from tb_share_item
+    where share_item_id = #{shareItemId,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.pojo.TbShareExample" >
-    delete from tb_share
+  <delete id="deleteByExample" parameterType="com.pojo.TbShareItemExample" >
+    delete from tb_share_item
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.pojo.TbShare" >
-    insert into tb_share (share_id, share_user, share_comment, 
-      share_title, share_url)
-    values (#{shareId,jdbcType=BIGINT}, #{shareUser,jdbcType=BIGINT}, #{shareComment,jdbcType=VARCHAR}, 
-      #{shareTitle,jdbcType=VARCHAR}, #{shareUrl,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.pojo.TbShareItem" >
+    insert into tb_share_item (share_item_id, share_id, share_userfile_id
+      )
+    values (#{shareItemId,jdbcType=BIGINT}, #{shareId,jdbcType=BIGINT}, #{shareUserfileId,jdbcType=BIGINT}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.pojo.TbShare" >
-    insert into tb_share
+  <insert id="insertSelective" parameterType="com.pojo.TbShareItem" >
+    insert into tb_share_item
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shareItemId != null" >
+        share_item_id,
+      </if>
       <if test="shareId != null" >
         share_id,
       </if>
-      <if test="shareUser != null" >
-        share_user,
-      </if>
-      <if test="shareComment != null" >
-        share_comment,
-      </if>
-      <if test="shareTitle != null" >
-        share_title,
-      </if>
-      <if test="shareUrl != null" >
-        share_url,
+      <if test="shareUserfileId != null" >
+        share_userfile_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shareItemId != null" >
+        #{shareItemId,jdbcType=BIGINT},
+      </if>
       <if test="shareId != null" >
         #{shareId,jdbcType=BIGINT},
       </if>
-      <if test="shareUser != null" >
-        #{shareUser,jdbcType=BIGINT},
-      </if>
-      <if test="shareComment != null" >
-        #{shareComment,jdbcType=VARCHAR},
-      </if>
-      <if test="shareTitle != null" >
-        #{shareTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="shareUrl != null" >
-        #{shareUrl,jdbcType=VARCHAR},
+      <if test="shareUserfileId != null" >
+        #{shareUserfileId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.pojo.TbShareExample" resultType="java.lang.Integer" >
-    select count(*) from tb_share
+  <select id="countByExample" parameterType="com.pojo.TbShareItemExample" resultType="java.lang.Integer" >
+    select count(*) from tb_share_item
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update tb_share
+    update tb_share_item
     <set >
+      <if test="record.shareItemId != null" >
+        share_item_id = #{record.shareItemId,jdbcType=BIGINT},
+      </if>
       <if test="record.shareId != null" >
         share_id = #{record.shareId,jdbcType=BIGINT},
       </if>
-      <if test="record.shareUser != null" >
-        share_user = #{record.shareUser,jdbcType=BIGINT},
-      </if>
-      <if test="record.shareComment != null" >
-        share_comment = #{record.shareComment,jdbcType=VARCHAR},
-      </if>
-      <if test="record.shareTitle != null" >
-        share_title = #{record.shareTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="record.shareUrl != null" >
-        share_url = #{record.shareUrl,jdbcType=VARCHAR},
+      <if test="record.shareUserfileId != null" >
+        share_userfile_id = #{record.shareUserfileId,jdbcType=BIGINT},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -172,40 +152,30 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update tb_share
-    set share_id = #{record.shareId,jdbcType=BIGINT},
-      share_user = #{record.shareUser,jdbcType=BIGINT},
-      share_comment = #{record.shareComment,jdbcType=VARCHAR},
-      share_title = #{record.shareTitle,jdbcType=VARCHAR},
-      share_url = #{record.shareUrl,jdbcType=VARCHAR}
+    update tb_share_item
+    set share_item_id = #{record.shareItemId,jdbcType=BIGINT},
+      share_id = #{record.shareId,jdbcType=BIGINT},
+      share_userfile_id = #{record.shareUserfileId,jdbcType=BIGINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.TbShare" >
-    update tb_share
+  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.TbShareItem" >
+    update tb_share_item
     <set >
-      <if test="shareUser != null" >
-        share_user = #{shareUser,jdbcType=BIGINT},
+      <if test="shareId != null" >
+        share_id = #{shareId,jdbcType=BIGINT},
       </if>
-      <if test="shareComment != null" >
-        share_comment = #{shareComment,jdbcType=VARCHAR},
-      </if>
-      <if test="shareTitle != null" >
-        share_title = #{shareTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="shareUrl != null" >
-        share_url = #{shareUrl,jdbcType=VARCHAR},
+      <if test="shareUserfileId != null" >
+        share_userfile_id = #{shareUserfileId,jdbcType=BIGINT},
       </if>
     </set>
-    where share_id = #{shareId,jdbcType=BIGINT}
+    where share_item_id = #{shareItemId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.pojo.TbShare" >
-    update tb_share
-    set share_user = #{shareUser,jdbcType=BIGINT},
-      share_comment = #{shareComment,jdbcType=VARCHAR},
-      share_title = #{shareTitle,jdbcType=VARCHAR},
-      share_url = #{shareUrl,jdbcType=VARCHAR}
-    where share_id = #{shareId,jdbcType=BIGINT}
+  <update id="updateByPrimaryKey" parameterType="com.pojo.TbShareItem" >
+    update tb_share_item
+    set share_id = #{shareId,jdbcType=BIGINT},
+      share_userfile_id = #{shareUserfileId,jdbcType=BIGINT}
+    where share_item_id = #{shareItemId,jdbcType=BIGINT}
   </update>
 </mapper>
