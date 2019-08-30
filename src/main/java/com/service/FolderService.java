@@ -1,5 +1,6 @@
 package com.service;
 
+import com.pojo.FolderAndFile;
 import com.pojo.ShowFolders;
 import com.pojo.TbFolder;
 import com.utils.ResponseResult;
@@ -33,5 +34,10 @@ public interface FolderService {
      */
     String updateFolder(TbFolder folder);
 
-
+    /**
+     * 根据文件夹id删除文件夹
+     * @param ff
+     * @return
+     */
+    void deleteFolder(FolderAndFile ff);
 }

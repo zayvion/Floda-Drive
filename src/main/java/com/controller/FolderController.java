@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.pojo.*;
 import com.service.FolderService;
 import com.service.UserFileService;
@@ -63,6 +64,31 @@ public class FolderController {
             userFile.setUserSysfileId(folderAndFile.getUserSysfileId());
             return userFileServiceImpl.updateUserFile(userFile);
         }
+    }
+
+    /**
+     * 删除文件和文件夹
+     * @param deleteList
+     * @return
+     */
+    @RequestMapping(value = "/delete",produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String delete(String deleteList) {
+        List<FolderAndFile> ffs = new Gson().fromJson(deleteList, new TypeToken<List<FolderAndFile>>() {}.getType());
+        try {
+            for (FolderAndFile ff:ffs) {
+                //根据删除的文件类型判断删除的是文件夹还是文件
+                if (ff.getFileType().equals("0")){
+                    folderServiceImpl.deleteFolder(ff);
+                }else {
+                    userFileServiceImpl.deleteUserFile(ff);
+                }
+            }
+            return ResponseResult.build(200, "删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseResult.build(500, "删除失败");
     }
 
     /**

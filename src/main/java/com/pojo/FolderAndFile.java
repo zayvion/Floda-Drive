@@ -19,6 +19,7 @@ public class FolderAndFile {
     private String fileType;
     private Long userSysfileId;
     private String file_url;
+    private Short isdel;
 
     //封装图片预览所需参数
     private String title;
@@ -109,6 +110,14 @@ public class FolderAndFile {
         return description;
     }
 
+    public Short getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(Short isdel) {
+        this.isdel = isdel;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -133,6 +142,7 @@ public class FolderAndFile {
                 ", fileType='" + fileType + '\'' +
                 ", userSysfileId=" + userSysfileId +
                 ", file_url='" + file_url + '\'' +
+                ", isdel=" + isdel +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", src='" + src + '\'' +

@@ -62,4 +62,16 @@ public class TbFolder {
     public void setIsdel(Short isdel) {
         this.isdel = isdel;
     }
+
+    @Override
+    public String toString() {
+        return "TbFolder{" +
+                "folderId=" + folderId +
+                ", folderName='" + folderName + '\'' +
+                ", folderFather=" + folderFather +
+                ", folderUser=" + folderUser +
+                ", folderCreatetime=" + folderCreatetime +
+                ", isdel=" + isdel +
+                '}';
+    }
 }

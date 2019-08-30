@@ -35,7 +35,7 @@ public class UserFileServiceImpl implements UserFileService {
     }
 
     @Override
-    public int getSameNameFile(String filename,long userId, long fatherFloder) {
+    public int getSameNameFile(String filename, long userId, long fatherFloder) {
         TbUserFileExample userFileExample = new TbUserFileExample();
         TbUserFileExample.Criteria fileExampleCriteria = userFileExample.createCriteria();
         fileExampleCriteria.andUserFileNameLike(filename);
@@ -52,6 +52,7 @@ public class UserFileServiceImpl implements UserFileService {
         TbUserFileExample.Criteria fileExampleCriteria = userFileExample.createCriteria();
         fileExampleCriteria.andFileTypeEqualTo(type);
         fileExampleCriteria.andBelongUserEqualTo(userId);
+        fileExampleCriteria.andIsdelEqualTo((short)0);
         List<TbUserFile> fileList = userFileMapper.selectByExample(userFileExample);
         ArrayList<FolderAndFile> files = new ArrayList<>();
         for (TbUserFile tbUserFile : fileList) {
@@ -84,15 +85,31 @@ public class UserFileServiceImpl implements UserFileService {
     }
 
     @Override
-        public String updateUserFile (TbUserFile userFile){
-            try {
-                userFile.setUploadTime(new Date());
-                userFileMapper.updateByPrimaryKey(userFile);
-                return ResponseResult.build(200, "修改成功");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return ResponseResult.build(500, "修改失败");
+    public String updateUserFile(TbUserFile userFile) {
+        try {
+            userFile.setUploadTime(new Date());
+            userFileMapper.updateByPrimaryKey(userFile);
+            return ResponseResult.build(200, "修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return ResponseResult.build(500, "修改失败");
     }
+
+    @Override
+    public void deleteUserFile(FolderAndFile ff) {
+        //删除文件时，要删除该文件所在的用户表（预留功能：以及该文件在系统表中对应的数据）
+        TbUserFile tbUserFile = new TbUserFile();
+        tbUserFile.setUserSysfileId(ff.getUserSysfileId());
+        tbUserFile.setUserFileName(ff.getFileName());
+        tbUserFile.setUserfileId(ff.getId());
+        tbUserFile.setUploadTime(ff.getUpdatetime());
+        tbUserFile.setFileType(ff.getFileType());
+        tbUserFile.setFileSize(ff.getFileSize());
+        tbUserFile.setFileLocation(ff.getParentId());
+        tbUserFile.setBelongUser(ff.getBelong());
+        tbUserFile.setIsdel((short)1);
+        userFileMapper.updateByPrimaryKey(tbUserFile);
+    }
+}
 

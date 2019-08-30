@@ -93,4 +93,19 @@ public class TbUserFile {
     public void setIsdel(Short isdel) {
         this.isdel = isdel;
     }
+
+    @Override
+    public String toString() {
+        return "TbUserFile{" +
+                "userfileId=" + userfileId +
+                ", userSysfileId=" + userSysfileId +
+                ", userFileName='" + userFileName + '\'' +
+                ", belongUser=" + belongUser +
+                ", fileType='" + fileType + '\'' +
+                ", fileSize=" + fileSize +
+                ", fileLocation=" + fileLocation +
+                ", uploadTime=" + uploadTime +
+                ", isdel=" + isdel +
+                '}';
+    }
 }

@@ -2,6 +2,7 @@ package com.service;
 
 import com.mapper.TbUserFileMapper;
 import com.pojo.FolderAndFile;
+import com.pojo.TbFolder;
 import com.pojo.TbUserFile;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -53,6 +54,12 @@ public interface UserFileService {
      */
     TbUserFile getUserFile(long userFileId);
 
+    /**
+     * 根据文件id删除文件
+     * @param fileId
+     * @return
+     */
+    void deleteUserFile(FolderAndFile ff);
     /**
      * 获取文件夹下的文件
      * @param folderId

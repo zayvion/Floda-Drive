@@ -46,11 +46,13 @@ public class FolderServiceImpl implements FolderService {
         TbFolderExample.Criteria criteria = folderExample.createCriteria();
         criteria.andFolderUserEqualTo(userId);
         criteria.andFolderFatherEqualTo(folder_father);
+        criteria.andIsdelEqualTo((short)0);
         //查询文件
         TbUserFileExample userFileExample = new TbUserFileExample();
         TbUserFileExample.Criteria userFileExampleCriteria = userFileExample.createCriteria();
         userFileExampleCriteria.andBelongUserEqualTo(userId);
         userFileExampleCriteria.andFileLocationEqualTo(folder_father);
+        userFileExampleCriteria.andIsdelEqualTo((short)0);
         List<TbFolder> tbFolders = folderMapper.selectByExample(folderExample);
         List<TbUserFile> tbUserFiles = userFileMapper.selectByExample(userFileExample);
         //填入文件夹
@@ -66,6 +68,8 @@ public class FolderServiceImpl implements FolderService {
             ff.setParentId(tbFolder.getFolderFather());
             ff.setBelong(tbFolder.getFolderUser());
             ff.setFileType("0");
+            ff.setIsdel(tbFolder.getIsdel());
+            ff.setUpdatetime(tbFolder.getFolderCreatetime());
             ffs.add(ff);
         }
         //填入文件
@@ -79,6 +83,7 @@ public class FolderServiceImpl implements FolderService {
             ff.setFileSize(tbUserFile.getFileSize());
             ff.setUpdatetime(tbUserFile.getUploadTime());
             ff.setUserSysfileId(tbUserFile.getUserSysfileId());
+            ff.setIsdel(tbUserFile.getIsdel());
             TbSystemFile tbSystemFile = tbSystemFileMapper.selectByPrimaryKey(tbUserFile.getUserSysfileId());
             ff.setFile_url(tbSystemFile.getFileUrl());
             ff.setSrc(tbSystemFile.getFileUrl());
@@ -100,5 +105,46 @@ public class FolderServiceImpl implements FolderService {
             e.printStackTrace();
         }
         return ResponseResult.build(500,"修改失败");
+    }
+
+    @Override
+    public void deleteFolder(FolderAndFile ff) {
+        TbFolder tbFolder = new TbFolder();
+        tbFolder.setFolderCreatetime(ff.getUpdatetime());
+        tbFolder.setFolderFather(ff.getParentId());
+        tbFolder.setFolderUser(ff.getBelong());
+        tbFolder.setFolderName(ff.getFileName());
+        tbFolder.setFolderId(ff.getId());
+        tbFolder.setIsdel((short)1);
+        recursionDelete(tbFolder);
+    }
+
+    //递归一次删除文件夹下的所有文件和文件夹
+    private void recursionDelete(TbFolder tbFolder){
+        /**
+         * 根据当前文件夹id查询看是否有子文件或者文件夹
+         */
+        //判断是否有子文件
+        TbUserFileExample userFileExample = new TbUserFileExample();
+        TbUserFileExample.Criteria userFileExampleCriteria = userFileExample.createCriteria();
+        userFileExampleCriteria.andFileLocationEqualTo(tbFolder.getFolderId());
+        List<TbUserFile> tbUserFiles = userFileMapper.selectByExample(userFileExample);
+        for (TbUserFile tuf:tbUserFiles){
+            tuf.setIsdel((short)1);
+            userFileMapper.updateByPrimaryKey(tuf);
+        }
+        //判断是否有子文件夹
+        TbFolderExample folderExample = new TbFolderExample();
+        TbFolderExample.Criteria criteria = folderExample.createCriteria();
+        criteria.andFolderFatherEqualTo(tbFolder.getFolderId());
+        List<TbFolder> tbFolders = folderMapper.selectByExample(folderExample);
+        for (TbFolder tf:tbFolders){
+            tf.setIsdel((short)1);
+            folderMapper.updateByPrimaryKey(tf);
+            recursionDelete(tf);
+        }
+        tbFolder.setFolderCreatetime(new Date());
+        tbFolder.setIsdel((short)1);
+        folderMapper.updateByPrimaryKey(tbFolder);
     }
 }

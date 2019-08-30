@@ -39,7 +39,7 @@
             border-color: #c3eaff;
             color: #0098ea;
         }
-        .layui-card-header .layui-btn-group button,.layui-card-header .layui-btn-group a:hover {
+        .layui-card-header .layui-btn-group button:hover,.layui-card-header .layui-btn-group a:hover {
             border-color: #c3eaff;
             color: #0098ea;
         }
@@ -351,9 +351,38 @@
     }
 
     //文件夹、文件删除
-    function trash(folder_father) {
-        var checkStatus = table.checkStatus('test-table-checkbox');
-        console.log(gallery);
+    function trash() {
+        var dataa = table.checkStatus('test-table-checkbox').data;
+        layer.confirm('',{
+            offset: '200px',
+            content: '确认要把所选文件放入回收站吗？\n' +
+                '删除的文件可通过回收站还原',
+            btnAlign: 'c',
+            title:'确认删除',
+            icon:2
+        },function(index){
+            $.post("folder/delete",{deleteList:JSON.stringify(dataa)},function (data,status) {
+                if (data.status === 200){
+                    layer.msg(data.msg,{
+                        icon:1,
+                        offset: '200px'
+                    });
+                    //需改数据后表格局部刷新
+                    tableIns.reload({
+                        where: { //设定异步数据接口的额外参数，任意设
+                            folder_father: dataa[0].parentId
+                        }
+                    });
+                    $('.layui-btn-group').addClass('layui-hide');
+                }else {
+                    layer.msg(data.msg,{
+                        icon:2,
+                        offset: '200px'
+                    });
+                }
+            });
+            layer.close(index);
+        });
     }
 
     //分享

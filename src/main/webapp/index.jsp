@@ -26,6 +26,9 @@
         .layui-nav-tree .layui-nav-bar {
             background-color: #1E9FFF;
         }
+        .layui-progress-text{
+            color: #ffffff;
+        }
     </style>
     <base href="<%=basePath%>">
 </head>
@@ -164,10 +167,16 @@
                     </li>
                 </ul>
 
-               <div style="width: 220px;height: 50px;position: relative;top: 200px;">
-                   <div class="layui-progress-bar layui-bg-blue" lay-percent="30%" style="width: ${sizePresent}%;height: 8px;position: absolute;"><span class="layui-progress-text" style="color: #F6F6F6">${sizePresent}%</span></div>
-                   <span style="display:inline-block;margin-top:20px;">网盘容量：${userTotalSize}M/${TotalSize}M</span>
-               </div>
+<%--               <div style="width: 220px;position: relative;top: 200px;border-radius: 20px; background-color: #ffffff;">--%>
+<%--                   <div class="layui-progress-bar layui-bg-blue" lay-percent="30%" style="width: ${sizePresent}%;height: 8px;position: absolute;"><--%>
+<%--                   </div>--%>
+<%--                   <span class="layui-progress-text" style="color: #F6F6F6">${sizePresent}%</span>--%>
+<%--                   --%>
+<%--               </div>--%>
+                <div class="layui-progress" lay-showpercent="true" style="width: 180px;margin:300px 0 0 15px;height: 8px;">
+                    <div class="layui-progress-bar" lay-percent="${sizePresent}%" style="height: 8px;background-color: #1E9FFF"></div>
+                    <span style="display:inline-block;font-size: 12px;margin: 15px 0 0 5px">网盘容量：${userTotalSize}M/${TotalSize}M</span>
+                </div>
             </div>
         </div>
 
