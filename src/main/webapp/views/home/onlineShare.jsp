@@ -74,8 +74,14 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-header" style="height: 200px">
-                    <div style="width: 200px;margin: 0 auto"><img src="/views/imgs/logo200.png"></div>
-                    <div class="layui-btn-group layui-hide">
+                    <div style="width: 200px;margin: 0 auto">
+                        <a href="/index"><img src="/views/imgs/logo200.png"></a>
+                    </div>
+                    <p style="font-size: 20px;text-align: center;">
+                        FloadDrive——懂你的云盘
+                    </p>
+                    <div></div>
+
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" style="margin-top: 160px">
                             <i class="fa fa-exclamation-circle"></i>下载
                         </button>
@@ -93,6 +99,8 @@
 <script src="../../layuiadmin/layui/layui.js?t=1"></script>
 <script src="../../layuiadmin/layui/jquery.min.js"></script>
 <script>
+    var  shareId = window.location.href.substr(window.location.href.lastIndexOf("/")+1)
+    console.log(shareId)
     var table, layer,tableIns;
 
     layui.config({
@@ -106,7 +114,7 @@
         tableIns = table.render({
             elem: '#test-table-checkbox'
             , skin: 'row'
-            , url: 'userfile/getFileType?type=4'//获取数据的地方
+            , url: 'share/getdata/'+shareId//获取数据的地方
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , id:'test-table-checkbox'
             , cols: [[{type: 'checkbox'}
@@ -116,6 +124,7 @@
                     title: '文件名',
                     sort: true,
                     templet: function (d) {
+                        console.log(d)
                         var icon = "";prefix = "",suffix = "</a>";
                         switch (d.fileType) {
                             case '0':
@@ -191,46 +200,6 @@
 
     });
 
-    //重命名文件夹
-    function renameFolder() {
-        var checkStatus = table.checkStatus('test-table-checkbox');
-        layer.prompt({
-                type: 1,
-                title: ['<i class="fa fa-pencil"></i>重命名', 'color:#0098ea'],
-                offset: '100px',
-                value:checkStatus.data[0].fileName
-            },
-            function (text, index) {
-                //index为当前层索引
-                //text为输入参数
-                //在回调函数末尾添加 “return false”可以禁止点击该按钮关闭弹出层
-                checkStatus.data[0].fileName = text;
-                //修改后触发ajax方法，异步请求后台修改数据库
-                console.log(JSON.stringify(checkStatus.data[0]));
-                $.post('/folder/rename',{'folder':JSON.stringify(checkStatus.data[0])},function (data,status) {
-                    if (data.status === 200){
-                        layer.msg(data.msg,{
-                            icon:1,
-                            offset: '200px'
-                        });
-                        //需改数据后表格局部刷新
-                        tableIns.reload({
-                            where: { //设定异步数据接口的额外参数，任意设
-                                fileName: 'fileName'
-                            }
-                        });
-                        $('.layui-btn-group').addClass('layui-hide');
-
-                    }else {
-                        layer.msg(data.msg,{
-                            icon:2,
-                            offset: '200px'
-                        });
-                    }
-                });
-                layer.close(index);
-            });
-    }
 
 
 </script>

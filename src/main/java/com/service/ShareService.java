@@ -38,4 +38,11 @@ public interface ShareService {
      */
     void updateUserShare(TbShare share);
 
+    /**
+     * 获取一次分享的具体文件
+     * @param shareId
+     * @return
+     */
+    List<TbShareItem> showShareData(long shareId);
+
 }

@@ -2,10 +2,7 @@ package com.service.impl;
 
 import com.mapper.TbShareItemMapper;
 import com.mapper.TbShareMapper;
-import com.pojo.ShowShare;
-import com.pojo.TbShare;
-import com.pojo.TbShareExample;
-import com.pojo.TbShareItem;
+import com.pojo.*;
 import com.service.ShareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,5 +45,13 @@ public class ShareServiceImpl  implements ShareService {
     @Override
     public void updateUserShare(TbShare share) {
         shareMapper.updateByPrimaryKeySelective(share);
+    }
+
+    @Override
+    public List<TbShareItem> showShareData(long shareId) {
+        TbShareItemExample shareItemExample = new TbShareItemExample();
+        TbShareItemExample.Criteria itemExampleCriteria = shareItemExample.createCriteria();
+        itemExampleCriteria.andShareIdEqualTo(shareId);
+        return shareItemMapper.selectByExample(shareItemExample);
     }
 }
