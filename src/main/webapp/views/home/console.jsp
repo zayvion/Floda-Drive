@@ -103,7 +103,6 @@
                 <div class="layui-card-body">
                     <a href="javascript:void(0)" class="folderList" onclick="interFolder(0)">全部文件</a>
                     <a href="javascript:void(0)" class="folderList" style="visibility: hidden;"> | 返回上一级</a>
-                    <%--<a href="/sysfile/download2" class="folderList" >下载</a>--%>
                     <table class="layui-hide" id="test-table-checkbox" lay-filter="test-table-checkbox"></table>
                 </div>
             </div>
@@ -132,7 +131,8 @@
             , where:{folder_father:folderId}//传递参数的地方
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , id:'test-table-checkbox'
-            , cols: [[{type: 'checkbox'}
+            , cols: [
+                [{type: 'checkbox'}
                 , {
                     field: 'fileName',
                     width: 600,
@@ -158,7 +158,6 @@
                                 icon = "<i class='fa fa-file-video-o' style='font-size:18px;color:rgb(129,131,241);margin:8px 5px 0 0'></i>";
                                 break;
                             case '4':
-                                console.log(d);
                                 icon = "<i class='fa fa-file-text' style='font-size:18px;color:rgb(77,151,255);margin:8px 5px 0 0'></i>";
                                 prefix = "<a lay-href='userfile/previewFile?fileId="+d.id+"&type="+d.fileType+"'>";
                                 break;
@@ -196,12 +195,14 @@
         });
         table.on('checkbox(test-table-checkbox)', function (obj) {
             var checkStatus = table.checkStatus('test-table-checkbox');
-            var fileId = "";
+            var downObjs = [];
             for (var i = 0; i < checkStatus.data.length; i ++){
-                fileId += checkStatus.data[i].id+",";
+                var downObj = {id:"",fileType:""};
+                downObj.id = checkStatus.data[i].id;
+                downObj.fileType = checkStatus.data[i].fileType;
+                downObjs.push(downObj);
             }
-            console.log(fileId.substring(0,fileId.lastIndexOf(',')))
-            $('.layui-btn-group a').attr("href","/sysfile/download?userFileId="+fileId.substring(0,fileId.lastIndexOf(',')));
+            $('.layui-btn-group a').attr("href","/sysfile/download2?downObjs="+JSON.stringify(downObjs));
             //console.log("当前选中的个数："+checkStatus.data.length);//输出当前选中的个数
             //console.log("相关数据："+checkStatus.data); //选中行的相关数据
             //console.log("是否全选:"+checkStatus.isAll); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
