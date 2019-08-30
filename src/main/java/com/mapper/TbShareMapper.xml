@@ -7,6 +7,7 @@
     <result column="share_comment" property="shareComment" jdbcType="VARCHAR" />
     <result column="share_title" property="shareTitle" jdbcType="VARCHAR" />
     <result column="share_url" property="shareUrl" jdbcType="VARCHAR" />
+    <result column="share_date" property="shareDate" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    share_id, share_user, share_comment, share_title, share_url
+    share_id, share_user, share_comment, share_title, share_url, share_date
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pojo.TbShareExample" >
     select
@@ -101,11 +102,16 @@
   </delete>
   <insert id="insert" parameterType="com.pojo.TbShare" >
     insert into tb_share (share_id, share_user, share_comment, 
-      share_title, share_url)
+      share_title, share_url, share_date
+      )
     values (#{shareId,jdbcType=BIGINT}, #{shareUser,jdbcType=BIGINT}, #{shareComment,jdbcType=VARCHAR}, 
-      #{shareTitle,jdbcType=VARCHAR}, #{shareUrl,jdbcType=VARCHAR})
+      #{shareTitle,jdbcType=VARCHAR}, #{shareUrl,jdbcType=VARCHAR}, #{shareDate,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.pojo.TbShare" >
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="shareId">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into tb_share
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="shareId != null" >
@@ -123,6 +129,9 @@
       <if test="shareUrl != null" >
         share_url,
       </if>
+      <if test="shareDate != null" >
+        share_date,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="shareId != null" >
@@ -139,6 +148,9 @@
       </if>
       <if test="shareUrl != null" >
         #{shareUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shareDate != null" >
+        #{shareDate,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -166,6 +178,9 @@
       <if test="record.shareUrl != null" >
         share_url = #{record.shareUrl,jdbcType=VARCHAR},
       </if>
+      <if test="record.shareDate != null" >
+        share_date = #{record.shareDate,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -177,7 +192,8 @@
       share_user = #{record.shareUser,jdbcType=BIGINT},
       share_comment = #{record.shareComment,jdbcType=VARCHAR},
       share_title = #{record.shareTitle,jdbcType=VARCHAR},
-      share_url = #{record.shareUrl,jdbcType=VARCHAR}
+      share_url = #{record.shareUrl,jdbcType=VARCHAR},
+      share_date = #{record.shareDate,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -197,6 +213,9 @@
       <if test="shareUrl != null" >
         share_url = #{shareUrl,jdbcType=VARCHAR},
       </if>
+      <if test="shareDate != null" >
+        share_date = #{shareDate,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where share_id = #{shareId,jdbcType=BIGINT}
   </update>
@@ -205,7 +224,8 @@
     set share_user = #{shareUser,jdbcType=BIGINT},
       share_comment = #{shareComment,jdbcType=VARCHAR},
       share_title = #{shareTitle,jdbcType=VARCHAR},
-      share_url = #{shareUrl,jdbcType=VARCHAR}
+      share_url = #{shareUrl,jdbcType=VARCHAR},
+      share_date = #{shareDate,jdbcType=TIMESTAMP}
     where share_id = #{shareId,jdbcType=BIGINT}
   </update>
 </mapper>

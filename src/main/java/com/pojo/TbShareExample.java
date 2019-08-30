@@ -1,6 +1,7 @@
 package com.pojo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TbShareExample {
@@ -431,6 +432,66 @@ public class TbShareExample {
 
         public Criteria andShareUrlNotBetween(String value1, String value2) {
             addCriterion("share_url not between", value1, value2, "shareUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareDateIsNull() {
+            addCriterion("share_date is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareDateIsNotNull() {
+            addCriterion("share_date is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareDateEqualTo(Date value) {
+            addCriterion("share_date =", value, "shareDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareDateNotEqualTo(Date value) {
+            addCriterion("share_date <>", value, "shareDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareDateGreaterThan(Date value) {
+            addCriterion("share_date >", value, "shareDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareDateGreaterThanOrEqualTo(Date value) {
+            addCriterion("share_date >=", value, "shareDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareDateLessThan(Date value) {
+            addCriterion("share_date <", value, "shareDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareDateLessThanOrEqualTo(Date value) {
+            addCriterion("share_date <=", value, "shareDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareDateIn(List<Date> values) {
+            addCriterion("share_date in", values, "shareDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareDateNotIn(List<Date> values) {
+            addCriterion("share_date not in", values, "shareDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareDateBetween(Date value1, Date value2) {
+            addCriterion("share_date between", value1, value2, "shareDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareDateNotBetween(Date value1, Date value2) {
+            addCriterion("share_date not between", value1, value2, "shareDate");
             return (Criteria) this;
         }
     }

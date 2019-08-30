@@ -1,7 +1,10 @@
 package com.service;
 
+import com.pojo.ShowShare;
 import com.pojo.TbShare;
 import com.pojo.TbShareItem;
+
+import java.util.List;
 
 /**
  * @Auther: zayvion
@@ -14,12 +17,25 @@ public interface ShareService {
      * 添加分享
      * @param share
      */
-    void addShare(TbShare share);
+    long addShare(TbShare share);
 
     /**
      * 一次分享下单个文件的添加
      * @param shareItem
      */
     void addShareItem(TbShareItem shareItem);
+
+    /**
+     * 展示一个用户的分享
+     * @param userId
+     * @return
+     */
+    List<TbShare> showUserShares(long userId);
+
+    /**
+     * 更新分享信息
+     * @param share
+     */
+    void updateUserShare(TbShare share);
 
 }

@@ -1,5 +1,7 @@
 package com.pojo;
 
+import java.util.Date;
+
 public class TbShare {
     private Long shareId;
 
@@ -10,6 +12,8 @@ public class TbShare {
     private String shareTitle;
 
     private String shareUrl;
+
+    private Date shareDate;
 
     public Long getShareId() {
         return shareId;
@@ -49,5 +53,13 @@ public class TbShare {
 
     public void setShareUrl(String shareUrl) {
         this.shareUrl = shareUrl == null ? null : shareUrl.trim();
+    }
+
+    public Date getShareDate() {
+        return shareDate;
+    }
+
+    public void setShareDate(Date shareDate) {
+        this.shareDate = shareDate;
     }
 }

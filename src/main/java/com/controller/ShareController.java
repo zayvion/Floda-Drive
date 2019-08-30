@@ -2,9 +2,13 @@ package com.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.pojo.ShowShare;
 import com.pojo.TbShare;
+import com.pojo.TbShareItem;
 import com.pojo.TbUser;
+import com.service.ShareService;
 import com.utils.ResponseResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @Auther: zayvion
@@ -20,8 +26,12 @@ import java.util.ArrayList;
  * @Description:分享controller
  */
 @Controller
+@ResponseBody
 @RequestMapping("/share")
 public class ShareController {
+
+    @Autowired
+    private ShareService shareService;
 
     @RequestMapping(value = "/add",produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -29,25 +39,54 @@ public class ShareController {
         System.out.println(shareObjs);
         TbUser user = (TbUser) session.getAttribute("onlineuser");
         if (user == null) {
-            model.addAttribute("msg", "没有登录，请登录后再试");
-            return ResponseResult.build(500,"暂不支持此类型分享，系统升级中......");
+            return ResponseResult.build(500,"没有登录，请登录后再试");
         }
         Type type = new TypeToken<ArrayList<shareJson>>() {
         }.getType();
         ArrayList<shareJson> shareFiles = new Gson().fromJson(shareObjs, type);
-        for (int i = 0; i < shareFiles.size(); i++) {
-            if (shareFiles.get(i).getType() == 0) {
+            if (shareFiles.get(0).getType() == 0) {
                 return ResponseResult.build(500, "暂不支持这种类型的分享，请等待后期升级");
 
             } else {
                 TbShare share = new TbShare();
-                share.setShareComment(shareFiles.get(i).getComment());
-
-
+                share.setShareComment(shareFiles.get(0).getComment());
+                share.setShareTitle(shareFiles.get(0).getTitle());
+                share.setShareUser(user.getUserId());
+                share.setShareDate(new Date());
+                long shareId = shareService.addShare(share);
+                for (shareJson shareFile : shareFiles) {
+                    TbShareItem shareItem = new TbShareItem();
+                    shareItem.setShareId(shareId);
+                    shareItem.setShareUserfileId(shareFile.getFileId());
+                    shareService.addShareItem(shareItem);
+                }
+                share.setShareUrl("http://localhost/share/view/"+shareId);
+                shareService.updateUserShare(share);
+                return ResponseResult.ok("分享成功！");
             }
-        }
 
-        return ResponseResult.ok("分享成功！");
+
+    }
+
+    @RequestMapping(value = "/list",produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String shouUserShares(HttpSession session,Model model) {
+        TbUser user = (TbUser) session.getAttribute("onlineuser");
+        if (user == null) {
+            return ResponseResult.build(500,"没有登录，请登录后再试");
+        }
+        List<TbShare> tbShares = shareService.showUserShares(user.getUserId());
+        System.out.println(tbShares.size());
+        List<ShowShare> showShares = new ArrayList<>();
+        for (TbShare tbShare : tbShares) {
+            ShowShare share = new ShowShare();
+            share.setComment(tbShare.getShareComment());
+            share.setShareDate(tbShare.getShareDate());
+            share.setTitle(tbShare.getShareTitle());
+            share.setQRCodeUrl("http://qr.liantu.com/api.php?logo=182.254.180.106/img/123/yun-2.png&text="+share.getShareUrl());
+            showShares.add(share);
+        }
+        return new Gson().toJson(showShares);
     }
 
 
@@ -89,4 +128,6 @@ public class ShareController {
             this.title = title;
         }
     }
+
+
 }
