@@ -152,9 +152,11 @@
                                 icon = "<i class='fa fa-file-photo-o' style='font-size:18px;color:rgb(255,119,67);margin:8px 5px 0 0'></i>";
                                 break;
                             case '2':
+                                prefix = "<a lay-href='userfile/previewFile?fileId="+d.id+"&type="+d.fileType+"'>";
                                 icon = "<i class='fa fa-file-audio-o' style='font-size:18px;color:rgb(129,131,241);margin:8px 5px 0 0'></i>";
                                 break;
                             case '3':
+                                prefix = "<a lay-href='userfile/previewFile?fileId="+d.id+"&type="+d.fileType+"'>";
                                 icon = "<i class='fa fa-file-video-o' style='font-size:18px;color:rgb(129,131,241);margin:8px 5px 0 0'></i>";
                                 break;
                             case '4':
