@@ -1,6 +1,7 @@
 package com.service.impl;
 
 import com.mapper.TbUserFileMapper;
+import com.pojo.TbUserFile;
 import com.pojo.TbUserFileExample;
 import com.service.RecycleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,4 +42,11 @@ public class RecycleServiceImpl implements RecycleService {
         fileExampleCriteria.andBelongUserEqualTo(userId);
         userFileMapper.deleteByExample(userFileExample);
     }
+
+    @Override
+    public void restore(TbUserFile userFile) {
+        userFile.setIsdel((short) 0);
+        userFileMapper.updateByPrimaryKeySelective(userFile);
+    }
+
 }

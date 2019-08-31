@@ -19,6 +19,8 @@ public interface ShareService {
      */
     long addShare(TbShare share);
 
+
+
     /**
      * 一次分享下单个文件的添加
      * @param shareItem

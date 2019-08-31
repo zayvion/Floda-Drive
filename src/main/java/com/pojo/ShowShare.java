@@ -13,9 +13,18 @@ public class ShowShare {
     private String shareUrl;
     private Date shareDate;
     private String QRCodeUrl;
+    private long shareId;
 
     public String getTitle() {
         return title;
+    }
+
+    public long getShareId() {
+        return shareId;
+    }
+
+    public void setShareId(long shareId) {
+        this.shareId = shareId;
     }
 
     public void setTitle(String title) {

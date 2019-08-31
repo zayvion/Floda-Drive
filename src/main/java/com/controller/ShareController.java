@@ -102,6 +102,7 @@ public class ShareController {
             share.setShareDate(tbShare.getShareDate());
             share.setTitle(tbShare.getShareTitle());
             share.setShareUrl(tbShare.getShareUrl());
+            share.setShareId(tbShare.getShareId());
             share.setQRCodeUrl("http://qr.liantu.com/api.php?logo=182.254.180.106/img/123/yun-2.png&text="+share.getShareUrl());
             showShares.add(share);
         }

@@ -204,9 +204,9 @@
             title:'确认还原',
             icon:2
         },function(index){
-            $.post("folder/reduction",{userfileIds:JSON.stringify(userfileIds)},function (data,status) {
+            $.post("recycle/restore",{userfileIds:JSON.stringify(userfileIds)},function (data,status) {
                 if (data.status === 200){
-                    layer.msg(data.msg,{
+                    layer.msg(data.data,{
                         icon:1,
                         offset: '200px'
                     });
@@ -243,9 +243,9 @@
             title:'确认删除',
             icon:2
         },function(index){
-            $.post("folder/del",{userfileIds:JSON.stringify(userfileIds)},function (data,status) {
+            $.post("recycle/del",{userfileIds:JSON.stringify(userfileIds)},function (data,status) {
                 if (data.status === 200){
-                    layer.msg(data.msg,{
+                    layer.msg(data.data,{
                         icon:1,
                         offset: '200px'
                     });
@@ -269,7 +269,6 @@
 
     //清空
     function empty(folder_father) {
-        console.log(JSON.stringify(userfileIds));
         layer.confirm('',{
             offset: '200px',
             content: '确认要清空所有文件吗？',
@@ -277,9 +276,9 @@
             title:'确认清空',
             icon:2
         },function(index){
-            $.post("folder/empty",,function (data,status) {
+            $.post("recycle/empty",function (data,status) {
                 if (data.status === 200){
-                    layer.msg(data.msg,{
+                    layer.msg(data.data,{
                         icon:1,
                         offset: '200px'
                     });

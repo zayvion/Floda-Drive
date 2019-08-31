@@ -1,5 +1,7 @@
 package com.service;
 
+import com.pojo.TbUserFile;
+
 import java.util.List;
 
 /**
@@ -28,4 +30,9 @@ public interface RecycleService {
      */
     void delAllFile(long userId);
 
+    /**
+     * 还原文件
+     * @param userFile
+     */
+    void restore(TbUserFile userFile);
 }
