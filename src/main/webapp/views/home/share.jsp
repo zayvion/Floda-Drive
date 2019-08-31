@@ -75,7 +75,7 @@
             <div class="layui-card">
                 <div class="layui-card-header">
                     <div class="layui-btn-group layui-hide" style="margin-top: 5px">
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="delShare()">
                             <i class="fa fa-exclamation-circle"></i>取消分享
                         </button>
                     </div>
@@ -213,6 +213,45 @@
     function copy() {
         var clipboard = new ClipboardJS('.btn');
         layer.msg("复制成功！",{icon:1,time:3000})
+    }
+
+    //取消分享
+    function delShare(folder_father) {
+        var jsonData = table.checkStatus('test-table-checkbox').data;
+        var shareIds = [];
+        for (var i = 0; i < jsonData.length; i++){
+            shareIds.push(jsonData[i].shareId);
+        }
+        console.log(JSON.stringify(shareIds));
+        layer.confirm('',{
+            offset: '200px',
+            content: '确认要取消分享所选文件吗？',
+            btnAlign: 'c',
+            title:'确认取消',
+            icon:2
+        },function(index){
+            $.post("share/del",{shareIds:JSON.stringify(shareIds)},function (data,status) {
+                if (data.status === 200){
+                    layer.msg(data.msg,{
+                        icon:1,
+                        offset: '200px'
+                    });
+                    //需改数据后表格局部刷新
+                    tableIns.reload({
+                        where: { //设定异步数据接口的额外参数，任意设
+                            folder_father: folder_father
+                        }
+                    });
+                    $('.layui-btn-group').addClass('layui-hide');
+                }else {
+                    layer.msg(data.msg,{
+                        icon:2,
+                        offset: '200px'
+                    });
+                }
+            });
+            layer.close(index);
+        });
     }
 </script>
 </body>
