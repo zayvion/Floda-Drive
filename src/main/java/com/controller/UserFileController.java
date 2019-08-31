@@ -117,7 +117,8 @@ public class UserFileController {
             model.addAttribute("fileUploadTime", updateTime);
             return "/views/home/onlineMusic";
         }
-        return "123";
+        model.addAttribute("msg", "该文件暂不支持在线预览，系统将在后期将会支持该格式！");
+        return "error";
 
     }
 

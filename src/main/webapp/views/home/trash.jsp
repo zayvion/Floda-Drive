@@ -110,17 +110,18 @@
         tableIns = table.render({
             elem: '#test-table-checkbox'
             , skin: 'row'
-            , url: 'folder/folders'//获取数据的地方
+            , url: 'recycle/list'//获取数据的地方
             , where:{folder_father:folderId}//传递参数的地方
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , id:'test-table-checkbox'
             , cols: [
                 [{type: 'checkbox'}
                 , {
-                    field: 'fileName',
+                    field: 'userFileName',
                     width: 600,
                     title: '文件名',
                     templet: function (d) {
+                        console.log(d)
                         var icon = "";
                         switch (d.fileType) {
                             case '0':
@@ -142,7 +143,7 @@
                                 icon = "<i class='fa fa-file' style='font-size:18px;color:rgb(185,201,214);margin:8px 5px 0 0'></i>";
                                 break;
                         }
-                        return icon+d.fileName;
+                        return icon+d.userFileName;
                     }
                 }
                 , {
@@ -166,11 +167,7 @@
                     title: '修改日期',
                     templet: "<div>{{layui.util.toDateString(d.updatetime, 'yyyy-MM-dd HH:mm:ss')}}</div>"
                 }
-                , {
-                    field: 'updatetime',
-                    title: '有效时间',
-                    templet: "<div>{{layui.util.toDateString(d.updatetime, 'yyyy-MM-dd HH:mm:ss')}}</div>"
-                }
+
             ]]
         });
         table.on('checkbox(test-table-checkbox)', function (obj) {

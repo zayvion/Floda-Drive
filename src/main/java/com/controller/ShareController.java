@@ -78,8 +78,6 @@ public class ShareController {
                 shareService.updateUserShare(share);
                 return ResponseResult.ok("分享成功！");
             }
-
-
     }
 
     /**
@@ -90,7 +88,7 @@ public class ShareController {
      */
     @RequestMapping(value = "/list",produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public String shouUserShares(HttpSession session,Model model) {
+    public String showUserShares(HttpSession session,Model model) {
         TbUser user = (TbUser) session.getAttribute("onlineuser");
         if (user == null) {
             return ResponseResult.build(500,"没有登录，请登录后再试");
@@ -124,6 +122,11 @@ public class ShareController {
     }
 
 
+    /**
+     * 获取一个分享的数据
+     * @param shareId
+     * @return
+     */
     @RequestMapping(value = "/getdata/{shareId}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getData(@PathVariable long shareId) {
