@@ -88,6 +88,19 @@
       order by ${orderByClause}
     </if>
   </select>
+
+
+
+  <select id="getPicDate" resultType="string" parameterType="java.lang.Long" >
+    SELECT DISTINCT SUBSTR(upload_time,1,10)
+    FROM tb_user_file
+    WHERE belong_user = #{user_id}
+    AND file_type = 1 AND isDel = 0
+    GROUP BY upload_time
+  </select>
+
+
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select
     <include refid="Base_Column_List" />

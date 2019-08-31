@@ -1,10 +1,7 @@
 package com.service.impl;
 
 import com.mapper.TbUserFileMapper;
-import com.pojo.FolderAndFile;
-import com.pojo.TbSystemFile;
-import com.pojo.TbUserFile;
-import com.pojo.TbUserFileExample;
+import com.pojo.*;
 import com.service.SystemFileService;
 import com.service.UserFileService;
 import com.utils.ResponseResult;
@@ -27,6 +24,19 @@ public class UserFileServiceImpl implements UserFileService {
     private TbUserFileMapper userFileMapper;
     @Autowired
     private SystemFileService systemFileService;
+
+    @Override
+    public List<ShowPictures> findAllPic(Long user_id) {
+        List<ShowPictures> pics = new ArrayList<>();
+        //根据时间分组
+        List<String> picDate = userFileMapper.getPicDate(user_id);
+        for (String date:picDate) {
+            ShowPictures showPictures = new ShowPictures();
+            showPictures.setDate(date);
+            pics.add(showPictures);
+        }
+        return pics;
+    }
 
     @Override
     public void addFile(TbUserFile userFile) {
@@ -111,5 +121,7 @@ public class UserFileServiceImpl implements UserFileService {
         tbUserFile.setIsdel((short)1);
         userFileMapper.updateByPrimaryKey(tbUserFile);
     }
+
+
 }
 

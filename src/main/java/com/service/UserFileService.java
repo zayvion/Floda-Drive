@@ -2,6 +2,7 @@ package com.service;
 
 import com.mapper.TbUserFileMapper;
 import com.pojo.FolderAndFile;
+import com.pojo.ShowPictures;
 import com.pojo.TbFolder;
 import com.pojo.TbUserFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,13 @@ public interface UserFileService {
      * @return
      */
     List getFolderFiles(long folderId);
+
+    /**
+     * 查询当前登录用户的所有未删除的图片
+     * @param user_id
+     * @return
+     */
+    List<ShowPictures> findAllPic(Long user_id);
 
 
 }

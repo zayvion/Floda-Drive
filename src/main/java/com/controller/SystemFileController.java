@@ -190,24 +190,18 @@ public class SystemFileController {
     @RequestMapping("/download")
     public String download(HttpServletRequest request, HttpServletResponse response, String userFileId, Model model, String downObjs) throws Exception {
         String[] files = null;
-        System.out.println("downObjsz=" + downObjs);
-        Type type = new TypeToken<ArrayList<FolderAndFile>>() {
-        }.getType();
+        Type type = new TypeToken<ArrayList<FolderAndFile>>() {}.getType();
         ArrayList<FolderAndFile> downloadObj = new Gson().fromJson(downObjs, type);
-        System.out.println(downloadObj.size());
         for (FolderAndFile folderAndFile : downloadObj) {
             if (downloadObj.size() == 1 && !folderAndFile.getFileType().equals("0")) {
                 TbUserFile file = userFileService.getUserFile(folderAndFile.getId());
                 TbSystemFile systemFile = systemFileService.getSystemFile(file.getUserSysfileId());
                 String fileName = file.getUserFileName();
                 try {
+                    //获取文件地址
                     URL internetUrl = new URL(systemFile.getFileUrl());
-                    in = internetUrl.openStream();
-                    // Read from is
-                    //根据条件得到文件路径
-                    System.out.println("===========文件路径===========" + internetUrl);
                     //将文件读入文件流
-
+                    in = internetUrl.openStream();
                     //获得浏览器代理信息
                     final String userAgent = request.getHeader("USER-AGENT");
                     //判断浏览器代理并分别设置响应给浏览器的编码格式

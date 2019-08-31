@@ -31,6 +31,20 @@ public class UserFileController {
     private SystemFileService systemFileService;
 
     /**
+     * 查询当前用户的所有未删除的图片
+     * @param onlineuser
+     * @return
+     */
+    @RequestMapping("getAllPic")
+    public String getAllPic(@SessionAttribute TbUser onlineuser){
+        List<ShowPictures> allPic = userFileService.findAllPic(onlineuser.getUserId());
+        for (ShowPictures sp:allPic) {
+            System.out.println(sp+"--------------");
+        }
+        return "/views/home/photos";
+    }
+
+    /**
      * 重命名文件
      *
      * @param file

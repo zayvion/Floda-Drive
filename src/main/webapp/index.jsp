@@ -127,7 +127,7 @@
                                 </a>
                             </dd>
                             <dd data-name="console">
-                                <a lay-href="./views/home/photos.jsp">
+                                <a lay-href="/userfile/getAllPic">
                                     图片
                                 </a>
                             </dd>

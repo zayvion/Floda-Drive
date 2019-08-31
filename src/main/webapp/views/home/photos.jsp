@@ -136,6 +136,20 @@
                                         <i class="layui-icon layui-timeline-axis"></i>
                                         <div class="layui-timeline-content layui-text">
                                             <h3 class="layui-timeline-title">12月25日</h3>
+                                            <div class="spotlight-group">
+                                                <div class="image" style="background-image:url(./views/imgs/test.jpg)">
+                                                    <i class="downLoad fa fa-check-circle" onclick="downLoad(1,this)"></i>
+                                                    <i class="fa fa-search-plus" onclick="showGallery(1)"></i>
+                                                </div>
+                                                <div class="image" style="background-image:url(./views/imgs/test1.jpg)">
+                                                    <i class="downLoad fa fa-check-circle" onclick="downLoad(2,this)"></i>
+                                                    <i class="fa fa-search-plus" onclick="showGallery(2)"></i>
+                                                </div>
+                                                <div class="image" style="background-image:url(./views/imgs/test2.jpg)">
+                                                    <i class=" downLoad fa fa-check-circle" onclick="downLoad(3,this)"></i>
+                                                    <i class="fa fa-search-plus" onclick="showGallery(3)"></i>
+                                                </div>
+                                            </div>
                                         </div>
                                     </li>
                                     <li class="layui-timeline-item">
