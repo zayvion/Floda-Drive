@@ -54,4 +54,13 @@ public class ShareServiceImpl  implements ShareService {
         itemExampleCriteria.andShareIdEqualTo(shareId);
         return shareItemMapper.selectByExample(shareItemExample);
     }
+
+    @Override
+    public void delShare(long shareId) {
+        shareMapper.deleteByPrimaryKey(shareId);
+        TbShareItemExample shareItemExample = new TbShareItemExample();
+        TbShareItemExample.Criteria itemExampleCriteria = shareItemExample.createCriteria();
+        itemExampleCriteria.andShareIdEqualTo(shareId);
+        shareItemMapper.deleteByExample(shareItemExample);
+    }
 }

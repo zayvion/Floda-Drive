@@ -232,7 +232,7 @@
         },function(index){
             $.post("share/del",{shareIds:JSON.stringify(shareIds)},function (data,status) {
                 if (data.status === 200){
-                    layer.msg(data.msg,{
+                    layer.msg(data.data,{
                         icon:1,
                         offset: '200px'
                     });

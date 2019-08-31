@@ -153,6 +153,28 @@ public class ShareController {
         return new Gson().toJson(showFolders);
     }
 
+    @RequestMapping(value = "/del", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String delShare(HttpSession session,String shareIds) {
+        System.out.println(shareIds);
+        TbUser user = (TbUser) session.getAttribute("onlineuser");
+        if (user == null) {
+            return ResponseResult.build(500, "没有登录，请登录后再试");
+        }
+        String[] ids = new String[0];
+        try {
+            String res = shareIds.substring(1, shareIds.length() - 1);
+            ids = res.split(",");
+            for (String id : ids) {
+                shareService.delShare(Long.parseLong(id));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseResult.build(500, "参数异常，请重试！");
+        }
+        return ResponseResult.ok("操作成功！");
+    }
+
 
     class shareJson {
         private long fileId;

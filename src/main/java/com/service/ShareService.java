@@ -47,4 +47,10 @@ public interface ShareService {
      */
     List<TbShareItem> showShareData(long shareId);
 
+    /**
+     * 删除分享
+     * @param shareId
+     */
+    void delShare(long shareId);
+
 }
