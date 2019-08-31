@@ -325,10 +325,12 @@
         $('.layui-card-header button').eq(1).attr('onclick','addFolder('+folder_father+')');
         $('.layui-card-header button').eq(0).attr('onclick','uploadFile('+folder_father+')');
         $('.layui-btn-group button').eq(2).attr('onclick','renameFolder('+folder_father+')');
+
     }
 
     //把上一级id添加到返回上一级的方法中
     function preFolder() {
+
         tableIns.reload({
             where: {
                 //设定异步数据接口的额外参数，任意设
@@ -389,7 +391,6 @@
 
     //分享
     function addShare(folder_father) {
-
         var checkStatus = table.checkStatus('test-table-checkbox');
         if(checkStatus.data.length === 1){
             var title = checkStatus.data[0].fileName;

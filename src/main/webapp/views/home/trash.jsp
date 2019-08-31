@@ -73,14 +73,14 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" style="float: right;margin-top: 6px">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="empty()" style="float: right;margin-top: 6px">
                         <i class="fa fa-upload"></i>清空回收站
                     </button>
                     <div class="layui-btn-group layui-hide">
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="reduction()">
                             <i class="fa fa-refresh"></i>还原
                         </button>
-                        <a type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                        <a type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="del()">
                             <i class="fa fa-download"></i>删除
                         </a>
                     </div>
@@ -188,18 +188,23 @@
         });
     });
 
-    //文件夹、文件删除
-    function trash() {
-        var dataa = table.checkStatus('test-table-checkbox').data;
+
+    //还原
+    function reduction(folder_father) {
+        var jsonData = table.checkStatus('test-table-checkbox').data;
+        var userfileIds = [];
+        for (var i = 0; i < jsonData.length; i++){
+            userfileIds.push(jsonData[i].userfileId);
+        }
+        console.log(JSON.stringify(userfileIds));
         layer.confirm('',{
             offset: '200px',
-            content: '确认要把所选文件放入回收站吗？\n' +
-                '删除的文件可通过回收站还原',
+            content: '确认要把所选文件还原吗？',
             btnAlign: 'c',
-            title:'确认删除',
+            title:'确认还原',
             icon:2
         },function(index){
-            $.post("folder/delete",{deleteList:JSON.stringify(dataa)},function (data,status) {
+            $.post("folder/reduction",{userfileIds:JSON.stringify(userfileIds)},function (data,status) {
                 if (data.status === 200){
                     layer.msg(data.msg,{
                         icon:1,
@@ -208,7 +213,80 @@
                     //需改数据后表格局部刷新
                     tableIns.reload({
                         where: { //设定异步数据接口的额外参数，任意设
-                            folder_father: dataa[0].parentId
+                            folder_father: folder_father
+                        }
+                    });
+                    $('.layui-btn-group').addClass('layui-hide');
+                }else {
+                    layer.msg(data.msg,{
+                        icon:2,
+                        offset: '200px'
+                    });
+                }
+            });
+            layer.close(index);
+        });
+    }
+
+    //删除
+    function del(folder_father) {
+        var jsonData = table.checkStatus('test-table-checkbox').data;
+        var userfileIds = [];
+        for (var i = 0; i < jsonData.length; i++){
+            userfileIds.push(jsonData[i].userfileId);
+        }
+        console.log(JSON.stringify(userfileIds));
+        layer.confirm('',{
+            offset: '200px',
+            content: '确认要把所选文件删除吗？',
+            btnAlign: 'c',
+            title:'确认删除',
+            icon:2
+        },function(index){
+            $.post("folder/del",{userfileIds:JSON.stringify(userfileIds)},function (data,status) {
+                if (data.status === 200){
+                    layer.msg(data.msg,{
+                        icon:1,
+                        offset: '200px'
+                    });
+                    //需改数据后表格局部刷新
+                    tableIns.reload({
+                        where: { //设定异步数据接口的额外参数，任意设
+                            folder_father: folder_father
+                        }
+                    });
+                    $('.layui-btn-group').addClass('layui-hide');
+                }else {
+                    layer.msg(data.msg,{
+                        icon:2,
+                        offset: '200px'
+                    });
+                }
+            });
+            layer.close(index);
+        });
+    }
+
+    //清空
+    function empty(folder_father) {
+        console.log(JSON.stringify(userfileIds));
+        layer.confirm('',{
+            offset: '200px',
+            content: '确认要清空所有文件吗？',
+            btnAlign: 'c',
+            title:'确认清空',
+            icon:2
+        },function(index){
+            $.post("folder/empty",,function (data,status) {
+                if (data.status === 200){
+                    layer.msg(data.msg,{
+                        icon:1,
+                        offset: '200px'
+                    });
+                    //需改数据后表格局部刷新
+                    tableIns.reload({
+                        where: { //设定异步数据接口的额外参数，任意设
+                            folder_father: folder_father
                         }
                     });
                     $('.layui-btn-group').addClass('layui-hide');

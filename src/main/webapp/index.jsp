@@ -51,15 +51,6 @@
                 </li>
             </ul>
             <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
-
-                <li class="layui-nav-item" lay-unselect>
-                    <a lay-href="app/message/index.html" layadmin-event="message" lay-text="消息中心">
-                        <i class="layui-icon layui-icon-notice"></i>
-
-                        <!-- 如果有新消息，则显示小圆点 -->
-                        <span class="layui-badge-dot"></span>
-                    </a>
-                </li>
                 <li class="layui-nav-item layui-hide-xs" lay-unselect>
                     <a href="javascript:;" layadmin-event="theme">
                         <i class="layui-icon layui-icon-theme"></i>
@@ -75,7 +66,7 @@
                         <i class="layui-icon layui-icon-screen-full"></i>
                     </a>
                 </li>
-                <li class="layui-nav-item" lay-unselect>
+                <li class="layui-nav-item" lay-unselect  style="margin-right: 50px;">
                     <a href="javascript:;">
                         <cite>
                            <c:choose>
@@ -86,8 +77,6 @@
                                    ${onlineuser.userName}
                                </c:otherwise>
                            </c:choose>
-
-
                         </cite>
                     </a>
                     <dl class="layui-nav-child">
@@ -96,10 +85,6 @@
                         <hr>
                         <dd style="text-align: center;"><a href="user/logout">退出</a></dd>
                     </dl>
-                </li>
-
-                <li class="layui-nav-item layui-hide-xs" lay-unselect>
-                    <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
                 </li>
                 <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
                     <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
@@ -173,7 +158,7 @@
 <%--                   <span class="layui-progress-text" style="color: #F6F6F6">${sizePresent}%</span>--%>
 <%--                   --%>
 <%--               </div>--%>
-                <div class="layui-progress" lay-showpercent="true" style="width: 180px;margin:300px 0 0 15px;height: 8px;">
+                <div class="layui-progress" lay-showpercent="true" style="width: 180px;margin:100px 0 0 15px;height: 8px;">
                     <div class="layui-progress-bar" lay-percent="${sizePresent}%" style="height: 8px;background-color: #1E9FFF"></div>
                     <span style="display:inline-block;font-size: 12px;margin: 15px 0 0 5px">网盘容量：${userTotalSize}M/${TotalSize}M</span>
                 </div>
