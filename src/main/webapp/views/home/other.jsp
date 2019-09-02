@@ -76,6 +76,9 @@
                 <div class="layui-card-header">
                     <div class="layui-btn-group layui-hide" style="float: right">
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                            <i class="fa fa-share"></i>分享
+                        </button>
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="trash()">
                             <i class="fa fa-trash"></i>删除
                         </button>
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="renameFolder()">
@@ -208,6 +211,41 @@
                 });
                 layer.close(index);
             });
+    }
+
+    function trash() {
+        var dataa = table.checkStatus('test-table-checkbox').data;
+        console.log(dataa);
+        layer.confirm('',{
+            offset: '200px',
+            content: '确认要把所选文件放入回收站吗？\n' +
+                '删除的文件可通过回收站还原',
+            btnAlign: 'c',
+            title:'确认删除',
+            icon:2
+        },function(index){
+            $.post("folder/delete",{deleteList:JSON.stringify(dataa)},function (data,status) {
+                if (data.status === 200){
+                    layer.msg(data.msg,{
+                        icon:1,
+                        offset: '200px'
+                    });
+                    //需改数据后表格局部刷新
+                    tableIns.reload({
+                        where: { //设定异步数据接口的额外参数，任意设
+                            fileType: 4
+                        }
+                    });
+                    $('.layui-btn-group').addClass('layui-hide');
+                }else {
+                    layer.msg(data.msg,{
+                        icon:2,
+                        offset: '200px'
+                    });
+                }
+            });
+            layer.close(index);
+        });
     }
 
 </script>

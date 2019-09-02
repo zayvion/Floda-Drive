@@ -106,12 +106,15 @@ public class UserFileServiceImpl implements UserFileService {
         ArrayList<FolderAndFile> files = new ArrayList<>();
         for (TbUserFile tbUserFile : fileList) {
             FolderAndFile folderAndFile = new FolderAndFile();
+            folderAndFile.setId(tbUserFile.getUserfileId());
+            folderAndFile.setParentId(tbUserFile.getFileLocation());
+            folderAndFile.setIsdel(tbUserFile.getIsdel());
             folderAndFile.setFileName(tbUserFile.getUserFileName());
             folderAndFile.setBelong(tbUserFile.getBelongUser());
             folderAndFile.setFileSize(tbUserFile.getFileSize());
             folderAndFile.setFileType(tbUserFile.getFileType());
             folderAndFile.setUpdatetime(tbUserFile.getUploadTime());
-            folderAndFile.setUserSysfileId(tbUserFile.getUserfileId());
+            folderAndFile.setUserSysfileId(tbUserFile.getUserSysfileId());
             TbSystemFile systemFile = systemFileService.getSystemFile(tbUserFile.getUserSysfileId());
             folderAndFile.setFile_url(systemFile.getFileUrl());
             files.add(folderAndFile);
