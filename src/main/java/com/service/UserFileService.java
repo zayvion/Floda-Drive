@@ -75,5 +75,11 @@ public interface UserFileService {
      */
     List<ShowPictures> findAllPic(Long user_id);
 
+    /**
+     * 根据文件id删除文件
+     * @param fileId
+     */
+    void deleteUserFileById(Long fileId);
+
 
 }

@@ -89,6 +89,25 @@ public class FolderController {
         }
         return ResponseResult.build(500, "删除失败");
     }
+    /**
+     * 删除文件
+     * @param deleteList
+     * @return
+     */
+    @RequestMapping(value = "/deleteById",produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String deleteById(String deleteList) {
+        List<FolderAndFile> ffs = new Gson().fromJson(deleteList, new TypeToken<List<FolderAndFile>>() {}.getType());
+        try {
+            for (FolderAndFile ff:ffs) {
+                userFileServiceImpl.deleteUserFileById(ff.getId());
+            }
+            return ResponseResult.build(200, "删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseResult.build(500, "删除失败");
+    }
 
     /**
      * 创建文件夹

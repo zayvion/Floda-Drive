@@ -161,6 +161,13 @@ public class UserFileServiceImpl implements UserFileService {
         userFileMapper.updateByPrimaryKey(tbUserFile);
     }
 
+    @Override
+    public void deleteUserFileById(Long fileId) {
+        //删除文件时，要删除该文件所在的用户表（预留功能：以及该文件在系统表中对应的数据）
+        TbUserFile tbUserFile = userFileMapper.selectByPrimaryKey(fileId);
+        tbUserFile.setIsdel((short)1);
+        userFileMapper.updateByPrimaryKey(tbUserFile);
+    }
 
 }
 

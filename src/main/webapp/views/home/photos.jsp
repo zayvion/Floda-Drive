@@ -74,6 +74,10 @@
             border-color: #c3eaff;
             color: #0098ea;
         }
+        .layui-tab-title .layui-btn-group a {
+            border-color: #c3eaff;
+            color: #0098ea;
+        }
         .layui-tab-title .layui-btn-group button i{
             margin-right: 5px;
         }
@@ -82,6 +86,10 @@
             color: #0098ea;
         }
         .layui-tab-title .layui-btn-group button:hover {
+            border-color: #c3eaff;
+            color: #0098ea;
+        }
+        .layui-tab-title .layui-btn-group a:hover {
             border-color: #c3eaff;
             color: #0098ea;
         }
@@ -114,10 +122,10 @@
                                 <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
                                     <i class="fa fa-share"></i>分享
                                 </button>
-                                <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                                <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="trash()">
                                     <i class="fa fa-trash"></i>删除
                                 </button>
-                                <a type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                                <a type="button" style="" class="layui-btn layui-btn-sm layui-btn-primary">
                                     <i class="fa fa-download"></i>下载
                                 </a>
                                 <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="cleanImgCheck()">
@@ -216,7 +224,41 @@
         $('.layui-btn-group').toggleClass('layui-hide');
     }
 
-    //删除图片
+    //文件夹、文件删除
+    function trash() {
+        layer.confirm('',{
+            offset: '200px',
+            content: '确认要把所选文件放入回收站吗？\n' +
+                '删除的文件可通过回收站还原',
+            btnAlign: 'c',
+            title:'确认删除',
+            icon:2
+        },function(index){
+            var downObjs = [];
+            var $imgs = $('.imgChecked').parent('.image');
+            for (var i = 0; i < $imgs.length; i ++){
+                var downObj = {id:"",fileType:""};
+                downObj.id = $imgs.eq(i).attr('fileId');
+                downObj.fileType = $imgs.eq(i).attr('fileType');
+                downObjs.push(downObj);
+            }
+            $.post("folder/deleteById",{deleteList:JSON.stringify(downObjs)},function (data,status) {
+                if (data.status === 200){
+                    layer.msg(data.msg,{
+                        icon:1,
+                        offset: '200px'
+                    });
+                    $('.layui-btn-group').addClass('layui-hide');
+                }else {
+                    layer.msg(data.msg,{
+                        icon:2,
+                        offset: '200px'
+                    });
+                }
+            });
+            layer.close(index);
+        });
+    }
 
 </script>
 </body>
