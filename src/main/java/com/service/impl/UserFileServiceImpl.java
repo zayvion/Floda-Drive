@@ -8,6 +8,9 @@ import com.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,8 +34,44 @@ public class UserFileServiceImpl implements UserFileService {
         //根据时间分组
         List<String> picDate = userFileMapper.getPicDate(user_id);
         for (String date:picDate) {
+            List<FolderAndFile> folderAndFiles = new ArrayList<>();
             ShowPictures showPictures = new ShowPictures();
             showPictures.setDate(date);
+            //根据时间查询当前时间下的图片
+            TbUserFileExample tbUserFileExample = new TbUserFileExample();
+            TbUserFileExample.Criteria criteria = tbUserFileExample.createCriteria();
+            criteria.andBelongUserEqualTo(user_id);
+            criteria.andFileTypeEqualTo("1");
+            criteria.andIsdelEqualTo((short)0);
+            try {
+                //一天的开始时间
+                String begin = date+" 00:00:00";
+                //一天的结束时间
+                String end = date+" 24:00:00";
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                criteria.andUploadTimeBetween(format.parse(begin),format.parse(end));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            List<TbUserFile> tbUserFiles = userFileMapper.selectByExample(tbUserFileExample);
+            for (TbUserFile tbUserFile : tbUserFiles) {
+                FolderAndFile folderAndFile = new FolderAndFile();
+                folderAndFile.setId(tbUserFile.getUserfileId());
+                folderAndFile.setFileName(tbUserFile.getUserFileName());
+                folderAndFile.setBelong(tbUserFile.getBelongUser());
+                folderAndFile.setFileSize(tbUserFile.getFileSize());
+                folderAndFile.setFileType(tbUserFile.getFileType());
+                folderAndFile.setUpdatetime(tbUserFile.getUploadTime());
+                folderAndFile.setUserSysfileId(tbUserFile.getUserSysfileId());
+                folderAndFile.setIsdel(tbUserFile.getIsdel());
+                TbSystemFile systemFile = systemFileService.getSystemFile(tbUserFile.getUserSysfileId());
+                folderAndFile.setFile_url(systemFile.getFileUrl());
+                folderAndFile.setSrc(systemFile.getFileUrl());
+                folderAndFile.setTitle(tbUserFile.getUserFileName());
+                folderAndFile.setDescription("大小："+tbUserFile.getFileSize()+" 日期："+tbUserFile.getUploadTime());
+                folderAndFiles.add(folderAndFile);
+            }
+            showPictures.setFolderAndFiles(folderAndFiles);
             pics.add(showPictures);
         }
         return pics;

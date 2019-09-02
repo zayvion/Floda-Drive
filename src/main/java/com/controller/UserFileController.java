@@ -36,11 +36,9 @@ public class UserFileController {
      * @return
      */
     @RequestMapping("getAllPic")
-    public String getAllPic(@SessionAttribute TbUser onlineuser){
+    public String getAllPic(@SessionAttribute TbUser onlineuser,Model model){
         List<ShowPictures> allPic = userFileService.findAllPic(onlineuser.getUserId());
-        for (ShowPictures sp:allPic) {
-            System.out.println(sp+"--------------");
-        }
+        model.addAttribute("pics",allPic);
         return "/views/home/photos";
     }
 

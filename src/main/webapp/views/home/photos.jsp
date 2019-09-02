@@ -1,3 +1,8 @@
+<%@ page import="java.util.List" %>
+<%@ page import="com.pojo.FolderAndFile" %>
+<%@ page import="com.pojo.ShowPictures" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="com.google.gson.Gson" %>
 <%--
   User: dc
   Date: 2019/8/26
@@ -5,11 +10,23 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"  prefix="fn"%>
 <%@page isELIgnored="false" %>
 <html>
 <%
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+%>
+<%
+    List<ShowPictures> pics = (List<ShowPictures>)request.getAttribute("pics");
+    List<FolderAndFile> ffs = new ArrayList<FolderAndFile>();
+    for (ShowPictures showPictures:pics ) {
+        for (FolderAndFile ff: showPictures.getFolderAndFiles()) {
+            ffs.add(ff);
+        }
+    }
+    String str = new Gson().toJson(ffs);
+    int count = 1;
 %>
 <head>
     <base href="<%=basePath%>">
@@ -93,7 +110,6 @@
                     <div class="layui-tab layui-tab-brief" lay-filter="component-tabs-hash">
                         <ul class="layui-tab-title">
                             <li class="layui-this" lay-id="11">时光轴</li>
-                            <li lay-id="22">最近上传</li>
                             <div class="layui-btn-group layui-hide" style="float: right">
                                 <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
                                     <i class="fa fa-share"></i>分享
@@ -112,63 +128,23 @@
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
                                 <ul class="layui-timeline">
-                                    <li class="layui-timeline-item">
-                                        <i class="layui-icon layui-timeline-axis"></i>
-                                        <div class="layui-timeline-content layui-text">
-                                            <h3 class="layui-timeline-title">12月28日</h3>
-                                            <div class="spotlight-group">
-                                                <div class="image" style="background-image:url(./views/imgs/test.jpg)">
-                                                    <i class="downLoad fa fa-check-circle" onclick="downLoad(1,this)"></i>
-                                                    <i class="fa fa-search-plus" onclick="showGallery(1)"></i>
-                                                </div>
-                                                <div class="image" style="background-image:url(./views/imgs/test1.jpg)">
-                                                    <i class="downLoad fa fa-check-circle" onclick="downLoad(2,this)"></i>
-                                                    <i class="fa fa-search-plus" onclick="showGallery(2)"></i>
-                                                </div>
-                                                <div class="image" style="background-image:url(./views/imgs/test2.jpg)">
-                                                    <i class=" downLoad fa fa-check-circle" onclick="downLoad(3,this)"></i>
-                                                    <i class="fa fa-search-plus" onclick="showGallery(3)"></i>
+                                    <c:forEach var="pic" items="${pics}">
+                                        <li class="layui-timeline-item">
+                                            <i class="layui-icon layui-timeline-axis"></i>
+                                            <div class="layui-timeline-content layui-text">
+                                                <h3 class="layui-timeline-title">${pic.date}</h3>
+                                                <div class="spotlight-group">
+                                                    <c:forEach var="showPic" items="${pic.folderAndFiles}" varStatus="sp">
+                                                        <div class="image" style="background-image:url(${showPic.src})">
+                                                            <i class="downLoad fa fa-check-circle" onclick="downLoad(1,this)"></i>
+                                                            <i class="fa fa-search-plus" onclick="showGallery(<%=count ++ %>)"></i>
+                                                        </div>
+                                                    </c:forEach>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                    <li class="layui-timeline-item">
-                                        <i class="layui-icon layui-timeline-axis"></i>
-                                        <div class="layui-timeline-content layui-text">
-                                            <h3 class="layui-timeline-title">12月25日</h3>
-                                            <div class="spotlight-group">
-                                                <div class="image" style="background-image:url(./views/imgs/test.jpg)">
-                                                    <i class="downLoad fa fa-check-circle" onclick="downLoad(1,this)"></i>
-                                                    <i class="fa fa-search-plus" onclick="showGallery(1)"></i>
-                                                </div>
-                                                <div class="image" style="background-image:url(./views/imgs/test1.jpg)">
-                                                    <i class="downLoad fa fa-check-circle" onclick="downLoad(2,this)"></i>
-                                                    <i class="fa fa-search-plus" onclick="showGallery(2)"></i>
-                                                </div>
-                                                <div class="image" style="background-image:url(./views/imgs/test2.jpg)">
-                                                    <i class=" downLoad fa fa-check-circle" onclick="downLoad(3,this)"></i>
-                                                    <i class="fa fa-search-plus" onclick="showGallery(3)"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="layui-timeline-item">
-                                        <i class="layui-icon layui-timeline-axis"></i>
-                                        <div class="layui-timeline-content layui-text">
-                                            <h3 class="layui-timeline-title">12月24日</h3>
-
-                                        </div>
-                                    </li>
-                                    <li class="layui-timeline-item">
-                                        <i class="layui-icon layui-timeline-axis"></i>
-                                        <div class="layui-timeline-content layui-text">
-                                            <div class="layui-timeline-title">过去</div>
-                                        </div>
-                                    </li>
+                                        </li>
+                                    </c:forEach>
                                 </ul>
-                            </div>
-                            <div class="layui-tab-item">
-
                             </div>
                         </div>
                     </div>
@@ -185,23 +161,14 @@
         base: '../../layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use('index');
+    }).use(['index'],function () {
+        var element = layui.element;
+        element.render();
 
-    //图片放大预览
-    var gallery = [{
-        title: "Image 1",
-        description: "This is a description.",
-        src: "../imgs/test.jpg"
-    }, {
-        title: "Image 2",
-        description: "This is a description.",
-        src: "../imgs/test1.jpg"
-    }, {
-        title: "Image 3",
-        description: "This is a description.",
-        src: "../imgs/test2.jpg"
-    }];
+    });
 
+    //图片预览
+    var gallery = <%=str%>;
     function showGallery(index) {
         Spotlight.show(gallery, {
             index: index,
@@ -237,6 +204,12 @@
         //隐藏按钮组
         $('.layui-btn-group').toggleClass('layui-hide');
     }
+
+    //删除图片
+
+    //下载图片（批量）
+
+
 </script>
 </body>
 </html>
