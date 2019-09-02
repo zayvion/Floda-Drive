@@ -117,9 +117,9 @@
                                 <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
                                     <i class="fa fa-trash"></i>删除
                                 </button>
-                                <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                                <a type="button" class="layui-btn layui-btn-sm layui-btn-primary">
                                     <i class="fa fa-download"></i>下载
-                                </button>
+                                </a>
                                 <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="cleanImgCheck()">
                                     <span class="layui-badge layui-bg-gray" style="border-radius:10px;border: 1px solid #1E9FFF;margin:7px 7px 0 0;color: #1E9FFF!important;background-color:#eee!important;">1</span>取消
                                 </button>
@@ -135,8 +135,8 @@
                                                 <h3 class="layui-timeline-title">${pic.date}</h3>
                                                 <div class="spotlight-group">
                                                     <c:forEach var="showPic" items="${pic.folderAndFiles}" varStatus="sp">
-                                                        <div class="image" style="background-image:url(${showPic.src})">
-                                                            <i class="downLoad fa fa-check-circle" onclick="downLoad(1,this)"></i>
+                                                        <div class="image" fileId = "${showPic.id}" fileType="${showPic.fileType}" style="background-image:url(${showPic.src})">
+                                                            <i class="downLoad fa fa-check-circle" onclick="downLoad(this)"></i>
                                                             <i class="fa fa-search-plus" onclick="showGallery(<%=count ++ %>)"></i>
                                                         </div>
                                                     </c:forEach>
@@ -181,8 +181,8 @@
      * (1)点击选中一张图片后，显示其他图片的选中按钮、预览按钮
      * (2)选中一张图片后，显示下载分享按钮
      */
-    //var fileIds = [];
-    function downLoad(fileId,elm){
+    //
+    function downLoad(elm){
         //(1)点击选中一张图片后，显示其他图片的选中按钮、预览按钮
         $(elm).toggleClass('imgChecked').css('visibility','visible')
             .parent('.image').find('i').css('visibility','visible')
@@ -190,6 +190,17 @@
 
         //显示按钮组已经当前选中的个数
         if ($('.imgChecked').size() > 0) {
+            //设置下载集合
+            var downObjs = [];
+            var $imgs = $('.imgChecked').parent('.image');
+            for (var i = 0; i < $imgs.length; i ++){
+                var downObj = {id:"",fileType:""};
+                downObj.id = $imgs.eq(i).attr('fileId');
+                downObj.fileType = $imgs.eq(i).attr('fileType');
+                downObjs.push(downObj);
+            }
+            $('.layui-btn-group a').attr("href","/sysfile/download?downObjs="+JSON.stringify(downObjs));
+            console.log(downObjs);
             $('.layui-btn-group').removeClass('layui-hide');
             $('.layui-badge').text($('.imgChecked').size());
         } else {
@@ -206,9 +217,6 @@
     }
 
     //删除图片
-
-    //下载图片（批量）
-
 
 </script>
 </body>
