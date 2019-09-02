@@ -76,9 +76,6 @@
                 <div class="layui-card-header">
                     <div class="layui-btn-group layui-hide" style="float: right">
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
-                            <i class="fa fa-share"></i>分享
-                        </button>
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
                             <i class="fa fa-trash"></i>删除
                         </button>
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="renameFolder()">
@@ -212,7 +209,6 @@
                 layer.close(index);
             });
     }
-
 
 </script>
 </body>

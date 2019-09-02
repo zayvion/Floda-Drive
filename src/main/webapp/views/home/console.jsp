@@ -410,7 +410,7 @@
                 checkStatus.data[0].fileName = text;
                 var shareObjs = [];
                 for (var i = 0; i < checkStatus.data.length; i ++){
-                    var shareObj = {comment:"",fileId:"",title:""};
+                    var shareObj = {comment:"",fileId:"",title:"",type:""};
                     shareObj.comment = text;
                     shareObj.title = title;
                     shareObj.fileId = checkStatus.data[i].id;

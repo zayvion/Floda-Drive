@@ -75,7 +75,7 @@
             <div class="layui-card">
                 <div class="layui-card-header">
                     <div class="layui-btn-group layui-hide" style="float: right">
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="addShare()">
                             <i class="fa fa-share"></i>分享
                         </button>
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
@@ -213,7 +213,55 @@
             });
     }
 
+    //分享
+    function addShare(folder_father) {
+        var checkStatus = table.checkStatus('test-table-checkbox');
+        if(checkStatus.data.length === 1){
+            var title = checkStatus.data[0].fileName;
 
+        }else{
+            var title = checkStatus.data[0].fileName+"等";
+        }
+        layer.prompt({
+                type: 1,
+                title: ['<i class="fa fa-share"></i>分享文件:'+title,'color:#0098ea'],
+                offset: '100px',
+                value:checkStatus.data[0].fileName
+            },
+            function (text, index) {
+                //index为当前层索引
+                //text为输入参数
+                checkStatus.data[0].fileName = text;
+                var shareObjs = [];
+                for (var i = 0; i < checkStatus.data.length; i ++){
+                    var shareObj = {comment:"",fileId:"",title:"",type:""};
+                    shareObj.comment = text;
+                    shareObj.title = title;
+                    shareObj.fileId = checkStatus.data[i].id;
+                    shareObj.type = checkStatus.data[i].fileType;
+                    shareObjs.push(shareObj);
+                }
+                console.log(shareObjs);
+                //修改后触发ajax方法，异步请求后台修改数据库
+                $.post('/share/add',{'shareObjs':JSON.stringify(shareObjs)},function (data,status) {
+                    console.log(data);
+                    if (data.status === 200){
+                        layer.msg(data.data,{
+                            icon:1,
+                            offset: '200px'
+                        });
+
+                        $('.layui-btn-group').addClass('layui-hide');
+                    }else {
+                        layer.msg(data.msg,{
+                            icon:2,
+                            offset: '200px'
+                        });
+                    }
+                });
+                layer.close(index);
+            });
+    }
 </script>
 </body>
 </html>

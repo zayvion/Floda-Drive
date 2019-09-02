@@ -119,7 +119,7 @@
                         <ul class="layui-tab-title">
                             <li class="layui-this" lay-id="11">时光轴</li>
                             <div class="layui-btn-group layui-hide" style="float: right">
-                                <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                                <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="addShare()">
                                     <i class="fa fa-share"></i>分享
                                 </button>
                                 <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="trash()">
@@ -224,6 +224,52 @@
         $('.layui-btn-group').toggleClass('layui-hide');
     }
 
+    //分享
+    function addShare(elm) {
+        $(elm).toggleClass('imgChecked').css('visibility','visible')
+        .parent('.image').find('i').css('visibility','visible')
+        .parent('.image').siblings().find('i').css('visibility','visible');
+        layer.prompt({
+                type: 1,
+                title: ['<i class="fa fa-share"></i>分享图片:','color:#0098ea'],
+                offset: '100px',
+                value:'图片分享'
+            },
+            function (text, index) {
+                //index为当前层索引
+                //text为输入参数
+                var shareObjs = [];
+                var $imgs = $('.imgChecked').parent('.image');
+                console.log($imgs);
+                for (var i = 0; i < $imgs.length; i ++){
+                    var shareObj = {comment:"",fileId:"",title:"",type:""};
+                    shareObj.comment = '图片分享';
+                    shareObj.title = '分享图片';
+                    shareObj.fileId = $imgs.eq(i).attr('fileId');
+                    shareObj.type = $imgs.eq(i).attr('fileType');
+                    shareObjs.push(shareObj);
+                }
+                console.log(shareObjs);
+                //修改后触发ajax方法，异步请求后台修改数据库
+                $.post('/share/add',{'shareObjs':JSON.stringify(shareObjs)},function (data,status) {
+                    console.log(data);
+                    if (data.status === 200){
+                        layer.msg(data.data,{
+                            icon:1,
+                            offset: '200px'
+                        });
+
+                        $('.layui-btn-group').addClass('layui-hide');
+                    }else {
+                        layer.msg(data.msg,{
+                            icon:2,
+                            offset: '200px'
+                        });
+                    }
+                });
+                layer.close(index);
+            });
+    }
     //文件夹、文件删除
     function trash() {
         layer.confirm('',{
