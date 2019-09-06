@@ -95,7 +95,7 @@
         <!-- 侧边菜单 -->
         <div class="layui-side  layui-side-menu">
             <div class="layui-side-scroll">
-                <div class="layui-logo" lay-href="home/console.jsp">
+                <div class="layui-logo" lay-href="views/home/console.jsp">
                     <img src="./views/imgs/yun-2.png" alt="" style="height: 30px;margin: 0 5px 10px 0"><span style="font-size: 1.5em">FlodaDrive</span>
                 </div>
 

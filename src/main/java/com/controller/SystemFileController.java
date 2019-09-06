@@ -155,7 +155,6 @@ public class SystemFileController {
             userFile.setFileType(systemFile.getFileType());
             userFile.setUserFileName(file.getOriginalFilename());
             userFile.setUserSysfileId(newFileId);
-            //这里还暂时获取不到用户需要存的位置，后期请补充
             userFile.setFileLocation(folder_id);
             userFileService.addFile(userFile);
             TbUserFileExample userFileExample = new TbUserFileExample();

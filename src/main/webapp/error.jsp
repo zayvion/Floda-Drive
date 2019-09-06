@@ -48,7 +48,7 @@
                     <c:if test="${msg != null}">${msg}</c:if>
                 </P>
                 <P style="FONT-SIZE: 14px; LINE-HEIGHT: 20px">您可以回到
-                    <A href="/index" class="myFile">我的文件</A>或
+                    <A href="/index"  target="_parent" class="myFile">我的文件</A>或
                     <A href="user/login.jsp" class="myFile">返回登录</A>
                 </P>
             </DIV></DIV></DIV></SECTION><FOOTER

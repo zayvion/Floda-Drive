@@ -97,6 +97,7 @@
     WHERE belong_user = #{user_id}
     AND file_type = 1 AND isDel = 0
     GROUP BY upload_time
+    ORDER BY upload_time desc
   </select>
 
 <!--  <select id="getByDate" resultType="com.pojo.TbUserFile" parameterType="string">-->
